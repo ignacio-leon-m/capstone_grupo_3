@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.duocuc.capstoneapp"
+    namespace = "com.duocuc.application"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.duocuc.capstoneapp"
+        applicationId = "com.duocuc.application"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

@@ -1,0 +1,10 @@
+# Backend (Spring Boot)
+capstone-backend-code/target/
+capstone-backend-code/.idea/
+
+# Kotlin (si es multiplatform o gradle)
+capstone-kotlin-code/build/
+capstone-kotlin-code/.idea/
+
+# Documentos
+documentos-semanales/*.tmp
