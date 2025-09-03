@@ -29,6 +29,16 @@ data class User (
     @JoinColumn(name = "id_rol", nullable = false)
     val role: Role,
 
+    @Column(nullable = false, unique = true, length = 100)
+    val email: String,
+
+    @Column(nullable = false)
+    val active: Boolean = true,
+
+    @Column(length = 20)
+    val phone: String? = null,
+
+
     @Column(name = "password_hash", nullable = false, length = 255) // Store hashed passwords
     val passwordHash: String,
 
