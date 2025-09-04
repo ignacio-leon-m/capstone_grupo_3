@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import java.util.UUID
 
 
 enum class RoleType {
@@ -20,8 +21,8 @@ enum class RoleType {
 @Table(name = "roles")
 data class Role (
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID) // UUID
-    val id: Long = 0,
+    @GeneratedValue // UUID
+    val id: UUID? = null,
 
     @Enumerated(EnumType.STRING)
     @Column(name = "nombre_rol", nullable = false, length = 50)

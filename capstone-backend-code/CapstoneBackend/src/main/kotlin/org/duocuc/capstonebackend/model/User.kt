@@ -10,13 +10,14 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import java.time.LocalDate
+import java.util.UUID
 
 @Entity
 @Table(name = "usuarios")
 data class User (
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    val id: Long = 0,
+    @GeneratedValue
+    val id: UUID? = null,
 
     @Column(nullable = false, length = 100)
     val name: String,
