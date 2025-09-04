@@ -1,0 +1,49 @@
+-- Habilita la extensión pgcrypto para generar UUIDs 
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- Tabla de roles
+CREATE TABLE roles(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nombre VARCHAR(50) NOT NULL
+);
+
+-- Tabla de usuarios (cada usuario tiene un solo rol)
+CREATE TABLE usuarios (
+   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    id_rol UUID NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    estado BOOLEAN NOT NULL,
+    celular VARCHAR(20),
+    fecha_creacion DATE DEFAULT CURRENT_DATE, 
+    fecha_ultimo_login DATE,
+    FOREIGN KEY (id_rol) REFERENCES roles(id)
+);
+
+-- Tabla de carreras
+CREATE TABLE carreras (
+   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nombre VARCHAR(100) NOT NULL
+);
+
+-- Tabla de materias (relación muchos a uno con carreras)
+CREATE TABLE materias (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nombre VARCHAR(100) NOT NULL,
+    id_carrera UUID NOT NULL,
+    FOREIGN KEY (id_carrera) REFERENCES carreras(id)
+);
+
+
+-- Tabla de puntaje (ejemplo de relación usuario - materia)
+CREATE TABLE puntajes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    id_usuario UUID NOT NULL,
+    id_materia UUID NOT NULL,
+    puntaje NUMERIC(10,2) NOT NULL,
+    fecha_asignacion DATE DEFAULT CURRENT_DATE,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
+    FOREIGN KEY (id_materia) REFERENCES materias(id)
+);
