@@ -1,9 +1,7 @@
 package org.duocuc.capstonebackend.controller
 
-import org.duocuc.capstonebackend.dto.SaveUserDto
 import org.duocuc.capstonebackend.model.User
 import org.duocuc.capstonebackend.service.AuthService
-import org.duocuc.capstonebackend.service.UserService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping

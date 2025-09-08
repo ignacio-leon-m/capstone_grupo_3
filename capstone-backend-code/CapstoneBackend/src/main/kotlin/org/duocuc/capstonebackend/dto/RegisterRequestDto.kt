@@ -2,7 +2,7 @@ package org.duocuc.capstonebackend.dto
 
 import java.util.UUID
 
-data class SaveUserDto(
+data class RegisterRequestDto(
     val name: String,
     val lastName: String,
     val idRole: UUID,
