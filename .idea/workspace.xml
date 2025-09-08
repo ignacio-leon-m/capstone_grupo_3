@@ -5,7 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd20df59-8733-4489-b4c4-b1ac015e4f5d" name="Changes" comment="Separando carpetas que recibirán el backend Spring(kotlin) y la app de Kotlin.">
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/SaveUserDto.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/repository/RoleRepository.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/config/SecurityConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/config/SecurityConfig.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/UserController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/UserController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/model/Role.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/model/Role.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/model/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/model/User.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/repository/UserRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/repository/UserRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/UserService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/UserService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-kotlin-code/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-kotlin-code/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-kotlin-code/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-kotlin-code/.idea/misc.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +42,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/ignacio-leon-m/capstone_grupo_3.git&quot;,
-    &quot;accountId&quot;: &quot;9e99c04f-e077-43da-86b8-f514b5c34d40&quot;
+    &quot;accountId&quot;: &quot;108c226d-11ad-4bfd-82ab-cd602bd983f5&quot;
   }
 }</component>
   <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="$USER_HOME$/.gradle/wrapper/dists/gradle-8.14-bin/38aieal9i53h9rfe7vjup95b9/gradle-8.14" javaHome="$USER_HOME$/.jdks/openjdk-24.0.2+12-54" gradleVersion="8.14" />
@@ -61,7 +71,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;CG3-2&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/ignac/OneDrive/Escritorio/capstone_grupo_3&quot;,

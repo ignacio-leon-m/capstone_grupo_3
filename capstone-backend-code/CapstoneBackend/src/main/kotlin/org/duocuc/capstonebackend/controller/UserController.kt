@@ -1,15 +1,22 @@
 package org.duocuc.capstonebackend.controller
 
+import org.duocuc.capstonebackend.dto.SaveUserDto
+import org.duocuc.capstonebackend.model.User
+import org.duocuc.capstonebackend.service.AuthService
 import org.duocuc.capstonebackend.service.UserService
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/users")
 class UserController (
-    private val userService: UserService
+    private val authService: AuthService,
 ) {
-    fun findUserByEmail(email: String) {
-        userService.getUserByEmail(email)
+    // Endpoint to create a new user
+    @PostMapping
+    fun createUser(@RequestBody user: User){
+
     }
 }
