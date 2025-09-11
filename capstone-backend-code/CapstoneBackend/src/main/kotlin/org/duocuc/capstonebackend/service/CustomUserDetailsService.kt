@@ -18,7 +18,8 @@ class CustomUserDetailsService(private val userRepository: UserRepository): User
             return User(
                 user.email,
                 user.passwordHash,
-                listOf(SimpleGrantedAuthority(user.idRole.name)))
+                listOf(SimpleGrantedAuthority(user.role.name))
+            )
 
         }
 }

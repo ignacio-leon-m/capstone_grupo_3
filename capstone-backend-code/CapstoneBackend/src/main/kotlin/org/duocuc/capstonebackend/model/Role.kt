@@ -10,9 +10,9 @@ import java.util.UUID
 
 @Entity
 @Table(name = "roles")
-data class Role (
+class Role (
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     val id: UUID = UUID.randomUUID(),
 
     @Column(name = "nombre_rol", nullable = false, length = 50)

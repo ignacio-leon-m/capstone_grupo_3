@@ -8,50 +8,52 @@ import org.duocuc.capstonebackend.repository.RoleRepository
 import org.duocuc.capstonebackend.repository.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
-import java.util.Date
+import java.time.LocalDateTime
+import java.util.UUID
 
+@Suppress("SpellCheckingInspection")
 @Service
 class AuthService (
     private val userRepository: UserRepository,
     private val roleRepository: RoleRepository,
     private val passwordEncoder: PasswordEncoder,
-    //private val authenticationManager: AuthenticationManager
 ) {
     fun userRegistry(request: RegisterRequestDto): UserResponseDto {
         if(userRepository.findByEmail(request.email).isPresent){
             throw IllegalStateException("Ya existe el usuario")
         }
 
-        val role = roleRepository.findById(request.idRole)
-            .orElseThrow{IllegalArgumentException("Rol Id inválido")}
+        val role = roleRepository.findById(UUID.fromString("22d58bf8-c5fe-47f2-9540-ebbf5e411c78"))
+            .orElseThrow { IllegalStateException("Rol por defecto no existe") }
 
         val newUser = User(
             firstName = request.name,
             lastName = request.lastName,
-            idRole = role,
+            role = role,
             passwordHash = passwordEncoder.encode(request.password),
             email = request.email,
             state = true,
             phone = request.phone,
-            createdAt = Date(),
+            createdAt = LocalDateTime.now(),
             lastLoginAt = null
             )
 
         val savedUser = userRepository.save(newUser)
-        return mapToUserResponse(savedUser)
+        return userResponse(savedUser)
     }
 
-    private fun mapToUserResponse(user: User): UserResponseDto{
+    fun userResponse(user: User): UserResponseDto {
         return UserResponseDto(
             id = user.id,
             name = user.firstName,
             lastName = user.lastName,
+            role = user.role,
             email = user.email,
-            role = user.idRole.name
         )
     }
 
-    fun userLogin(request: LoginRequestDto): UserResponseDto {
+
+    fun userLogin(request: LoginRequestDto): User {
         val user = userRepository.findByEmail(request.email)
             .orElseThrow { IllegalArgumentException("Correo o contraseña inválidos") }
 
@@ -59,11 +61,10 @@ class AuthService (
             throw IllegalArgumentException("Correo o contraseña inválidos")
         }
 
-        user.lastLoginAt = Date()
+        user.lastLoginAt = LocalDateTime.now()
         userRepository.save(user)
 
-        return mapToUserResponse(user)
+        return user
     }
-
 
 }

@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest
 import org.duocuc.capstonebackend.dto.LoginRequestDto
 import org.duocuc.capstonebackend.dto.RegisterRequestDto
 import org.duocuc.capstonebackend.dto.UserResponseDto
+import org.duocuc.capstonebackend.model.User
 import org.duocuc.capstonebackend.service.AuthService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -23,7 +24,7 @@ class AuthController (private val authService: AuthService) {
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody request: LoginRequestDto): ResponseEntity<UserResponseDto> {
+    fun login(@RequestBody request: LoginRequestDto): ResponseEntity<User> {
         val userResponse = authService.userLogin(request)
         return ResponseEntity.ok(userResponse) // when login is successful, Spring Security creates a session and returns a session cookie JSESSIONID to the client
     }
@@ -32,8 +33,6 @@ class AuthController (private val authService: AuthService) {
     fun logout(request: HttpServletRequest): ResponseEntity<String> {
         val session = request.getSession(false)
         session?.invalidate() // Invalidate the session if it exists
-        return ResponseEntity.ok("Logout exitoso")
+        return ResponseEntity("Logout exitoso", HttpStatus.OK)
     }
-
-
 }

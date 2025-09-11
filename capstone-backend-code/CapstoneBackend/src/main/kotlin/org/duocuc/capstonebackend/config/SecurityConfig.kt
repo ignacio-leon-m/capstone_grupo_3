@@ -20,10 +20,9 @@ class SecurityConfig {
             .csrf { it.disable() }
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers("/users").permitAll() // Authorize access to /users endpoint
+                    .requestMatchers("/api/auth/**").permitAll() // Authorize access to /users endpoint
                     .anyRequest().authenticated() // the rest of endpoints require authentication
             }
         return http.build()
     }
-
 }

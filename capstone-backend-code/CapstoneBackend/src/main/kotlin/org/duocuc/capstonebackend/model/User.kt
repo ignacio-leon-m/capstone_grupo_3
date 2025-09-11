@@ -3,26 +3,22 @@ package org.duocuc.capstonebackend.model
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import jakarta.persistence.Temporal
-import jakarta.persistence.TemporalType
-import java.time.LocalDate
+import jakarta.persistence.Version
+import org.hibernate.annotations.UuidGenerator
 import java.time.LocalDateTime
-import java.util.Date
 import java.util.UUID
 
 @Entity
 @Table(name = "usuarios")
-data class User (
+class User (
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    val id: UUID = UUID.randomUUID(), // UUID primary key
+    @UuidGenerator
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    val id: UUID? = null, // UUID primary key
 
     @Column(name = "nombre", nullable = false, length = 100)
     val firstName: String,
@@ -33,12 +29,12 @@ data class User (
     // many-to-one relationship with Role
     @ManyToOne
     @JoinColumn(name = "id_rol", nullable = false)
-    val idRole: Role,
+    val role: Role,
 
     @Column(name = "correo", nullable = false, unique = true, length = 100)
     val email: String,
 
-    @Column(nullable = false)
+    @Column(name = "estado",  nullable = false)
     val state: Boolean,
 
     @Column(name = "celular", length = 20)
@@ -48,10 +44,12 @@ data class User (
     val passwordHash: String,
 
     @Column(name = "fecha_creacion")
-    @Temporal(TemporalType.DATE)
-    val createdAt: Date = Date(),
+    val createdAt: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "fecha_ultimo_login")
-    @Temporal(TemporalType.DATE)
-    var lastLoginAt: Date?
+    var lastLoginAt: LocalDateTime? = null,
+
+    @Version
+    var version: Long? = null
+
 )
