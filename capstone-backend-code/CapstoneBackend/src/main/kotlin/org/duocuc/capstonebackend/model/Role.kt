@@ -15,6 +15,6 @@ class Role (
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
     val id: UUID = UUID.randomUUID(),
 
-    @Column(name = "nombre_rol", nullable = false, length = 50)
+    @Column(name = "nombre", nullable = false, length = 50)
     val name: String = ""
 )
