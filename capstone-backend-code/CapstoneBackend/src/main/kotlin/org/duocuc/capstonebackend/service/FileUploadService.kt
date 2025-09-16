@@ -3,7 +3,6 @@ package org.duocuc.capstonebackend.service
 import org.duocuc.capstonebackend.dto.RegisterRequestDto
 import org.springframework.web.multipart.MultipartFile
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
-import org.duocuc.capstonebackend.dto.UserResponseDto
 import org.springframework.stereotype.Service
 
 @Service
@@ -26,4 +25,6 @@ class FileUploadService(
         }
         return students
     }
+
+    //fun processPdfFile(file: MultipartFile): List<RegisterRequestDto> {}
 }
