@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainBoost - Carga de Usuarios</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <link rel="stylesheet" href="/css/content.css">
+    <link rel="icon" href="/images/bb-logo.png">
+</head>
+<body>
+      <div class="header-container">
+        <div class="logo-area">
+            <a href="/home.html" class="logo-link">
+               <img src="/images/bb-logo.png" alt="BrainBoost Logo" class="logo">
+            </a>
+        </div>
+        <a href="/content-upload.html" class="upload-button">Carga de Contenido</a>
+    </div>
+    <div class="page-container">
+        <h1 class="page-title">  Contenido</h1>     
+        <div class="history-section">
+            <h2>Estado Archivos Procesados</h2>
+           
+            <div class="legend-container">
+                <p>Leyenda de estados:</p>
+                <ul>
+                    <li><span class="status-circle status-completed"></span> Completado</li>
+                    <li><span class="status-circle status-processing"></span> Procesando</li>
+                    <li><span class="status-circle status-error"></span> Errores</li>
+                </ul>
+            </div>
+            
+            <table id="filesTable" class="history-table">
+                <thead>
+                    <tr>
+                        <th>Sección</th>
+                        <th>Tipo de Carga</th>
+                        <th>Fecha Actualización</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A</td>
+                        <td>Web</td>
+                        <td>20-09-2025</td>
+                        <td><span class="status-circle status-completed" title="Completado"></span></td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>App</td>
+                        <td>21-09-2025</td>
+                        <td><span class="status-circle status-processing" title="Procesando"></span></td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>Web</td>
+                        <td>22-09-2025</td>
+                        <td><span class="status-circle status-error" title="Errores"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+     <div class="logout-fixed-container">
+      <a href="#" class="logout-icon-button" title="Cerrar Sesión">
+        <i class="fas fa-power-off"></i>
+        <span class="logout-tooltip">Cerrar Sesión</span>
+      </a>
+    </div>
+</body>
+</html>
