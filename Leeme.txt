@@ -1,0 +1,300 @@
+Capstone — Backend (Spring Boot/Kotlin) + Android
+
+Pequeño sistema académico con:
+
+Backend en Spring Boot Kotlin + PostgreSQL (datos relacionales) + MongoDB (GridFS) para archivos.
+
+Auth con sesión (JSESSIONID), roles ADMIN / PROFESOR / ALUMNO.
+
+Subida de documentos (PDF/DOCX) por profesor, resumen + quiz generados con Gemini.
+
+App Android (Retrofit/OkHttp/Compose + pantalla clásica) para login, ver materias, temas, subir doc, generar AI, contestar quiz y eliminar.
+
+Requisitos (dev)
+
+Java 21 (JDK 21)
+
+IntelliJ IDEA (para backend)
+
+Android Studio (para app)
+
+Git
+
+PostgreSQL 15+ (probado con 15/16)
+
+MongoDB 6+ (servicio local en mongodb://localhost:27017)
+
+cURL (para probar rápido por consola)
+
+(Opcional) pgAdmin 4 para revisar PostgreSQL
+
+Clonar el proyecto
+git clone <URL_DE_TU_REPO>.git
+cd <repo>
+
+
+Estructura (resumen):
+
+/capstone-backend/           # Spring Boot Kotlin
+/Front/                      # App Android
+
+Backend — Configuración
+1) PostgreSQL
+
+Crear DB y usuario (ejemplo):
+
+-- en psql como postgres
+CREATE ROLE capstone WITH LOGIN PASSWORD 'capstone';
+CREATE DATABASE capstone_db OWNER capstone;
+GRANT ALL PRIVILEGES ON DATABASE capstone_db TO capstone;
+
+
+(Opcional) Locales/Collation según tu Windows/OS no afectan a dev.
+
+Verifica conexión:
+
+psql -h localhost -U capstone -d capstone_db -c "\dt"
+
+2) MongoDB
+
+Instala y asegúrate de que el servicio corre:
+
+# Windows (PowerShell)
+Get-Service | ? {$_.Name -like "*MongoDB*"} | Start-Service
+
+
+URI por defecto que usamos: mongodb://localhost:27017
+
+3) Gemini (API Key)
+
+Crea una variable de entorno GEMINI_API_KEY con tu clave:
+
+Windows (PowerShell)
+
+setx GEMINI_API_KEY "TU_API_KEY_AQUI"
+
+
+macOS/Linux (bash/zsh)
+
+echo 'export GEMINI_API_KEY=TU_API_KEY_AQUI' >> ~/.zshrc
+source ~/.zshrc
+
+
+Si no pones la API Key, el endpoint de IA devolverá error.
+
+4) application.yml (dev)
+
+Ejemplo típico (ya incluido en el proyecto):
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/capstone_db
+    username: capstone
+    password: capstone
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true  # importante si ya tienes tablas
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/capstone
+
+server:
+  port: 8080
+
+app:
+  ai:
+    gemini:
+      model: "models/gemini-1.5-flash" # o el que uses
+
+
+Nota Flyway: si ves Found non-empty schema but no schema history table, mantener baseline-on-migrate: true.
+
+5) Correr backend
+cd capstone-backend
+./gradlew bootRun
+
+
+Arranca en http://localhost:8080
+
+Verás logs “Tomcat started on port 8080”.
+
+Credenciales de prueba (dev)
+
+Admin
+Email: admin@demo.cl
+Password: Secreta123
+
+Alumno
+Email: claudio@demo.cl
+Password: Clave123!
+
+Si necesitas un profesor, puedes registrar uno con ROLE_PROFESOR (tenemos endpoints para crear usuarios; si no está expuesto en UI, puedes registrar con /api/auth/register y luego actualizar rol por DB/endpoint admin).
+
+Quick Start (cURL)
+
+Cookies: usamos sesión con JSESSIONID. Guarda y reusa cookies con -c y -b.
+
+Login admin:
+
+curl -i -c admin.txt -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d "{\"email\":\"admin@demo.cl\",\"password\":\"Secreta123\"}"
+
+
+Listar materias:
+
+curl -s -b admin.txt http://localhost:8080/api/materias
+
+
+Crear tema + subir PDF:
+
+curl -i -b admin.txt -X POST \
+  http://localhost:8080/api/profesores/materias/<MATERIA_ID>/temas \
+  -F "titulo=Mi Documento" \
+  -F "descripcion=Prueba de upload" \
+  -F "file=@C:\Ruta\al\archivo.pdf;type=application/pdf"
+
+
+Generar resumen + quiz (IA):
+
+curl -i -b admin.txt -X POST \
+  http://localhost:8080/api/profesores/temas/<TEMA_ID>/ai
+
+
+Ver detalle del tema:
+
+curl -s -b admin.txt http://localhost:8080/api/temas/<TEMA_ID>
+
+
+Listar/descargar documento (desde ALUMNO):
+
+# login alumno
+curl -i -c alumno.txt -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d "{\"email\":\"claudio@demo.cl\",\"password\":\"Clave123!\"}"
+
+# descargar (la ruta exacta de download depende de tu controlador)
+curl -L -J -O -b alumno.txt \
+  http://localhost:8080/api/documentos/<DOC_ID>/download
+
+
+Eliminar documento (profe/admin):
+
+curl -i -b admin.txt -X DELETE \
+  http://localhost:8080/api/profesores/temas/<TEMA_ID>/documentos/<DOC_ID>
+
+
+Eliminar solo IA (resumen/quiz):
+
+curl -i -b admin.txt -X DELETE \
+  http://localhost:8080/api/profesores/temas/<TEMA_ID>/ai
+
+
+Eliminar tema completo:
+
+curl -i -b admin.txt -X DELETE \
+  http://localhost:8080/api/profesores/temas/<TEMA_ID>
+
+Android — Configuración rápida
+
+Abrir /Front en Android Studio.
+
+Revisa ApiClient.kt:
+
+.baseUrl("http://10.0.2.2:8080/") // Android emulador → host del PC
+
+
+AndroidManifest.xml (app):
+
+<uses-permission android:name="android.permission.INTERNET"/>
+<application
+    android:usesCleartextTraffic="true" ... >
+    <activity
+        android:name=".ComposeLoginActivity"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+        </intent-filter>
+    </activity>
+    <activity android:name=".MainActivity" android:exported="false"/>
+</application>
+
+
+Login con admin/alumno, ver materias, entrar a temas, subir doc, generar AI, responder quiz, eliminar documentos/AI/tema.
+
+Cookies de sesión: usamos OkHttp con JavaNetCookieJar (se mantiene la sesión).
+
+Consejo: Si al subir archivos ves timeout, sube los timeouts en ApiClient:
+
+.connectTimeout(30, TimeUnit.SECONDS)
+.writeTimeout(90, TimeUnit.SECONDS)
+.readTimeout(90, TimeUnit.SECONDS)
+
+Endpoints (resumen)
+
+POST /api/auth/register — registrar usuario
+
+POST /api/auth/login — login (devuelve cookie JSESSIONID)
+
+POST /api/auth/logout — logout (invalida sesión)
+
+GET /api/users/me — usuario actual
+
+GET /api/materias — lista materias
+
+POST /api/profesores/materias/{materiaId}/temas — subir tema + doc
+
+POST /api/profesores/temas/{temaId}/ai — generar resumen/quiz
+
+DELETE /api/profesores/temas/{temaId}/documentos/{docId} — eliminar doc
+
+DELETE /api/profesores/temas/{temaId}/ai — limpiar resumen/quiz
+
+DELETE /api/profesores/temas/{temaId} — eliminar tema
+
+GET /api/documentos/{docId}/download — descargar documento (alumno/profe/admin según permisos)
+
+Algunos controladores aceptan rutas equivalentes con /materias/{materiaId}/temas/... para compatibilidad.
+
+Problemas frecuentes (FAQ)
+
+403: No estás enviando cookie de sesión. En curl usa -b y en Android asegúrate de usar el CookieJar.
+
+404: Ruta distinta a la que mapea tu controlador (p. ej. faltó /api/profesores). En el backend dejamos dos variantes para documentos y AI.
+
+Flyway “no schema history table”: deja baseline-on-migrate: true.
+
+Mongo “Connection refused”: inicia el servicio MongoDB.
+
+Upload timeout: sube timeouts y lee el archivo en Dispatchers.IO.
+
+Windows + cURL: recuerda que en CMD ^ continúa líneas y el escape de comillas es distinto a PowerShell.
+
+Seguridad (producción)
+
+Esto es entorno de desarrollo. Para producción:
+
+Configurar HTTPS, CORS restringido y cookies Secure/SameSite.
+
+Deshabilitar logs sensibles.
+
+Gestionar secretos (API keys) con un vault.
+
+Revisar límites de tamaño de subida y validación de tipos de archivo.
+
+Política de retención/depuración de GridFS.
+
+Licencia
+
