@@ -16,19 +16,53 @@
         <div class="logo-area">
             <img src="/images/bb-logo.png" alt="BrainBoost Logo">
         </div>
-        <form class="login-form">
+        <form id = "loginForm" class="login-form">
             <h2>Iniciar Sesión</h2>
             <div class="input-group">
-                <input type="text" placeholder="Usuario" required>
+                <input name = "email" type="email" placeholder="username" required>
             </div>
             <div class="input-group">
-                <input type="password" placeholder="Contraseña" required>
+                <input name = "password" type="password" placeholder="password" required>
             </div>
             <button type="submit" class="login-button">Entrar</button>
             <div class="links">
                 <a href="#">¿Olvidaste tu contraseña?</a>
             </div>
         </form>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const form = document.getElementById('loginForm');
+
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const payload = {
+                        email: form.email.value.trim(),
+                        password: form.password.value
+                    };
+
+                    try {
+                        const res = await fetch('/api/auth/login', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            credentials: 'same-origin',
+                            body: JSON.stringify(payload)
+                        });
+                        if (!res.ok) {
+                            const text = await res.text();
+                            console.error('Error login', res.status, text);
+                            // TODO manejar ésto de mejor manera, que aparezca un cuadro de texto en el mismo form o cerca
+                            alert('Login fallido')
+                            return;
+                        }
+                        window.location.href = '/home.html'; // JSESSIONID queda guardada como cookie de sesión
+                    } catch (err) {
+                        console.error('Fallo de red', err);
+                        alert('Error de red');
+                    }
+                });
+            });
+        </script>
     </div>
 </body>
 </html>
