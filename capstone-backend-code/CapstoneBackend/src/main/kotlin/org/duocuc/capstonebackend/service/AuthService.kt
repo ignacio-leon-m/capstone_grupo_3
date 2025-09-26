@@ -9,7 +9,6 @@ import org.duocuc.capstonebackend.repository.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
-import java.util.UUID
 
 @Suppress("SpellCheckingInspection")
 @Service
@@ -23,8 +22,7 @@ class AuthService (
             throw IllegalStateException("Ya existe el usuario")
         }
 
-        val role = roleRepository.findById(UUID.fromString("22d58bf8-c5fe-47f2-9540-ebbf5e411c78"))
-            .orElseThrow { IllegalStateException("Rol por defecto no existe") }
+        val role = roleRepository.findByName("profesor") ?: throw IllegalStateException("Rol por defecto no existe")
 
         val newUser = User(
             firstName = request.name,
