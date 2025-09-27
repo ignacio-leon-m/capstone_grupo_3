@@ -57,7 +57,6 @@
                             alert('Login fallido')
                             return;
                         }
-                        // Redirigir al frontend servido por el backend para mantener mismo origen
                         window.location.href = 'http://localhost:8080/home.html'; // JSESSIONID queda guardada como cookie de sesión
                     } catch (err) {
                         console.error('Fallo de red', err);
