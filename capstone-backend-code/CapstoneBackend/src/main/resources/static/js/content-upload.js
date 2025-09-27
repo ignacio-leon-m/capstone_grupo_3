@@ -1,6 +1,6 @@
 // Lógica para la página content-upload.html
 // Ajusta UPLOAD_URL a la ruta real del backend que maneja la carga de contenido/documentos.
-const UPLOAD_URL = 'http://localhost:8080/api/content/upload'; // <-- Cambia esto si tu endpoint es distinto
+const UPLOAD_URL = '/api/content/upload'; // <-- Cambia esto si tu endpoint es distinto
 
 document.addEventListener('DOMContentLoaded', () => {
   const fileInput = document.getElementById('fileInput');
@@ -97,4 +97,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-

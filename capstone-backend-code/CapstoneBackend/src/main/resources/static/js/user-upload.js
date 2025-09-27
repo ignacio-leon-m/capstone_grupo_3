@@ -1,6 +1,6 @@
 // Lógica para la página user-upload.html
 // Ajusta UPLOAD_URL a la ruta real del backend que maneja la carga de Excel de alumnos.
-const UPLOAD_URL = 'http://localhost:8080/api/users/upload'; // <-- Cambia esto si tu endpoint es distinto
+const UPLOAD_URL = '/api/users/upload'; // <-- Cambia esto si tu endpoint es distinto
 
 document.addEventListener('DOMContentLoaded', () => {
   const fileInput = document.getElementById('fileInput');
@@ -85,4 +85,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-
