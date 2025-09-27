@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainBoost - Carga de Contenido</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <link rel="stylesheet" href="/css/content-upload.css">
+    <link rel="icon" href="/images/bb-logo.png">
+</head>
+<body>
+    <div class="header-container">
+        <a href="/content.html" class="back-button">← Volver</a>
+    </div>
+
+    <div class="page-container">
+        <h1 class="page-title">Carga de Contenido</h1>
+
+        <div class="upload-area">
+            <textarea id="contentInput" placeholder="Pega aquí el contenido de un texto o arrastra un documento..."></textarea>
+            
+            <div class="file-drop-area">
+                <span class="file-msg">Arrastra y suelta documentos aquí</span>
+                <input type="file" id="fileInput" multiple style="display: none;">
+            </div>
+
+            <button id="uploadButton" disabled>Enviar</button>
+        </div>
+    </div>
+       <div class="logout-fixed-container">
+      <a href="#" class="logout-icon-button" title="Cerrar Sesión">
+        <i class="fas fa-power-off"></i>
+        <span class="logout-tooltip">Cerrar Sesión</span>
+      </a>
+    </div>
+
+    <script src="/js/content-upload.js"></script>
+</body>
+</html>

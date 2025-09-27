@@ -20,8 +20,18 @@ class SecurityConfig {
             .csrf { it.disable() }
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/api/files/**").permitAll() // Permitir acceso a los endpoints de carga de archivos
+                    .requestMatchers(
+                        "/",
+                        "/index.html",
+                        "/home.html",
+                        "/user.html",
+                        "/user-upload.html",
+                        "/css/**",
+                        "/js/**",
+                        "/images/**",
+                        "/api/auth/**",
+                        "/api/users/**"
+                    ).permitAll()
                     .anyRequest().authenticated()
             }
         return http.build()

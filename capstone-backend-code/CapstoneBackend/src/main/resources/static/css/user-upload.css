@@ -1,0 +1,257 @@
+/* Estilos generales para el fondo y la fuente */
+body {
+    font-family: 'Nunito', sans-serif; 
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0f2f7, #fbe9e7); 
+    color: #333;
+    padding-bottom: 40px;
+}
+
+/* Estilos para el botón de volver */
+.header-container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 20px auto 0;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.back-button {
+    text-decoration: none;
+    background-color: #f0f0f0;
+    color: #555;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #ddd;
+}
+
+/* Contenedor principal de la página */
+.page-container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 40px auto;
+    text-align: left;
+}
+
+.page-title {
+    font-size: 2.5em;
+    color: #007bff;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Sección de Carga de Archivo */
+.upload-section {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin-bottom: 40px;
+}
+
+.format-example {
+    background-color: #f0f0f0;
+    padding: 15px;
+    border-left: 5px solid #ff8c00;
+    margin: 15px 0;
+}
+
+#uploadForm {
+    margin-top: 20px;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.custom-file-upload:hover {
+    background-color: #0056b3;
+}
+
+#fileName {
+    margin-left: 10px;
+    font-style: italic;
+    color: #666;
+}
+
+#uploadButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff8c00;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#uploadButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Sección de Historial y Filtros */
+.history-section {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.filters-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.filters-container label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.filters-container select, .filters-container input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+}
+
+/* Estilos de la tabla de historial */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.9em;
+}
+
+.history-table th, .history-table td {
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.history-table th {
+    background-color: #f2f2f2;
+    color: #555;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.history-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.status-circle {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.status-completed { background-color: #4CAF50; }
+.status-processing { background-color: #FFC107; }
+.status-error { background-color: #F44336; }
+
+.legend-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.legend-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.legend-container li {
+    display: flex;
+    align-items: center;
+}
+
+.legend-container li .status-circle {
+    margin-right: 5px;
+}
+
+/* Estilos para el contenedor flotante */
+.logout-fixed-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+/* Estilos para el botón del ícono */
+.logout-icon-button {
+    background-color: #fff; 
+    color: #a0a0a0; 
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative; 
+}
+
+.logout-icon-button:hover {
+    background-color: #f44336; 
+    color: white; 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para el texto flotante (tooltip) */
+.logout-tooltip {
+    position: absolute;
+    right: 60px; 
+    background-color: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    white-space: nowrap;
+    opacity: 0; 
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    font-size: 0.9em;
+}
+
+/* Muestra el tooltip al pasar el mouse sobre el ícono */
+.logout-icon-button:hover .logout-tooltip {
+    opacity: 1;
+    visibility: visible;
+}

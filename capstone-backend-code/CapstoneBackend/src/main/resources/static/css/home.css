@@ -1,0 +1,156 @@
+:root {
+    --brainboost-blue: #007bff;
+    --brainboost-magenta: #ff007f;
+    --brainboost-orange: #ff8c00;
+    --brainboost-yellow: #ffd700;
+    --brainboost-cyan: #00ffff;
+    --background-dark: #e0f2f7; 
+    --background-light: #fbe9e7; 
+    --box-bg: rgba(255, 255, 255, 0.9);
+}
+
+body {
+    font-family: 'Nunito', sans-serif; 
+    margin: 0;
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-start; 
+    align-items: center; 
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--background-dark), var(--background-light));
+    color: #333;
+}
+
+.main-header {
+    width: 100%;
+    padding: 20px 40px; 
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.logo {
+    max-width: 100px; 
+    height: auto;
+}
+
+.container {
+    text-align: center;
+    max-width: 800px;
+    width: 90%;
+    margin-top: 5vh; 
+}
+
+.content-box {
+    background: var(--box-bg);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 2px solid transparent;
+    background-image: linear-gradient(var(--box-bg), var(--box-bg)), 
+                      linear-gradient(45deg, var(--brainboost-blue), var(--brainboost-magenta), var(--brainboost-orange));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    animation: gradientShift 10s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.welcome-message {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--brainboost-blue);
+    margin-bottom: 10px;
+}
+
+.instruction {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.options-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.option-button {
+    text-decoration: none;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.option-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.users-button {
+    background: linear-gradient(45deg, var(--brainboost-magenta), var(--brainboost-orange));
+}
+
+.content-button {
+    background: linear-gradient(45deg, var(--brainboost-blue), var(--brainboost-cyan));
+}
+
+
+/* Estilos para el contenedor flotante */
+.logout-fixed-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+/* Estilos para el botón del ícono */
+.logout-icon-button {
+    background-color: #fff; 
+    color: #a0a0a0; 
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    position: relative; 
+}
+
+.logout-icon-button:hover {
+    background-color: #f44336; 
+    color: white; 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para el texto flotante (tooltip) */
+.logout-tooltip {
+    position: absolute;
+    right: 60px; 
+    background-color: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    white-space: nowrap;
+    opacity: 0; 
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    font-size: 0.9em;
+}
+
+/* Muestra el tooltip al pasar el mouse sobre el ícono */
+.logout-icon-button:hover .logout-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
