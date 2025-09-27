@@ -86,7 +86,7 @@ class AuthService (
             throw IllegalArgumentException("Correo o contraseña inválidos")
         }
 
-        user.lastLoginAt = LocalDateTime.now()
+        user.lastLoginAt = LocalDateTime.now() // acá le hace su update al last login del usuario
         userRepository.save(user)
 
         return user
