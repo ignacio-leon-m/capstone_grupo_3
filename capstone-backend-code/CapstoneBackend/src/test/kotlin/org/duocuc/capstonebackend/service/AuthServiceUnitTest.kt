@@ -23,6 +23,7 @@ class AuthServiceUnitTest {
     private val passwordEncoder: PasswordEncoder = mockk()
     private val service = AuthService(userRepository, roleRepository, passwordEncoder)
 
+    @Test
     fun `userRegistry creates an user with profesor role`() {
         val req = RegisterRequestDto(
             name = "Mick", lastName = "Jagger",
@@ -72,14 +73,6 @@ class AuthServiceUnitTest {
         // Esta es la verificación de interacciones
         verify(exactly = 1) { userRepository.findByEmail(login.email) } // verifica que la búsqueda se hizo una pura vez
         verify(exactly = 1) { passwordEncoder.matches(login.password, user.passwordHash) } // que se compara 1 vez
-        verify(exactly = 0) { userRepository.save(any()) } // que no se guarda ningún usuario y no hay efectos colaterales de persistencia
+        verify(exactly = 0) { userRepository.save(any()) } // que no se guarda ningún usuario y no hay efectos colaterales de persistencia}
     }
-
-
-
-
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> feature/CG3-15

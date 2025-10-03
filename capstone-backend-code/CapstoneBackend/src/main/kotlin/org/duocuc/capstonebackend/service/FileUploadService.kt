@@ -3,6 +3,7 @@ package org.duocuc.capstonebackend.service
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import org.duocuc.capstonebackend.dto.RegisterRequestDto
 import org.springframework.stereotype.Service
+import org.duocuc.capstonebackend.util.nameToTitleCase
 import java.io.InputStream
 
 @Service
@@ -17,7 +18,8 @@ class FileUploadService {
                 break
             }
             val fullName = row.getCell(2)?.stringCellValue?: continue
-            val (lastName, firstName) = splitFullNameFromExcel(fullName)
+            val fullNameToTitleCase = fullName.nameToTitleCase()
+            val (lastName, firstName) = splitFullNameFromExcel(fullNameToTitleCase)
             students.add(RegisterRequestDto(
                 name = firstName,
                 lastName = lastName,
