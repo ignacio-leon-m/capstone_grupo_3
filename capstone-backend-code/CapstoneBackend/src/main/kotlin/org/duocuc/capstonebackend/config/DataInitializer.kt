@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component
 class DataInitializer(
     private val roleRepository: RoleRepository
 ) {
+
+    // Nota: esta clase es básicamente para hacer pruebas. Si no están creados los roles, los inserta en el build
     private val log = LoggerFactory.getLogger(DataInitializer::class.java)
 
     @EventListener(ApplicationReadyEvent::class)
@@ -21,8 +23,8 @@ class DataInitializer(
             if (existing == null) {
                 val saved = roleRepository.save(Role(name = roleName))
                 log.info("Rol creado por inicializador: ${'$'}{saved.name} (id=${'$'}{saved.id})")
-            } else {
-                log.info("Rol existente: ${'$'}{existing.name} (id=${'$'}{existing.id})")
+//            } else {
+//                log.info("Rol existente: ${'$'}{existing.name} (id=${'$'}{existing.id})")
             }
         }
     }

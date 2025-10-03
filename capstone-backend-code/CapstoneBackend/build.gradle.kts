@@ -4,6 +4,7 @@ plugins {
 	id("org.springframework.boot") version "3.5.5"
 	id("io.spring.dependency-management") version "1.1.7"
 	kotlin("plugin.jpa") version "1.9.25"
+	id("jacoco")
 }
 
 group = "org.duocuc"
@@ -27,13 +28,14 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.apache.poi:poi-ooxml:5.2.3")
-    implementation("org.apache.poi:poi:5.3.0")
+    implementation("org.apache.poi:poi-ooxml:5.4.0")
+    implementation("org.apache.poi:poi:5.4.0")
     implementation("org.flywaydb:flyway-core")
 	implementation("org.flywaydb:flyway-database-postgresql")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -53,4 +55,18 @@ allOpen {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	finalizedBy(tasks.jacocoTestReport)
+}
+
+jacoco {
+
+toolVersion = "0.8.12"
+}
+
+tasks.jacocoTestReport {
+	dependsOn(tasks.test)
+	reports {
+		xml.required.set(true)
+		html.required.set(true)
+	}
 }
