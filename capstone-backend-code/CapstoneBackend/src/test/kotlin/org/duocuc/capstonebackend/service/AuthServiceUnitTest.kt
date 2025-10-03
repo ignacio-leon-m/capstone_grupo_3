@@ -78,4 +78,8 @@ class AuthServiceUnitTest {
 
 
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> feature/CG3-15
