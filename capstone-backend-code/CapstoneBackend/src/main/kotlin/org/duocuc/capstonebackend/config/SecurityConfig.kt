@@ -30,7 +30,8 @@ class SecurityConfig {
                         "/js/**",
                         "/images/**",
                         "/api/auth/**",
-                        "/api/users/**"
+                        "/api/users/**",
+                        "/download/**" 
                     ).permitAll()
                     .anyRequest().authenticated()
             }
