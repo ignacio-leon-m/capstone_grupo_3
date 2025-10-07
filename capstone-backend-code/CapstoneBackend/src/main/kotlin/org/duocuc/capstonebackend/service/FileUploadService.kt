@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory
 import org.duocuc.capstonebackend.dto.RegisterRequestDto
 import org.springframework.stereotype.Service
 import org.duocuc.capstonebackend.util.nameToTitleCase
+import org.duocuc.capstonebackend.util.splitFullNameFromExcel
 import java.io.InputStream
 
 @Service
@@ -33,15 +34,5 @@ class FileUploadService {
         return students
     }
 
-    fun splitFullNameFromExcel(fullName: String): Pair<String, String> {
-        val parts = fullName.trim().split(" ")
-        return if (parts.size >= 3) {
-            val lastName = parts.take(2).joinToString(" ")
-            val firstName =  parts.drop(2).joinToString(" ")
-            Pair(lastName, firstName)
-        } else {
-            // if there are just two parts, one is lastName and the other is firstName
-            Pair(parts.firstOrNull()?: "", parts.getOrNull(1)?: "")
-        }
-    }
+
 }

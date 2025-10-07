@@ -8,21 +8,22 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import org.hibernate.annotations.UuidGenerator
 import java.util.UUID
 
 @Entity
-@Table(name = "carreras")
-class Degree(
-    @Id
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    val id: UUID? = null,
-
-    @Column(name = "nombre", nullable = false, length = 100)
+@Table(name = "comunas")
+class Commune(
+    @Column(name = "nombre", nullable = false, unique = true, length = 100)
     var name: String,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_institucion", nullable = false,
-        foreignKey = ForeignKey(name = "fk_carrera_institucion")
-    )
-    var institution: Institution
-)
+    @JoinColumn(name = "id_region", nullable = false, foreignKey = ForeignKey(name = "fk_comuna_region"))
+    var region: Region
+) {
+    @Id
+    @UuidGenerator
+    @Column(name = "id", updatable = false, nullable = false)
+    var id: UUID? = null
+}
+
