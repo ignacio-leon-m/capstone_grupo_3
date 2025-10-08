@@ -12,6 +12,4 @@ interface UserRepository : JpaRepository<User, UUID> {
     fun findByEmail(email: String): Optional<User>
     fun findUsersByRoleName(roleName: String): List<User>
     fun deleteUserByEmail(email: String)
-
-
 }

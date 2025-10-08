@@ -9,7 +9,7 @@ class UserService (
     private val userRepository: UserRepository,
 ){
     fun getAllStudents(): List<StudentRequestDto> {
-        val students = userRepository.getUsersByRoleName("alumno")
+        val students = userRepository.findUsersByRoleName("alumno")
         return students.map { user ->
             StudentRequestDto(
                 name = user.firstName,
