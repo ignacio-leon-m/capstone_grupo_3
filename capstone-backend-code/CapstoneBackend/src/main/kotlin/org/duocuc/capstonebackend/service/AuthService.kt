@@ -1,12 +1,16 @@
 package org.duocuc.capstonebackend.service
 
+import org.duocuc.capstonebackend.service.JwtTokenService
 import org.duocuc.capstonebackend.dto.LoginRequestDto
+import org.duocuc.capstonebackend.dto.LoginResponseDto
 import org.duocuc.capstonebackend.dto.RegisterRequestDto
 import org.duocuc.capstonebackend.dto.UserResponseDto
 import org.duocuc.capstonebackend.model.User
 import org.duocuc.capstonebackend.repository.RoleRepository
 import org.duocuc.capstonebackend.repository.UserRepository
 import org.slf4j.LoggerFactory
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -17,6 +21,9 @@ class AuthService (
     private val userRepository: UserRepository,
     private val roleRepository: RoleRepository,
     private val passwordEncoder: PasswordEncoder,
+    private val authenticationManager: AuthenticationManager,
+    private val userDetailsService: CustomUserDetailsService,
+    private val jwtTokenService: JwtTokenService
 ) {
     private val log = LoggerFactory.getLogger(AuthService::class.java)
 
@@ -78,18 +85,19 @@ class AuthService (
     }
 
 
-    fun userLogin(request: LoginRequestDto): User {
-        val user = userRepository.findByEmail(request.email)
-            .orElseThrow { IllegalArgumentException("Correo o contraseña inválidos") }
-
-        if(!passwordEncoder.matches(request.password, user.passwordHash)){
-            throw IllegalArgumentException("Correo o contraseña inválidos")
-        }
-
-        user.lastLoginAt = LocalDateTime.now() // acá le hace su update al last login del usuario
+    fun login(request: LoginRequestDto): LoginResponseDto {
+        // 1) autenticar credenciales con el AuthenticationManager
+        authenticationManager.authenticate(
+            UsernamePasswordAuthenticationToken(request.email, request.password)
+        )
+        // 2) cargar UserDetails para generar token con authorities
+        val userDetails = userDetailsService.loadUserByUsername(request.email)
+        val token = jwtTokenService.generateToken(userDetails)
+        // 3) actualizar lastLoginAt
+        val user = userRepository.findByEmail(request.email).orElseThrow()
+        user.lastLoginAt = LocalDateTime.now()
         userRepository.save(user)
-
-        return user
+        return LoginResponseDto(accessToken = token, role = user.role.name)
     }
 
 }

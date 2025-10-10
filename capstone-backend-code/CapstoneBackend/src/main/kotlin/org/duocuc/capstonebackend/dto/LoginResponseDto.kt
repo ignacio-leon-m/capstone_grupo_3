@@ -1,4 +1,3 @@
 package org.duocuc.capstonebackend.dto
 
-class LoginResponseDto {
-}
+data class LoginResponseDto(val accessToken: String, val role: String)

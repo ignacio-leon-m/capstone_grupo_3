@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "description": "Secret key to sing JWT."
+    },
+    {
+      "name": "jwt.access.expiration",
+      "type": "java.lang.Long",
+      "description": "Time for access token (milliseconds)."
+    },
+    {
+      "name": "jwt.refresh.expiration",
+      "type": "java.lang.Long",
+      "description": "Time for refresh token (milliseconds)."
+    }
+  ]
+}
