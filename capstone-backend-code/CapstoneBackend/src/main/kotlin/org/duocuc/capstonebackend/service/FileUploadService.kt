@@ -28,7 +28,9 @@ class FileUploadService {
                 phone = "",
                 password = rutCell.toString()
                     .replace("-", "")
-                    .takeLast(4) + "1234"
+                    .takeLast(4) + "1234",
+                role = "alumno",
+                degreeName = "carrera-default"
             ))
         }
         return students

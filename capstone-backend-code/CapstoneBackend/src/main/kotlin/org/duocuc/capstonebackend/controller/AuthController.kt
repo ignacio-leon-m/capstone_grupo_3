@@ -5,7 +5,6 @@ import org.duocuc.capstonebackend.dto.LoginRequestDto
 import org.duocuc.capstonebackend.dto.LoginResponseDto
 import org.duocuc.capstonebackend.dto.RegisterRequestDto
 import org.duocuc.capstonebackend.dto.UserResponseDto
-import org.duocuc.capstonebackend.model.User
 import org.duocuc.capstonebackend.service.AuthService
 import org.duocuc.capstonebackend.service.CustomUserDetailsService
 import org.duocuc.capstonebackend.service.JwtTokenService
@@ -31,27 +30,28 @@ class AuthController (
 
 
     @PostMapping("/register")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('admin')")
     fun register(@RequestBody request: RegisterRequestDto): ResponseEntity<UserResponseDto> {
         val userResponse = authService.userRegistry(request)
         return ResponseEntity(userResponse, HttpStatus.CREATED)
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody request: LoginRequestDto): ResponseEntity<LoginResponseDto> {
+    fun login(@RequestBody request: LoginRequestDto): ResponseEntity<*> {
         try {
             authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(request.email, request.password)
             )
         } catch (e: BadCredentialsException) {
-            throw Exception("Credenciales incorrectas", e)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(mapOf("message" to "Credenciales incorrectas"))
         }
         val userDetails = customUserDetailsService.loadUserByUsername(request.email)
-        val jwt: String = jwtTokenService.generateToken(userDetails)
-        val role: String = userDetails.authorities
-            .map { it.authority }
-            .firstOrNull() ?: "USER"
-        return ResponseEntity(LoginResponseDto(jwt, role), HttpStatus.OK)
+        val token: String = jwtTokenService.generateToken(userDetails)
+        
+        // Modificado: Se obtiene el rol directamente (sin prefijo) y se asume que siempre existe.
+        val role: String = userDetails.authorities.map { it.authority }.first()
+
+        return ResponseEntity(LoginResponseDto(token, role), HttpStatus.OK)
     }
 
     @PostMapping("/logout")

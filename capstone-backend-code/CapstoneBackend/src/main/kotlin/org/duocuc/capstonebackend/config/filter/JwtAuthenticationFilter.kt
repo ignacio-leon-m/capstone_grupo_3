@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.duocuc.capstonebackend.service.CustomUserDetailsService
 import org.duocuc.capstonebackend.service.JwtTokenService
+import org.springframework.context.annotation.Lazy
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
@@ -15,7 +16,8 @@ import org.springframework.web.filter.OncePerRequestFilter
 @Component
 class JwtAuthenticationFilter(
     private val jwtTokenService: JwtTokenService,
-    private val userDetailsService: CustomUserDetailsService
+    @param:Lazy
+    private val customUserDetailsService: CustomUserDetailsService
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -34,7 +36,7 @@ class JwtAuthenticationFilter(
         val username = jwtTokenService.extractUsername(jwt)
 
         if (SecurityContextHolder.getContext().authentication == null) {
-            val userDetails = this.userDetailsService.loadUserByUsername(username)
+            val userDetails = this.customUserDetailsService.loadUserByUsername(username)
             if (jwtTokenService.validateToken(jwt, userDetails)) {
                 val authToken = UsernamePasswordAuthenticationToken(
                     userDetails,
