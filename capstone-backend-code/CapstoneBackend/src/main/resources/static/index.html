@@ -18,8 +18,8 @@
         <form id = "loginForm" class="login-form">
             <h2>Iniciar Sesión</h2>
             <div class="input-group">
-                <label for="email" class="sr-only">Correo electrónico</label>
-                <input id="email" name="email" type="email" placeholder="email" required>
+                <label for="username" class="sr-only">Correo electrónico</label>
+                <input id="username" name="email" type="email" placeholder="email" required>
             </div>
             <div class="input-group">
                 <label for="password" class="sr-only">Contraseña</label>
@@ -43,23 +43,34 @@
                     };
 
                     try {
-                        const res = await fetch('http://localhost:8080/api/auth/login', {
+                        const res = await fetch('http://localhost:8080/api/auth/login',{
                             method: 'POST',
                             headers: {'Content-Type': 'application/json'},
-                            credentials: 'include',
                             body: JSON.stringify(payload)
                         });
-                        if (!res.ok) {
-                            const text = await res.text();
-                            console.error('Error login', res.status, text);
-                            // TODO manejar ésto de mejor manera, que aparezca un cuadro de texto en el mismo form o cerca
-                            alert('Login fallido')
-                            return;
+                        
+                        if(!res.ok) {
+                            const errorData = await res.json();
+                            alert(errorData.message || 'Error en el inicio de sesión.');
+                            console.error('Error login:', res.status, errorData);
+                            return; // Detiene la ejecución si el login falla
                         }
-                        window.location.href = 'http://localhost:8080/home.html'; // JSESSIONID queda guardada como cookie de sesión
+
+                        // Convert the response to JSON solo si la respuesta es OK
+                        const data = await res.json();
+                        // Save token in localStorage
+                        localStorage.setItem('userRole', data.role);
+                        localStorage.setItem('jwtToken', data.token);
+                        console.log("Login successful, token stored.");
+                        // Redirect based on role
+                        if(data.role === 'admin' || data.role === 'profesor') { // Modificado: de ROLE_ a roles limpios
+                            window.location.href = '/home.html';
+                        } else {
+                            alert('Acceso denegado: No tienes privilegios para ingresar al sitio.');
+                        }
                     } catch (err) {
-                        console.error('Fallo de red', err);
-                        alert('Error de red');
+                        console.error('Fallo de red o error de parseo:', err);
+                        alert('Error de red. Por favor, revisa la consola para más detalles.');
                     }
                 });
             });
