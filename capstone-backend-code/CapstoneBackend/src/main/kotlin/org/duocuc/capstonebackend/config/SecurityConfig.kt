@@ -40,9 +40,11 @@ class SecurityConfig(
         http
             .csrf { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers("/api/auth/**", "/", "/index.html", "/login.html", "/home.html", "/crear-profesor.html", "/content-upload.html", "/content.html", "/css/**", "/js/**", "/images/**", "/download/**").permitAll()
+                it.requestMatchers("/api/auth/**", "/", "/css/**", "/js/**", "/images/**").permitAll()
+                    .requestMatchers("/api/ia/**").authenticated()
                     .anyRequest().authenticated()
             }
+
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
