@@ -214,7 +214,7 @@ WITH ins_pais AS (
      ),
      ins_usuario AS (
          INSERT INTO usuarios (nombre, apellido, id_rol, id_carrera, password_hash, correo)
-             SELECT 'Cecilia', 'Arroyo', ins_rol_1.id, ins_carrera.id, 'hash_de_prueba_seguro', 'cecilia.arroyo@duoc.cl'
+             SELECT 'Cecilia', 'Arroyo', ins_rol_1.id, ins_carrera.id, '$2a$10$NEiiAWhPBEU5Vjf6rf/jmONRoPMq5hTiDEEubaq1NMkfrW3lvJh.m', 'cecilia.arroyo@duoc.cl'
              FROM ins_rol_1, ins_carrera RETURNING id
      ),
      ins_estado_carga AS (

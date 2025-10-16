@@ -38,10 +38,11 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.ninja-squad:springmockk:4.0.2")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation("org.springframework.security:spring-securRity-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
