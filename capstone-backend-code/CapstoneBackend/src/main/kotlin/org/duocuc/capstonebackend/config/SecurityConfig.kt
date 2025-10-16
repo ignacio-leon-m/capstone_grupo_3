@@ -1,12 +1,9 @@
 package org.duocuc.capstonebackend.config
 
 import org.duocuc.capstonebackend.config.filter.JwtAuthenticationFilter
-import org.duocuc.capstonebackend.service.CustomUserDetailsService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.authentication.AuthenticationProvider
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -21,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 class SecurityConfig(
-    private val userDetailsService: CustomUserDetailsService,
     private val jwtAuthenticationFilter: JwtAuthenticationFilter
 ) {
 
@@ -40,7 +36,9 @@ class SecurityConfig(
         http
             .csrf { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers("/api/auth/**", "/", "/index.html", "/login.html", "/home.html", "/crear-profesor.html", "/content-upload.html", "/content.html", "/css/**", "/js/**", "/images/**", "/download/**").permitAll()
+                it.requestMatchers("/api/auth/**", "/", "/index.html", "/login.html", "/home.html", "/user.html",
+                    "/crear-profesor.html", "/content-upload.html", "/content.html", "/css/**", "/js/**", "/images/**"
+                    , "/download/**", "/user-upload.html").permitAll()
                     .anyRequest().authenticated()
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }

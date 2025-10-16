@@ -57,7 +57,7 @@
           optionsContainer.appendChild(contentLink);
 
           // Opciones solo para admin
-          if (role === 'admin') { // Modificado: de 'ROLE_ADMIN' a 'admin'
+          if (role === 'admin') {
               const usersLink = document.createElement('a');
               usersLink.href = '/user.html';
               usersLink.className = 'option-button users-button';
@@ -69,6 +69,15 @@
               createTeacherLink.className = 'option-button users-button'; // Reutilizando estilo
               createTeacherLink.textContent = 'Crear Profesor';
               optionsContainer.appendChild(createTeacherLink);
+          }
+
+          // Opciones solo para profesor
+          if (role === 'profesor') {
+              const uploadStudentsLink = document.createElement('a');
+              uploadStudentsLink.href = '/user-upload.html';
+              uploadStudentsLink.className = 'option-button users-button'; // Reutilizando estilo
+              uploadStudentsLink.textContent = 'Carga de Alumnos';
+              optionsContainer.appendChild(uploadStudentsLink);
           }
 
           console.log('Usuario autenticado con rol:', role);
