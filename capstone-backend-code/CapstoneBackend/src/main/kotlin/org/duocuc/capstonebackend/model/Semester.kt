@@ -1,17 +1,16 @@
 package org.duocuc.capstonebackend.model
 
+
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.annotations.UuidGenerator
 import java.util.UUID
 
 @Entity
-@Table(name = "roles")
-class Role(
+@Table(name = "semestres")
+class Semester(
     @Column(name = "nombre", nullable = false, unique = true, length = 50)
     var name: String
 ) {

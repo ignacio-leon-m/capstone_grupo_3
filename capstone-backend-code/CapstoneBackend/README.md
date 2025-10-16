@@ -2,12 +2,12 @@
 
 ## Descripción
 
-Este es el backend para el proyecto Capstone. Proporciona una API REST para gestionar los datos de la aplicación, incluyendo la autenticación de usuarios, la persistencia de datos y la carga de archivos. El proyecto está construido con Kotlin y Spring Boot, siguiendo las mejores prácticas de desarrollo de software.
+Este es el backend para el proyecto Capstone. Proporciona una API REST para gestionar los datos de la aplicación, incluyendo la autenticación de usuarios, la persistencia de datos y la carga masiva de usuarios a través de archivos Excel. El proyecto está construido con Kotlin y Spring Boot, siguiendo las mejores prácticas de desarrollo de software y una arquitectura limpia.
 
 ## Tecnologías Utilizadas
 
 *   **Lenguaje**: Kotlin
-*   **Framework**: Spring Boot 3.5.5
+*   **Framework**: Spring Boot 3.3.0
 *   **Base de Datos**: PostgreSQL
 *   **Migraciones de Base de Datos**: Flyway
 *   **Seguridad**: Spring Security
@@ -23,18 +23,19 @@ El proyecto sigue una arquitectura en capas, separando las responsabilidades en 
 *   `service`: Contiene la lógica de negocio de la aplicación.
 *   `repository`: Contiene las interfaces de Spring Data JPA para interactuar con la base de datos.
 *   `model`: Contiene las entidades de JPA que representan las tablas de la base de datos.
-*   `dto`: Contiene los Data Transfer Objects, utilizados para transferir datos entre las capas de la aplicación.
-*   `config`: Contiene las clases de configuración de Spring.
-*   `exception`: Contiene las clases de manejo de excepciones personalizadas.
-*   `util`: Contiene clases de utilidad.
+*   `dto`: Contiene los Data Transfer Objects (DTOs), utilizados para transferir datos de forma segura entre las capas.
+*   `config`: Contiene las clases de configuración de Spring, como la configuración de seguridad.
+*   `exception`: Contiene las clases para el manejo de excepciones personalizadas.
+*   `util`: Contiene clases de utilidad, como `StringUtils` para la manipulación y normalización de texto.
 
 ## Funcionalidades Implementadas
 
-*   **API REST**: Se ha implementado una API REST completa para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre los recursos de la aplicación.
-*   **Autenticación y Autorización**: Se utiliza Spring Security para proteger los endpoints de la API, asegurando que solo los usuarios autenticados y autorizados puedan acceder a los recursos.
-*   **Persistencia de Datos con PostgreSQL**: La información se almacena en una base de datos PostgreSQL, y se utiliza Spring Data JPA para facilitar el acceso y la manipulación de los datos.
-*   **Migraciones de Base de Datos con Flyway**: Se utiliza Flyway para versionar y gestionar las migraciones de la base de datos de forma automática.
-*   **Carga de Archivos Excel**: Se ha implementado una funcionalidad para cargar y procesar archivos de formato Excel (.xlsx) utilizando la librería Apache POI.
+*   **API REST**: Endpoints para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre los recursos de la aplicación.
+*   **Autenticación y Autorización**: Se utiliza Spring Security para proteger los endpoints de la API, asegurando que solo los usuarios autenticados y con los roles adecuados puedan acceder a los recursos.
+*   **Persistencia de Datos con PostgreSQL**: La información se almacena en una base de datos PostgreSQL. Se utiliza Spring Data JPA para un acceso y manipulación de datos eficiente.
+*   **Migraciones de Base de Datos con Flyway**: Se gestiona el versionado del esquema de la base de datos de forma automática y segura.
+*   **Carga de Archivos Excel**: Funcionalidad para cargar y procesar archivos `.xlsx` utilizando Apache POI. Esto permite la creación masiva de usuarios a partir de un formato predefinido, incluyendo validaciones y normalización de datos.
+*   **Normalización de Datos**: Se aplican funciones de utilidad para limpiar y estandarizar los datos de entrada, como la capitalización correcta de nombres completos.
 
 ## Cómo Empezar
 
@@ -50,14 +51,14 @@ Para ejecutar el proyecto en un entorno local, sigue estos pasos:
 
 1.  **Clona el repositorio:**
     ```bash
-    git clone <URL_DEL_REPOSITORIO>
-    cd capstone-backend-code/CapstoneBackend
+    git clone https://github.com/ignacio-leon-m/capstone_grupo_3.git
+    cd capstone_grupo_3/CapstoneBackend
     ```
 
 2.  **Configura la base de datos:**
     Crea un archivo `application.properties` en `src/main/resources` y configura las propiedades de conexión a tu base de datos PostgreSQL:
     ```properties
-    spring.datasource.url=jdbc:postgresql://localhost:5432/tu_base_de_datos
+    spring.datasource.url=jdbc:postgresql://localhost:5432/nombre_tu_db
     spring.datasource.username=tu_usuario
     spring.datasource.password=tu_contraseña
     spring.jpa.hibernate.ddl-auto=validate
@@ -69,4 +70,4 @@ Para ejecutar el proyecto en un entorno local, sigue estos pasos:
     ./gradlew bootRun
     ```
 
-La aplicación se iniciará en el puerto 8080 por defecto.
+La aplicación se iniciará en el puerto `8080` por defecto.

@@ -25,21 +25,72 @@
       <div class="content-box">
         <h1 class="welcome-message">Bienvenido, humano</h1>
         <p class="instruction">Selecciona una de las opciones:</p>
-        <div class="options-container">
-          <a href="/user.html" class="option-button users-button"
-            >Carga de Usuarios</a
-          >
-          <a href="/content.html" class="option-button content-button"
-            >Carga de Contenido</a
-          >
+        <div class="options-container" id="options-container">
+          <!-- Las opciones se agregarán dinámicamente aquí -->
         </div>
       </div>
     </div>
      <div class="logout-fixed-container">
-      <a href="#" class="logout-icon-button" title="Cerrar Sesión">
+      <a href="#" id="logout-button" class="logout-icon-button" title="Cerrar Sesión">
         <i class="fas fa-power-off"></i>
         <span class="logout-tooltip">Cerrar Sesión</span>
       </a>
     </div>
+
+  <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          const token = localStorage.getItem('jwtToken');
+          const role = localStorage.getItem('userRole');
+
+          if(!token){
+              window.location.href = '/index.html';
+              return;
+          }
+
+          const optionsContainer = document.getElementById('options-container');
+
+          // Opción visible para todos los roles autenticados
+          const contentLink = document.createElement('a');
+          contentLink.href = '/content.html';
+          contentLink.className = 'option-button content-button';
+          contentLink.textContent = 'Carga de Contenido';
+          optionsContainer.appendChild(contentLink);
+
+          // Opciones solo para admin
+          if (role === 'admin') {
+              const usersLink = document.createElement('a');
+              usersLink.href = '/user.html';
+              usersLink.className = 'option-button users-button';
+              usersLink.textContent = 'Carga de Usuarios';
+              optionsContainer.appendChild(usersLink);
+
+              const createTeacherLink = document.createElement('a');
+              createTeacherLink.href = '/crear-profesor.html';
+              createTeacherLink.className = 'option-button users-button'; // Reutilizando estilo
+              createTeacherLink.textContent = 'Crear Profesor';
+              optionsContainer.appendChild(createTeacherLink);
+          }
+
+          // Opciones solo para profesor
+          if (role === 'profesor') {
+              const uploadStudentsLink = document.createElement('a');
+              uploadStudentsLink.href = '/user-upload.html';
+              uploadStudentsLink.className = 'option-button users-button'; // Reutilizando estilo
+              uploadStudentsLink.textContent = 'Carga de Alumnos';
+              optionsContainer.appendChild(uploadStudentsLink);
+          }
+
+          console.log('Usuario autenticado con rol:', role);
+      });
+
+      const logoutButton = document.getElementById('logout-button');
+      logoutButton.addEventListener('click', (e) => { 
+          e.preventDefault();
+          localStorage.removeItem('jwtToken');
+          localStorage.removeItem('userRole');
+          window.location.href = '/index.html';
+      });
+  </script>
+
   </body>
 </html>
