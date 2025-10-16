@@ -131,7 +131,8 @@
 						"auth",
 						"login"
 					]
-				}
+				},
+				"description": "This POST request to the /api/auth/login endpoint is used to authenticate a user. The request body requires an email and password. Upon successful authentication, the server responds with a JWT token which is saved in the environment for subsequent authorized requests."
 			},
 			"response": []
 		}
