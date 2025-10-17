@@ -1,58 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AutoImportSettings">
-    <option name="autoReloadType" value="NONE" />
+    <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd20df59-8733-4489-b4c4-b1ac015e4f5d" name="Changes" comment="Separando carpetas que recibirán el backend Spring(kotlin) y la app de Kotlin.">
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/SaveUserDto.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/repository/RoleRepository.kt" afterDir="false" />
+    <list default="true" id="abc26fc0-1a96-4144-9890-a73f0aa8b341" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiTestController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiPromptDto.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiQuizDto.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiQuizQuestionDto.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiSummaryDto.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/AiService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/GeminiAiService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/SimpleAiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/AndroidProjectSystem.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/script.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/config/SecurityConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/config/SecurityConfig.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/UserController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/UserController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/model/Role.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/model/Role.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/model/User.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/model/User.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/repository/UserRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/repository/UserRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/UserService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/UserService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-kotlin-code/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-kotlin-code/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-kotlin-code/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-kotlin-code/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ClangdSettings">
-    <option name="formatViaClangd" value="false" />
-  </component>
   <component name="ExternalProjectsData">
-    <projectState path="$PROJECT_DIR$">
+    <projectState path="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend">
       <ProjectState />
     </projectState>
+    <projectState path="$PROJECT_DIR$/capstone-kotlin-code">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/capstone-kotlin-code">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="CapstoneApp" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="CapstoneApp" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="CapstoneApp" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="android" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="CapstoneApp" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="CapstoneBackend" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Kotlin Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;ignacio-leon-m&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/ignacio-leon-m/capstone_grupo_3.git&quot;,
-    &quot;accountId&quot;: &quot;108c226d-11ad-4bfd-82ab-cd602bd983f5&quot;
-  }
-}</component>
-  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="$USER_HOME$/.gradle/wrapper/dists/gradle-8.14-bin/38aieal9i53h9rfe7vjup95b9/gradle-8.14" javaHome="$USER_HOME$/.jdks/openjdk-24.0.2+12-54" gradleVersion="8.14" />
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
+  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend" gradleHome="C:\Users\Claudio\.gradle\wrapper\dists\gradle-8.14.3-bin\cv11ve7ro1n3o1j4so8xd9n66\gradle-8.14.3" javaHome="C:\Program Files\Eclipse Adoptium\jdk-21.0.8.9-hotspot" gradleVersion="8.14.3" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
-  <component name="ProjectId" id="31zLXjUZR6cLf1YqhFoSs1ZsmX9" />
+  <component name="ProjectId" id="347m4Nj4oAaQO3K5x4ZnhoZYhIY" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -62,70 +107,195 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Gradle.Build CapstoneBackend.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.capstone-kotlin-code [androidDependencies].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.capstone-kotlin-code [assembleAndroidTest].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.capstone-kotlin-code [assembleUnitTest].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.capstone-kotlin-code [assemble].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.capstone-kotlin-code [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.capstone-kotlin-code [signingReport].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.capstone-kotlin-code [sourceSets].executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;CG3-2&quot;,
+    &quot;Spring Boot.CapstoneBackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/ignac/OneDrive/Escritorio/capstone_grupo_3&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Claudio/Desktop/capstone_grupo_3&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-kotlin-code\app\src\main\java\com\duocuc\capstoneapp" />
-      <recent name="C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-kotlin-code\app\src\main\java\com\duocuc\capstoneapp\infrastructure" />
-      <recent name="C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-kotlin-code\app\src\androidTest\java\com\duocuc\capstoneapp" />
-    </key>
+  <component name="RunManager" selected="Spring Boot.CapstoneBackendApplication">
+    <configuration name="capstone-kotlin-code [assembleAndroidTest]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/capstone-kotlin-code" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="assembleAndroidTest" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="capstone-kotlin-code [assembleUnitTest]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/capstone-kotlin-code" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="assembleUnitTest" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="capstone-kotlin-code [assemble]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/capstone-kotlin-code" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="assemble" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="capstone-kotlin-code [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/capstone-kotlin-code" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="capstone-kotlin-code [sourceSets]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/capstone-kotlin-code" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="sourceSets" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="CapstoneBackendApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="CapstoneBackend.main" />
+      <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.duocuc.capstonebackend.CapstoneBackendApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.capstone-kotlin-code [clean]" />
+        <item itemvalue="Gradle.capstone-kotlin-code [assembleUnitTest]" />
+        <item itemvalue="Gradle.capstone-kotlin-code [assembleAndroidTest]" />
+        <item itemvalue="Gradle.capstone-kotlin-code [assemble]" />
+        <item itemvalue="Gradle.capstone-kotlin-code [sourceSets]" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
-        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84" />
       </set>
     </attachedChunks>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="dd20df59-8733-4489-b4c4-b1ac015e4f5d" name="Changes" comment="" />
-      <created>1756521997355</created>
+      <changelist id="abc26fc0-1a96-4144-9890-a73f0aa8b341" name="Changes" comment="" />
+      <created>1760572793064</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1756521997355</updated>
-      <workItem from="1756521998997" duration="693000" />
-      <workItem from="1756750577400" duration="1036000" />
-      <workItem from="1756762967795" duration="709000" />
+      <updated>1760572793064</updated>
+      <workItem from="1760572794170" duration="12200000" />
+      <workItem from="1760585664940" duration="21000" />
+      <workItem from="1760585925767" duration="11000" />
+      <workItem from="1760586105248" duration="43000" />
+      <workItem from="1760586274190" duration="1743000" />
+      <workItem from="1760647583252" duration="299000" />
     </task>
-    <task id="LOCAL-00001" summary="Configurando el repositorio para comenzar con el desarrollo">
-      <option name="closed" value="true" />
-      <created>1756735327037</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1756735327037</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Separando carpetas que recibirán el backend Spring(kotlin) y la app de Kotlin.">
-      <option name="closed" value="true" />
-      <created>1756751556686</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1756751556686</updated>
-    </task>
-    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -141,10 +311,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Configurando el repositorio para comenzar con el desarrollo" />
-    <MESSAGE value="Separando carpetas que recibirán el backend Spring(kotlin) y la app de Kotlin." />
-    <option name="LAST_COMMIT_MESSAGE" value="Separando carpetas que recibirán el backend Spring(kotlin) y la app de Kotlin." />
   </component>
 </project>
