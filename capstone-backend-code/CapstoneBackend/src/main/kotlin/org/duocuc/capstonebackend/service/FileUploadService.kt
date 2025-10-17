@@ -13,28 +13,38 @@ class FileUploadService {
         val workbook = WorkbookFactory.create(excelInputStream)
         val sheet = workbook.getSheetAt(0)
         val students = mutableListOf<RegisterRequestDto>()
+
         for (row in sheet.drop(11)) {
-            val rutCell = row.getCell(1)
-            if (rutCell.toString().isBlank()) {
+            val rut = row.getCell(1)?.toString()?.trim()
+            if (rut.isNullOrBlank()) {
                 break
             }
-            val fullName = row.getCell(2)?.stringCellValue?: continue
+
+            val fullName = row.getCell(2)?.toString()?.trim()
+            if (fullName.isNullOrBlank()) {
+                continue
+            }
+
             val fullNameToTitleCase = fullName.nameToTitleCase()
             val (lastName, firstName) = splitFullNameFromExcel(fullNameToTitleCase)
+
+            val degreeName = "Ingeniería en Informática"
+
+
+
             students.add(RegisterRequestDto(
                 name = firstName,
                 lastName = lastName,
-                email = "${rutCell}@duocuc.cl",
+                email = "$rut@duocuc.cl",
                 phone = "",
-                password = rutCell.toString()
+                password = rut
+                    .replace(".", "")
                     .replace("-", "")
                     .takeLast(4) + "1234",
                 role = "alumno",
-                degreeName = "carrera-default"
+                degreeName = degreeName,
             ))
         }
         return students
     }
-
-
 }

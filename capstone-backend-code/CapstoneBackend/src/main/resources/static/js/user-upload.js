@@ -1,87 +1,90 @@
-// Lógica para la página user-upload.html
-// Ajusta UPLOAD_URL a la ruta real del backend que maneja la carga de Excel de alumnos.
-const UPLOAD_URL = '/api/users/upload'; // <-- Cambia esto si tu endpoint es distinto
-
 document.addEventListener('DOMContentLoaded', () => {
-  const fileInput = document.getElementById('fileInput');
-  const fileNameSpan = document.getElementById('fileName');
-  const uploadButton = document.getElementById('uploadButton');
-  const uploadForm = document.getElementById('uploadForm');
+    const token = localStorage.getItem('jwtToken');
+    const role = localStorage.getItem('userRole');
 
-  // Cuando el usuario selecciona un archivo
-  fileInput.addEventListener('change', () => {
-    if (fileInput.files && fileInput.files.length > 0) {
-      const f = fileInput.files[0];
-      fileNameSpan.textContent = f.name;
-      uploadButton.disabled = false;
-    } else {
-      fileNameSpan.textContent = 'Ningún archivo seleccionado';
-      uploadButton.disabled = true;
-    }
-  });
-
-  // Submit del formulario: enviar multipart/form-data
-  uploadForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    if (!fileInput.files || fileInput.files.length === 0) {
-      alert('Selecciona un archivo .xlsx antes de subir.');
-      return;
-    }
-
-    const file = fileInput.files[0];
-    // Validación básica de extensión
-    if (!file.name.toLowerCase().endsWith('.xlsx')) {
-      alert('El archivo debe tener extensión .xlsx');
-      return;
-    }
-
-    const formData = new FormData();
-    // El nombre del campo "file" debe coincidir con lo que espera el backend
-    formData.append('file', file);
-
-    try {
-      uploadButton.disabled = true;
-      uploadButton.textContent = 'Subiendo...';
-
-      const resp = await fetch(UPLOAD_URL, {
-        method: 'POST',
-        credentials: 'include',
-        body: formData
-      });
-
-      if (!resp.ok) {
-        const text = await resp.text();
-        console.error('Error al subir archivo:', resp.status, text);
-        alert('Error al subir archivo: ' + (text || resp.status));
+    // 1. Seguridad: Redirigir si no hay token o el rol no es 'profesor'
+    if (!token) {
+        window.location.href = '/index.html';
         return;
-      }
-
-      // Si el backend devuelve JSON con detalles, podemos parsearlo
-      let resultText = 'Archivo subido correctamente.';
-      try {
-        const json = await resp.json();
-        if (json && json.message) resultText = json.message;
-      } catch (err) {
-        // no es JSON, ignorar
-      }
-
-      alert(resultText);
-
-      // Actualizar UI: limpiar input y desactivar botón
-      fileInput.value = '';
-      fileNameSpan.textContent = 'Ningún archivo seleccionado';
-      uploadButton.disabled = true;
-
-      // Opcional: recargar la página o actualizar la tabla de historial si el backend devuelve el nuevo registro
-      // location.reload();
-
-    } catch (err) {
-      console.error('Fallo de red al subir archivo:', err);
-      alert('Fallo de red al subir archivo');
-    } finally {
-      uploadButton.disabled = false;
-      uploadButton.textContent = 'Cargar';
     }
-  });
+    if (role !== 'profesor') {
+        alert('Acceso denegado. Solo los profesores pueden acceder a esta página.');
+        window.location.href = '/home.html';
+        return;
+    }
+
+    const fileInput = document.getElementById('fileInput');
+    const fileNameSpan = document.getElementById('fileName');
+    const uploadButton = document.getElementById('uploadButton');
+    const uploadForm = document.getElementById('uploadForm');
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            fileNameSpan.textContent = fileInput.files[0].name;
+            uploadButton.disabled = false;
+        } else {
+            fileNameSpan.textContent = 'Ningún archivo seleccionado';
+            uploadButton.disabled = true;
+        }
+    });
+
+    uploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (fileInput.files.length === 0) {
+            alert('Por favor, selecciona un archivo .xlsx para subir.');
+            return;
+        }
+
+        const file = fileInput.files[0];
+        if (!file.name.toLowerCase().endsWith('.xlsx') && !file.name.toLowerCase().endsWith('.xls')) {
+            alert('El archivo debe ser de tipo Excel (.xlsx o .xls).');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file); // El nombre 'file' debe coincidir con @RequestParam("file")
+
+        uploadButton.disabled = true;
+        uploadButton.textContent = 'Subiendo...';
+
+        try {
+            // 2. Lógica de subida corregida
+            const res = await fetch('/api/files/upload', { // URL corregida
+                method: 'POST',
+                headers: {
+                    // NO incluir 'Content-Type', el navegador lo gestiona con FormData
+                    'Authorization': `Bearer ${token}` // 3. Autenticación con Token
+                },
+                body: formData
+            });
+
+            const responseText = await res.text();
+
+            if (res.ok) {
+                alert('Éxito: ' + responseText);
+                fileInput.value = ''; // Limpiar el input
+                fileNameSpan.textContent = 'Ningún archivo seleccionado';
+            } else {
+                alert('Error: ' + responseText);
+            }
+        } catch (err) {
+            console.error('Error de red al subir el archivo:', err);
+            alert('Error de red. No se pudo conectar con el servidor.');
+        } finally {
+            uploadButton.disabled = false;
+            uploadButton.textContent = 'Cargar';
+        }
+    });
+
+    // Lógica del botón de logout
+    const logoutButton = document.querySelector('.logout-icon-button');
+    if(logoutButton) {
+        logoutButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('jwtToken');
+            localStorage.removeItem('userRole');
+            window.location.href = '/index.html';
+        });
+    }
 });

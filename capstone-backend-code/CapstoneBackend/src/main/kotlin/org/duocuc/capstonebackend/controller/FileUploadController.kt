@@ -21,7 +21,7 @@ class FileUploadController(
     private val log = LoggerFactory.getLogger(FileUploadController::class.java)
 
     @PostMapping("/upload")
-    @PreAuthorize("hasAuthority('PROFESOR')")
+    @PreAuthorize("hasAuthority('profesor')")
     fun uploadExcelFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
         return try {
             val students = file.inputStream.use { inputStream ->
@@ -29,7 +29,6 @@ class FileUploadController(
             }
             log.info("El servicio de Excel procesó ${students.size} alumnos.")
 
-            // Usamos la nueva función para registrar solo alumnos
             students.forEach {
                 authService.registerStudentFromExcel(it)
             }
