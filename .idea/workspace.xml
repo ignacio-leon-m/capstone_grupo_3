@@ -5,28 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="abc26fc0-1a96-4144-9890-a73f0aa8b341" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiController.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiTestController.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiPromptDto.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiQuizDto.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiQuizQuestionDto.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiSummaryDto.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/AiService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/GeminiAiService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/SimpleAiService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/AndroidProjectSystem.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/script.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/config/SecurityConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/config/SecurityConfig.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,40 +84,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Build CapstoneBackend.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.capstone-kotlin-code [androidDependencies].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.capstone-kotlin-code [assembleAndroidTest].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.capstone-kotlin-code [assembleUnitTest].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.capstone-kotlin-code [assemble].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.capstone-kotlin-code [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.capstone-kotlin-code [signingReport].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.capstone-kotlin-code [sourceSets].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Spring Boot.CapstoneBackendApplication.executor&quot;: &quot;Run&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Claudio/Desktop/capstone_grupo_3&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build CapstoneBackend.executor": "Run",
+    "Gradle.capstone-kotlin-code [androidDependencies].executor": "Run",
+    "Gradle.capstone-kotlin-code [assembleAndroidTest].executor": "Run",
+    "Gradle.capstone-kotlin-code [assembleUnitTest].executor": "Run",
+    "Gradle.capstone-kotlin-code [assemble].executor": "Run",
+    "Gradle.capstone-kotlin-code [clean].executor": "Run",
+    "Gradle.capstone-kotlin-code [signingReport].executor": "Run",
+    "Gradle.capstone-kotlin-code [sourceSets].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.CapstoneBackendApplication.executor": "Run",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Claudio/Desktop/capstone_grupo_3",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Spring Boot.CapstoneBackendApplication">
     <configuration name="capstone-kotlin-code [assembleAndroidTest]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
