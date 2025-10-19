@@ -13,13 +13,12 @@ import org.springframework.web.multipart.MultipartFile
 class AiController(
     private val aiService: AiService
 ) {
-    // 1) Resumen desde archivo (PDF/Doc/etc). Solo PROFESOR por ahora
     @PostMapping(
         "/summarize",
         consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    @PreAuthorize("hasAuthority('PROFESOR')")
+    @PreAuthorize("hasAnyAuthority('admin','profesor')")
     fun summarize(
         @RequestPart("file") file: MultipartFile,
         @RequestPart("title", required = false) title: String?
@@ -30,7 +29,6 @@ class AiController(
         return aiService.summarizeDocument(bytes, mime, t)
     }
 
-    // 2) Quiz desde texto plano. Solo PROFESOR por ahora
     data class QuizRequest(val text: String, val numQuestions: Int? = 5)
 
     @PostMapping(
@@ -38,7 +36,7 @@ class AiController(
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE]
     )
-    @PreAuthorize("hasAuthority('PROFESOR')")
+    @PreAuthorize("hasAnyAuthority('admin','profesor')")
     fun quiz(@RequestBody body: QuizRequest): AiQuizDto {
         return aiService.generateQuizFromText(body.text, body.numQuestions ?: 5)
     }
