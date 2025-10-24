@@ -5,28 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="abc26fc0-1a96-4144-9890-a73f0aa8b341" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiController.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiTestController.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiPromptDto.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiQuizDto.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiQuizQuestionDto.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiSummaryDto.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/AiService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/GeminiAiService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/SimpleAiService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/AndroidProjectSystem.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/config/CacheConfig.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiPdfController.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/Hashing.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/PdfExtractor.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/script.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/config/SecurityConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/config/SecurityConfig.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiTestController.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiSummaryDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiSummaryDto.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/GeminiAiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/GeminiAiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/SimpleAiService.kt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,9 +81,22 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="feature/CG3-49" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend" gradleHome="C:\Users\Claudio\.gradle\wrapper\dists\gradle-8.14.3-bin\cv11ve7ro1n3o1j4so8xd9n66\gradle-8.14.3" javaHome="C:\Program Files\Eclipse Adoptium\jdk-21.0.8.9-hotspot" gradleVersion="8.14.3" />
+  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$/capstone-kotlin-code" gradleHome="C:\Users\Claudio\.gradle\wrapper\dists\gradle-8.13-bin\5xuhj0ry160q40clulazy9h7d\gradle-8.13" javaHome="C:\Program Files\Eclipse Adoptium\jdk-21.0.8.9-hotspot" gradleVersion="8.13" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -123,9 +126,10 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.CapstoneBackendApplication.executor&quot;: &quot;Run&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/CG3-49&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
@@ -295,6 +299,7 @@
       <workItem from="1760586105248" duration="43000" />
       <workItem from="1760586274190" duration="1743000" />
       <workItem from="1760647583252" duration="299000" />
+      <workItem from="1760895938667" duration="5099000" />
     </task>
     <servers />
   </component>
@@ -302,11 +307,38 @@
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="feature/CG3-49" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="feature/CG3-49" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>

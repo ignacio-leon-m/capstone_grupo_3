@@ -3,52 +3,55 @@ package org.duocuc.capstonebackend.service.impl
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.genai.Client
+import org.duocuc.capstonebackend.dto.AiQuizDto
+import org.duocuc.capstonebackend.dto.AiQuizQuestionDto   // ⬅️ FALTABA ESTE
+import org.duocuc.capstonebackend.dto.AiSummaryDto
+import org.duocuc.capstonebackend.service.AiService
+import org.duocuc.capstonebackend.util.PdfTextExtractor
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
-// Usaremos esta interfaz para que otros componentes puedan llamar al servicio
-interface AiService {
-    fun resumen(texto: String): String
-    fun quiz(texto: String): JsonNode
-}
-
 @Service
 class GeminiService(
-    @Value("\${gemini.api-key:}") private val apiKey: String
+    @Value("\${gemini.api-key:}") private val apiKeyProp: String
 ) : AiService {
-    // Usa la clase Client del SDK de Java.
-    private val client: Client =
-        if (apiKey.isNotBlank()) Client.builder().apiKey(apiKey).build()
-        else Client()
 
+    private val apiKey: String = when {
+        apiKeyProp.isNotBlank() -> apiKeyProp
+        System.getenv("GOOGLE_API_KEY")?.isNotBlank() == true -> System.getenv("GOOGLE_API_KEY")
+        else -> throw IllegalStateException("Falta la API key de Gemini: define gemini.api-key o GOOGLE_API_KEY")
+    }
+
+    private val client: Client = Client.builder().apiKey(apiKey).build()
+    private val model = "gemini-2.0-flash"
     private val mapper = ObjectMapper()
-    // Usamos gemini-2.5-flash ya que es el modelo más reciente y rápido para este tipo de tareas
-    private val model = "gemini-2.5-flash"
 
-    override fun resumen(texto: String): String {
+    override fun summarizeDocument(bytes: ByteArray, mimeType: String, title: String): AiSummaryDto {
+        val text = PdfTextExtractor.safeExtract(bytes, mimeType).ifBlank {
+            return AiSummaryDto(title, "No se pudo extraer texto del documento.")
+        }
+
         val prompt = """
-            Eres un ayudante para cursos universitarios.
-            Devuelve un RESUMEN en español (5-7 viñetas) claro y conciso.
-            Prohibido usar bloques de código o markdown de cercas (no uses ```).
+            Eres un ayudante académico. Resume en español el siguiente contenido en 3 líneas claras, sin viñetas, sin markdown.
             Texto:
             ---
-            $texto
+            $text
             ---
         """.trimIndent()
 
-        // El SDK de Java permite la llamada simple con model, prompt y config (null para config simple)
         val resp = client.models.generateContent(model, prompt, null)
-        return resp.text().trim()
+        val summary = resp.text().trim()
+        return AiSummaryDto(title = title, summary = summary)
     }
 
-    /** Devuelve JSON válido con 5 preguntas de opción múltiple. Robusto ante ```json ... ```. */
-    override fun quiz(texto: String): JsonNode {
+    override fun generateQuizFromText(text: String, numQuestions: Int): AiQuizDto {
+        val bounded = numQuestions.coerceIn(3, 10)
+
         val prompt = """
-            Genera un QUIZ en **JSON** (sin texto extra) para estudiantes, en español.
-            - 5 preguntas de opción múltiple
+            Genera un QUIZ en formato JSON válido (sin texto extra) en español:
+            - $bounded preguntas de opción múltiple
             - 4 opciones por pregunta
-            - Solo una correcta (índice 0..3)
-            - Devuelve **exclusivamente** JSON, sin usar bloques ``` ni prosa.
+            - Solo una correcta (índice 0..3) en la propiedad "respuestaIndex"
             Esquema:
             {
               "preguntas": [
@@ -58,49 +61,50 @@ class GeminiService(
                 }
               ]
             }
-
+            
             Texto fuente:
             ---
-            $texto
+            $text
             ---
-            Responde solo el JSON.
+            Responde ÚNICAMENTE el JSON.
         """.trimIndent()
 
-        val resp = client.models.generateContent(model, prompt, null)
-        val raw = resp.text().trim()
+        val raw = client.models.generateContent(model, prompt, null).text().trim()
 
-        // Lógica de parsing robusta para asegurar que la salida es JSON válido:
+        val node = tryParseJson(raw)
+            ?: tryParseJson(stripCodeFences(raw))
+            ?: tryParseJson(extractBetweenBraces(raw) ?: "")
+            ?: tryParseJson(extractBetweenBraces(stripCodeFences(raw)) ?: "")
+            ?: throw IllegalStateException("La respuesta de Gemini no fue JSON válido. Muestra: ${raw.take(200)}")
 
-        // 1) intentar parseo directo
-        tryParseJson(raw)?.let { return it }
+        val preguntas = node["preguntas"] ?: throw IllegalStateException("JSON sin 'preguntas'")
+        if (!preguntas.isArray || preguntas.size() == 0) throw IllegalStateException("JSON 'preguntas' vacío")
 
-        // 2) quitar cercas ```…``` (```json o ``` a secas)
-        val withoutFences = stripCodeFences(raw)
-        tryParseJson(withoutFences)?.let { return it }
+        val list = preguntas.map { q ->
+            val enunciado = q["enunciado"]?.asText()?.trim().orEmpty()
+            val opcionesNode = q["opciones"]
+            val idx = q["respuestaIndex"]?.asInt() ?: 0
+            val opciones = if (opcionesNode != null && opcionesNode.isArray)
+                opcionesNode.map { it.asText() } else emptyList()
 
-        // 3) extraer bloque entre { ... }
-        val braces = extractBetweenBraces(raw)
-        if (braces != null) {
-            tryParseJson(braces)?.let { return it }
+            require(enunciado.isNotBlank() && opciones.size == 4) { "Pregunta mal formada" }
+            require(idx in 0..3) { "Índice de respuesta fuera de rango" }
+
+            AiQuizQuestionDto(
+                question = enunciado,
+                options = opciones,
+                answerIndex = idx
+            )
         }
 
-        // 4) como último intento, extraer de withoutFences
-        val braces2 = extractBetweenBraces(withoutFences)
-        if (braces2 != null) {
-            tryParseJson(braces2)?.let { return it }
-        }
-
-        // Si nada funcionó, lanza con muestra (corto) para depurar
-        throw IllegalStateException("La respuesta de Gemini no fue JSON válido. Muestra: " + raw.take(200))
+        return AiQuizDto(questions = list)
     }
 
-    private fun tryParseJson(s: String?): JsonNode? {
-        if (s.isNullOrBlank()) return null
-        return try { mapper.readTree(s) } catch (_: Exception) { null }
-    }
+    // --- helpers de parsing ---
+    private fun tryParseJson(s: String?): JsonNode? =
+        if (s.isNullOrBlank()) null else try { mapper.readTree(s) } catch (_: Exception) { null }
 
     private fun stripCodeFences(s: String): String {
-        // Captura ```json ... ``` o ``` ... ```
         val re = Regex("(?s)```(?:json)?\\s*(.*?)\\s*```")
         val m = re.find(s)
         return if (m != null) m.groupValues[1].trim() else s
