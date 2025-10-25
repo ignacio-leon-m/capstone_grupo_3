@@ -15,7 +15,7 @@ import java.util.UUID
 class Degree(
     @Id
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    val id: UUID? = null,
+    var id: UUID? = null,
 
     @Column(name = "nombre", nullable = false, length = 100)
     var name: String,

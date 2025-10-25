@@ -12,9 +12,9 @@ import javax.crypto.SecretKey
 
 @Service
 class JwtTokenService(
-    @Value("\${jwt.secret}")
+    @param:Value("\${jwt.secret}")
     private val secret: String,
-    @Value("\${jwt.expiration:86400000}")
+    @param:Value("\${jwt.expiration:86400000}")
     private val expirationMillis: Long
 ) {
     private val key: SecretKey by lazy {
