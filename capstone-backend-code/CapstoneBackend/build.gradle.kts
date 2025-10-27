@@ -23,15 +23,14 @@ repositories {
     google()
 }
 
+val poiVersion = "5.4.1"
+
 dependencies {
     // Dependencia Gemini: SDK de Java, versión estable
     implementation("com.google.genai:google-genai:1.23.0")
-
     // Dependencias Tika (Mantenidas de tu lista)
     implementation("org.apache.tika:tika-core:3.2.3")
     implementation("org.apache.tika:tika-parsers-standard-package:3.2.3")
-
-
     // Otras dependencias
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
@@ -47,8 +46,8 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-    implementation("org.apache.poi:poi:5.4.0") // Mantenido
-
+    implementation("org.apache.poi:poi:${poiVersion}")
+    implementation("org.apache.poi:poi-ooxml:${poiVersion}")
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")

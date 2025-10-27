@@ -1,5 +1,6 @@
 package com.bboost.brainboost
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -9,16 +10,25 @@ import kotlinx.coroutines.launch
 import com.bboost.brainboost.databinding.ActivityMainBinding
 import com.bboost.brainboost.dto.LoginRequestDto
 import com.bboost.brainboost.network.RetrofitClient
+import com.bboost.brainboost.util.SessionManager
 
 class MainActivity : AppCompatActivity() {
 
     // ViewBinding para acceder fácil a la UI
     private lateinit var binding: ActivityMainBinding
+    private lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        sessionManager = SessionManager(this)
+
+        // Si ya hay un token, ir directo a Home sin mostrar el login
+        if (sessionManager.getToken() != null) {
+            goToHome()
+        }
 
         // Asignar el clic del botón
         binding.btnLogin.setOnClickListener {
@@ -35,34 +45,47 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        // Creamos la petición
         val loginRequest = LoginRequestDto(email, password)
 
-        // Usamos corutinas para la llamada de red
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.instance.login(loginRequest)
 
                 if (response.isSuccessful) {
-                    // Éxito (Código 200 OK)
                     val loginResponse = response.body()
                     val token = loginResponse?.token
                     val role = loginResponse?.role
 
-                    Log.i("LOGIN_SUCCESS", "Token: $token, Rol: $role")
-                    binding.tvResult.text = "¡Login Exitoso! \nRol: $role"
+                    if (token != null && role != null) {
+                        Log.i("LOGIN_SUCCESS", "Token: $token, Rol: $role")
+
+                        // 1. Guardar la sesión
+                        sessionManager.saveAuth(token, role)
+
+                        // 2. Ir a Home
+                        goToHome()
+
+                    } else {
+                        binding.tvResult.text = "Error: Respuesta vacía del servidor."
+                    }
 
                 } else {
-                    // Error (Ej: 401 Unauthorized, 404, etc.)
                     val errorMsg = "Error: ${response.code()} - Credenciales incorrectas"
                     Log.e("LOGIN_ERROR", errorMsg)
                     binding.tvResult.text = errorMsg
                 }
             } catch (e: Exception) {
-                // Error de red (sin conexión, URL mal, etc.)
                 Log.e("LOGIN_EXCEPTION", "Excepción: ${e.message}", e)
                 binding.tvResult.text = "Error de conexión: ${e.message}"
             }
         }
     }
+
+    private fun goToHome() {
+        val intent = Intent(this, HomeActivity::class.java)
+        // Banderas para que el usuario no pueda volver al Login con el botón "atrás"
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
+
 }
