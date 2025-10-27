@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class GeminiService(
-    @Value("\${gemini.api-key:}") private val apiKeyProp: String
+    @param:Value("\${gemini.api-key:}") private val apiKeyProp: String
 ) : AiService {
 
     private val apiKey: String = when {

@@ -166,9 +166,7 @@ CREATE TABLE metricas (
                           FOREIGN KEY (id_pregunta) REFERENCES preguntas(id)
 );
 
-/******************************************************************/
 /*********************** INSERCIÓN DE DATOS ***********************/
-/******************************************************************/
 
 WITH ins_pais AS (
     INSERT INTO paises (nombre) VALUES ('Chile') RETURNING id

@@ -15,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
-@Suppress("SpellCheckingInspection")
 @Service
 class AuthService (
     private val userRepository: UserRepository,

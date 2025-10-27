@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service
 @Service
 @Primary
 class CachingAiService(
-    @Qualifier("geminiService") private val delegate: AiService,
+    @param:Qualifier("geminiService") private val delegate: AiService,
     private val cacheManager: CacheManager
 ) : AiService {
 
