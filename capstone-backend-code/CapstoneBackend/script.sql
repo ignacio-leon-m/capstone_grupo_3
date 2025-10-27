@@ -170,6 +170,10 @@ CREATE TABLE metricas (
 /*********************** INSERCIÓN DE DATOS ***********************/
 /******************************************************************/
 
+/******************************************************************/
+/*********************** INSERCIÓN DE DATOS CORREGIDA *************/
+/******************************************************************/
+
 WITH ins_pais AS (
 INSERT INTO paises (nombre) VALUES ('Chile') RETURNING id
     ),
@@ -209,20 +213,19 @@ SELECT 'Algoritmos y Programación', id FROM ins_carrera RETURNING id
 INSERT INTO asignaturas_semestre (id_asignatura, id_semestre)
 SELECT ins_asignatura.id, ins_semestre.id FROM ins_asignatura, ins_semestre
     ),
-                                              -- USUARIO 1 (ADMIN)
+                                              -- USUARIO 1 (ADMIN): RUT sin guion (para VARCHAR(9))
     ins_usuario_1 AS (
-INSERT INTO usuarios (nombre, apellido, id_rol, id_carrera, password_hash, correo)
-SELECT 'Cecilia', 'Arroyo', ins_rol_1.id, ins_carrera.id, '$2a$10$jBN0ANHTkwIZgqLe0TxlAeERoxCefxrOx9yzSXH7lIQ6pPHQa2cbe', 'cecilia.arroyo@duoc.cl'
+INSERT INTO usuarios (nombre, apellido, RUT, id_rol, id_carrera, password_hash, correo)
+SELECT 'Cecilia', 'Arroyo', '100000001', ins_rol_1.id, ins_carrera.id, '$2a$10$jBN0ANHTkwIZgqLe0TxlAeERoxCefxrOx9yzSXH7lIQ6pPHQa2cbe', 'cecilia.arroyo@duoc.cl'
 FROM ins_rol_1, ins_carrera RETURNING id
     ),
-    -- NUEVO USUARIO 2 (PROFESOR)
+    -- NUEVO USUARIO 2 (PROFESOR): RUT sin guion (para VARCHAR(9))
     ins_usuario_2 AS (
-INSERT INTO usuarios (nombre, apellido, id_rol, id_carrera, password_hash, correo)
-SELECT 'Pedro', 'Pérez', ins_rol_2.id, ins_carrera.id, '$2a$10$jBN0ANHTkwIZgqLe0TxlAeERoxCefxrOx9yzSXH7lIQ6pPHQa2cbe', 'pedro.perez@duoc.cl'
+INSERT INTO usuarios (nombre, apellido, RUT, id_rol, id_carrera, password_hash, correo)
+SELECT 'Pedro', 'Pérez', '11000000K', ins_rol_2.id, ins_carrera.id, '$2a$10$jBN0ANHTkwIZgqLe0TxlAeERoxCefxrOx9yzSXH7lIQ6pPHQa2cbe', 'pedro.perez@duoc.cl'
 FROM ins_rol_2, ins_carrera RETURNING id
     ),
-
-    -- El resto de las inserciones deben usar ins_usuario_1 para mantener la coherencia con los datos de prueba
+-- INSERCIONES DE GAMIFICACIÓN Y AUDITORÍA
     ins_estado_carga AS (
 INSERT INTO estados_carga (nombre_estado) VALUES ('Completado') RETURNING id
     ),
@@ -234,14 +237,20 @@ INSERT INTO cargas (id_usuario_carga, nombre_archivo, id_estado, id_tipo_carga)
 SELECT ins_usuario_1.id, 'apuntes_semana_1.pdf', ins_estado_carga.id, ins_tipo_carga.id
 FROM ins_usuario_1, ins_estado_carga, ins_tipo_carga
     ),
+    ins_tema AS ( -- Añadido para cumplir con la tabla temas
+INSERT INTO temas (nombre, id_asignatura)
+SELECT 'Conceptos Básicos', id FROM ins_asignatura RETURNING id
+    ),
     ins_pregunta AS (
-INSERT INTO preguntas (texto, respuesta_correcta, tema, id_asignatura)
-SELECT '¿Qué es una variable?', 'Un espacio en memoria para almacenar un valor.', 'Conceptos Básicos', id
-FROM ins_asignatura RETURNING id
+-- Corregido para usar id_tema en lugar de la columna 'tema' (VARCHAR)
+INSERT INTO preguntas (texto, respuesta_correcta, id_tema, id_asignatura)
+SELECT '¿Qué es una variable?', 'Un espacio en memoria para almacenar un valor.', ins_tema.id, ins_asignatura.id
+FROM ins_asignatura, ins_tema RETURNING id
     ),
     ins_juego AS (
-INSERT INTO juegos(id_usuario, id_asignatura, puntaje)
-SELECT ins_usuario_1.id, ins_asignatura.id, 150.00
+-- Corregido para incluir nombre_juego e intentos_restantes, que son NOT NULL o requeridos
+INSERT INTO juegos(id_usuario, id_asignatura, puntaje, nombre_juego, intentos_restantes)
+SELECT ins_usuario_1.id, ins_asignatura.id, 150.00, 'Quiz Inicial', 3
 FROM ins_usuario_1, ins_asignatura
     ),
     ins_puntajes AS (
@@ -255,5 +264,4 @@ SELECT ins_usuario_1.id, ins_asignatura.id, 150.00, 1
 FROM ins_usuario_1, ins_asignatura
     )
 INSERT INTO metricas (id_usuario, id_pregunta, respuesta_correcta, tiempo_respuesta_ms)
-SELECT ins_usuario_1.id, ins_pregunta.id, TRUE, 3500
-FROM ins_usuario_1, ins_pregunta;
+SELECT ins_usuario_1.id, ins_pregunta
