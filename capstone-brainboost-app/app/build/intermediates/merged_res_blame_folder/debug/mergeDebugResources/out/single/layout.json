@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-50:/layout/activity_content_upload.xml",
+        "source": "com.bboost.brainboost.app-main-53:/layout/activity_content_upload.xml"
+    },
+    {
+        "merged": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-mergeDebugResources-50:\\layout\\activity_create_teacher.xml",
+        "source": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-main-53:\\layout\\activity_create_teacher.xml"
+    },
+    {
+        "merged": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-mergeDebugResources-50:\\layout\\activity_home.xml",
+        "source": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-main-53:\\layout\\activity_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-mergeDebugResources-50:\\layout\\activity_upload_students.xml",
+        "source": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-main-53:\\layout\\activity_upload_students.xml"
+    },
+    {
+        "merged": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-mergeDebugResources-50:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-main-53:\\layout\\activity_main.xml"
+    }
+]

@@ -1,0 +1,13 @@
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\dto\RegisterRequestDto.kt
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\util\SessionManager.kt
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\ui\theme\Theme.kt
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\dto\LoginResponseDto.kt
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\ui\theme\Color.kt
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\network\RetrofitClient.kt
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\dto\UserResponseDto.kt
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\ui\theme\Type.kt
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\MainActivity.kt
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\dto\LoginRequestDto.kt
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\HomeActivity.kt
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\network\ApiService.kt
+C:\Users\ignac\OneDrive\Escritorio\capstone_grupo_3\capstone-brainboost-app\app\src\main\java\com\bboost\brainboost\dto\RoleDto.kt

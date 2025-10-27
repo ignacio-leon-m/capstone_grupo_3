@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.bboost.brainboost.app-mergeDebugResources-49:/values-ldltr-v21/values-ldltr-v21.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\ignac\\.gradle\\caches\\8.14.3\\transforms\\5e871e02d9a74dc3300376e11ee55157\\transformed\\appcompat-1.7.1\\res\\values-ldltr-v21\\values-ldltr-v21.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "112",
+                        "endOffsets": "163"
+                    }
+                }
+            ]
+        }
+    ]
+}
