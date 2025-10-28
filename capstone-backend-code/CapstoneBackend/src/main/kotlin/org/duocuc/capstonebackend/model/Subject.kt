@@ -14,7 +14,7 @@ import org.hibernate.annotations.UuidGenerator
 import java.util.UUID
 
 @Entity
-@Table(name = "asignaturas")
+@Table(name = "asignaturas", schema = "public")
 class Subject (
     @Column(name = "nombre", nullable = false, length = 100)
     var nombre: String,

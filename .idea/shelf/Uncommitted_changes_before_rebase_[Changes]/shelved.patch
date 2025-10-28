@@ -1,0 +1,376 @@
+Index: capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package org.duocuc.capstonebackend.service.impl\r\n\r\nimport org.duocuc.capstonebackend.dto.AiQuizDto\r\nimport org.duocuc.capstonebackend.dto.AiSummaryDto\r\nimport org.duocuc.capstonebackend.service.AiService\r\nimport org.duocuc.capstonebackend.util.Hashing\r\nimport org.springframework.beans.factory.annotation.Qualifier\r\nimport org.springframework.cache.CacheManager\r\nimport org.springframework.context.annotation.Primary\r\nimport org.springframework.stereotype.Service\r\n\r\n/**\r\n * Decorador de caché para AiService.\r\n * Mantiene la arquitectura: los controllers siguen inyectando AiService.\r\n */\r\n@Service\r\n@Primary\r\nclass CachingAiService(\r\n    @Qualifier(\"geminiService\") private val delegate: AiService,\r\n    private val cacheManager: CacheManager\r\n) : AiService {\r\n\r\n    override fun summarizeDocument(bytes: ByteArray, mimeType: String, title: String): AiSummaryDto {\r\n        val key = \"sum:${Hashing.sha256Hex(bytes)}:$mimeType\"\r\n        val cache = cacheManager.getCache(\"ai_summaries\")\r\n        cache?.get(key, AiSummaryDto::class.java)?.let { return it }\r\n\r\n        val result = delegate.summarizeDocument(bytes, mimeType, title)\r\n        cache?.put(key, result)\r\n        return result\r\n    }\r\n\r\n    override fun generateQuizFromText(text: String, numQuestions: Int): AiQuizDto {\r\n        val nq = numQuestions.coerceIn(3, 10)\r\n        val key = \"quiz:${Hashing.sha256Hex(text)}:$nq\"\r\n        val cache = cacheManager.getCache(\"ai_quizzes\")\r\n        cache?.get(key, AiQuizDto::class.java)?.let { return it }\r\n\r\n        val result = delegate.generateQuizFromText(text, nq)\r\n        cache?.put(key, result)\r\n        return result\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt
+--- a/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt	(revision 520108936a801807a2cc5fd46eb47c76bb88a3bd)
++++ b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt	(date 1760921302988)
+@@ -14,7 +14,7 @@
+  * Mantiene la arquitectura: los controllers siguen inyectando AiService.
+  */
+ @Service
+-@Primary
++
+ class CachingAiService(
+     @Qualifier("geminiService") private val delegate: AiService,
+     private val cacheManager: CacheManager
+Index: capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/PersistingAiService.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/PersistingAiService.kt b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/PersistingAiService.kt
+new file mode 100644
+--- /dev/null	(date 1760918393884)
++++ b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/PersistingAiService.kt	(date 1760918393884)
+@@ -0,0 +1,62 @@
++package org.duocuc.capstonebackend.service.impl
++
++import com.fasterxml.jackson.databind.ObjectMapper
++import org.duocuc.capstonebackend.dto.AiQuizDto
++import org.duocuc.capstonebackend.dto.AiSummaryDto
++import org.duocuc.capstonebackend.nosql.AiQuizDoc
++import org.duocuc.capstonebackend.nosql.AiQuizRepository
++import org.duocuc.capstonebackend.nosql.AiSummaryDoc
++import org.duocuc.capstonebackend.nosql.AiSummaryRepository
++import org.duocuc.capstonebackend.service.AiService
++import org.duocuc.capstonebackend.util.Checksums
++import org.springframework.beans.factory.annotation.Qualifier
++import org.springframework.context.annotation.Primary
++import org.springframework.stereotype.Service
++import org.duocuc.capstonebackend.security.CurrentUser
++import java.util.*
++
++@Service
++@Primary
++class PersistingAiService(
++    @Qualifier("geminiService") private val delegate: AiService,
++    private val summaryRepo: AiSummaryRepository,
++    private val quizRepo: AiQuizRepository,
++    private val currentUser: CurrentUser,                  // <-- NUEVO
++    private val mapper: ObjectMapper = ObjectMapper()
++) : AiService {
++
++    override fun summarizeDocument(bytes: ByteArray, mimeType: String, title: String): AiSummaryDto {
++        val dto = delegate.summarizeDocument(bytes, mimeType, title)
++
++        val userId = currentUser.id()                       // <-- UUID real
++        val sha1 = Checksums.sha1(bytes)
++
++        val doc = AiSummaryDoc(
++            userId = userId,
++            title = title,
++            mimeType = mimeType,
++            sizeBytes = bytes.size.toLong(),
++            sha1 = sha1,
++            summary = dto.summary
++        )
++        summaryRepo.save(doc)
++        return dto
++    }
++
++    override fun generateQuizFromText(text: String, numQuestions: Int): AiQuizDto {
++        val quiz = delegate.generateQuizFromText(text, numQuestions)
++
++        val userId = currentUser.id()                       // <-- UUID real
++        val payload = mapper.writeValueAsString(quiz)
++
++        val doc = AiQuizDoc(
++            userId = userId,
++            sourceTitle = "Texto libre",
++            sourceSha1 = null,
++            numQuestions = quiz.questions.size,
++            payload = payload
++        )
++        quizRepo.save(doc)
++        return quiz
++    }
++}
+\ No newline at end of file
+Index: capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiDevController.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiDevController.kt b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiDevController.kt
+new file mode 100644
+--- /dev/null	(date 1760920382993)
++++ b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiDevController.kt	(date 1760920382993)
+@@ -0,0 +1,33 @@
++// AiDevController.kt
++package org.duocuc.capstonebackend.controller
++
++import org.duocuc.capstonebackend.nosql.AiQuizRepository
++import org.duocuc.capstonebackend.nosql.AiSummaryRepository
++import org.duocuc.capstonebackend.security.CurrentUser
++import org.springframework.http.MediaType
++import org.springframework.security.access.prepost.PreAuthorize
++import org.springframework.web.bind.annotation.*
++
++@RestController
++@RequestMapping("/api/ai/dev")
++class AiDevController(
++    private val summaries: AiSummaryRepository,
++    private val quizzes: AiQuizRepository,
++    private val currentUser: CurrentUser
++) {
++    @GetMapping(
++        "/summaries",
++        produces = [MediaType.APPLICATION_JSON_VALUE]
++    )
++    @PreAuthorize("hasAnyAuthority('admin','profesor')")
++    fun mySummaries() =
++        summaries.findTop20ByUserIdOrderByCreatedAtDesc(currentUser.id())
++
++    @GetMapping(
++        "/quizzes",
++        produces = [MediaType.APPLICATION_JSON_VALUE]
++    )
++    @PreAuthorize("hasAnyAuthority('admin','profesor')")
++    fun myQuizzes() =
++        quizzes.findTop20ByUserIdOrderByCreatedAtDesc(currentUser.id())
++}
+Index: capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/Checksums.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/Checksums.kt b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/Checksums.kt
+new file mode 100644
+--- /dev/null	(date 1760916405765)
++++ b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/Checksums.kt	(date 1760916405765)
+@@ -0,0 +1,11 @@
++package org.duocuc.capstonebackend.util
++
++import java.security.MessageDigest
++
++object Checksums {
++    fun sha1(bytes: ByteArray): String {
++        val md = MessageDigest.getInstance("SHA-1")
++        val d = md.digest(bytes)
++        return d.joinToString("") { "%02x".format(it) }
++    }
++}
+Index: capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/security/CurrentUser.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/security/CurrentUser.kt b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/security/CurrentUser.kt
+new file mode 100644
+--- /dev/null	(date 1760918290229)
++++ b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/security/CurrentUser.kt	(date 1760918290229)
+@@ -0,0 +1,30 @@
++package org.duocuc.capstonebackend.security
++
++import org.duocuc.capstonebackend.repository.UserRepository
++import org.springframework.security.core.context.SecurityContextHolder
++import org.springframework.stereotype.Component
++import java.util.*
++
++@Component
++class CurrentUser(private val userRepository: UserRepository) {
++
++    /**
++     * Devuelve el UUID de usuarios. Lanza IllegalStateException si no encuentra.
++     */
++    fun id(): UUID {
++        val auth = SecurityContextHolder.getContext().authentication
++            ?: throw IllegalStateException("No hay autenticación en SecurityContext")
++
++        val email = auth.name ?: throw IllegalStateException("Principal sin email")
++        val user = userRepository.findByEmail(email).orElseThrow {
++            IllegalStateException("Usuario no encontrado por email: $email")
++        }
++        return user.id ?: throw IllegalStateException("Usuario sin UUID")
++    }
++
++    fun email(): String {
++        val auth = SecurityContextHolder.getContext().authentication
++            ?: throw IllegalStateException("No hay autenticación en SecurityContext")
++        return auth.name
++    }
++}
+Index: capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiQuizDoc.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiQuizDoc.kt b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiQuizDoc.kt
+new file mode 100644
+--- /dev/null	(date 1760920473929)
++++ b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiQuizDoc.kt	(date 1760920473929)
+@@ -0,0 +1,18 @@
++// AiQuizDoc.kt
++package org.duocuc.capstonebackend.nosql
++
++import org.springframework.data.annotation.Id
++import org.springframework.data.mongodb.core.mapping.Document
++import java.time.Instant
++import java.util.*
++
++@Document("ai_quizzes")
++data class AiQuizDoc(
++    @Id val id: String? = null,
++    val userId: UUID,
++    val sourceTitle: String?,
++    val sourceSha1: String?,
++    val numQuestions: Int,
++    val payload: String,          // JSON del quiz
++    val createdAt: Instant = Instant.now()
++)
+Index: capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiSummaryDoc.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiSummaryDoc.kt b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiSummaryDoc.kt
+new file mode 100644
+--- /dev/null	(date 1760920462529)
++++ b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiSummaryDoc.kt	(date 1760920462529)
+@@ -0,0 +1,19 @@
++// AiSummaryDoc.kt
++package org.duocuc.capstonebackend.nosql
++
++import org.springframework.data.annotation.Id
++import org.springframework.data.mongodb.core.mapping.Document
++import java.time.Instant
++import java.util.*
++
++@Document("ai_summaries")
++data class AiSummaryDoc(
++    @Id val id: String? = null,
++    val userId: UUID,
++    val title: String,
++    val mimeType: String,
++    val sizeBytes: Long,
++    val sha1: String,
++    val summary: String,
++    val createdAt: Instant = Instant.now()
++)
+Index: capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiQuizRepository.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiQuizRepository.kt b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiQuizRepository.kt
+new file mode 100644
+--- /dev/null	(date 1760920489806)
++++ b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiQuizRepository.kt	(date 1760920489806)
+@@ -0,0 +1,8 @@
++// AiQuizRepository.kt
++package org.duocuc.capstonebackend.nosql
++
++import org.springframework.data.mongodb.repository.MongoRepository
++
++interface AiQuizRepository : MongoRepository<AiQuizDoc, String> {
++    fun findTop20ByUserIdOrderByCreatedAtDesc(userId: java.util.UUID): List<AiQuizDoc>
++}
+Index: capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiSummaryRepository.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiSummaryRepository.kt b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiSummaryRepository.kt
+new file mode 100644
+--- /dev/null	(date 1760920481767)
++++ b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiSummaryRepository.kt	(date 1760920481767)
+@@ -0,0 +1,8 @@
++// AiSummaryRepository.kt
++package org.duocuc.capstonebackend.nosql
++
++import org.springframework.data.mongodb.repository.MongoRepository
++
++interface AiSummaryRepository : MongoRepository<AiSummaryDoc, String> {
++    fun findTop20ByUserIdOrderByCreatedAtDesc(userId: java.util.UUID): List<AiSummaryDoc>
++}
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"abc26fc0-1a96-4144-9890-a73f0aa8b341\" name=\"Changes\" comment=\"\">\r\n      <change afterPath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/config/CacheConfig.kt\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiPdfController.kt\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/Hashing.kt\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/PdfExtractor.kt\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/build.gradle.kts\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/build.gradle.kts\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiController.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiController.kt\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiTestController.kt\" beforeDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiSummaryDto.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiSummaryDto.kt\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/GeminiAiService.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/GeminiAiService.kt\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/SimpleAiService.kt\" beforeDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"ExternalProjectsData\">\r\n    <projectState path=\"$PROJECT_DIR$/capstone-backend-code/CapstoneBackend\">\r\n      <ProjectState />\r\n    </projectState>\r\n    <projectState path=\"$PROJECT_DIR$/capstone-kotlin-code\">\r\n      <ProjectState />\r\n    </projectState>\r\n  </component>\r\n  <component name=\"ExternalProjectsManager\">\r\n    <system id=\"GRADLE\">\r\n      <state>\r\n        <task path=\"$PROJECT_DIR$/capstone-kotlin-code\">\r\n          <activation />\r\n        </task>\r\n        <projects_view>\r\n          <tree_state>\r\n            <expand>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"CapstoneApp\" type=\"f1a62948:ProjectNode\" />\r\n              </path>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"CapstoneApp\" type=\"f1a62948:ProjectNode\" />\r\n                <item name=\"Tasks\" type=\"e4a08cd1:TasksNode\" />\r\n              </path>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"CapstoneApp\" type=\"f1a62948:ProjectNode\" />\r\n                <item name=\"Tasks\" type=\"e4a08cd1:TasksNode\" />\r\n                <item name=\"android\" type=\"c8890929:TasksNode$1\" />\r\n              </path>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"CapstoneApp\" type=\"f1a62948:ProjectNode\" />\r\n                <item name=\"Tasks\" type=\"e4a08cd1:TasksNode\" />\r\n                <item name=\"build\" type=\"c8890929:TasksNode$1\" />\r\n              </path>\r\n              <path>\r\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\r\n                <item name=\"CapstoneBackend\" type=\"f1a62948:ProjectNode\" />\r\n              </path>\r\n            </expand>\r\n            <select />\r\n          </tree_state>\r\n        </projects_view>\r\n      </state>\r\n    </system>\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Class\" />\r\n        <option value=\"Kotlin Class\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <favorite-branches>\r\n      <branch-storage>\r\n        <map>\r\n          <entry type=\"LOCAL\">\r\n            <value>\r\n              <list>\r\n                <branch-info repo=\"$PROJECT_DIR$\" source=\"feature/CG3-49\" />\r\n              </list>\r\n            </value>\r\n          </entry>\r\n        </map>\r\n      </branch-storage>\r\n    </favorite-branches>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GradleScriptDefinitionsStorage\" workingDir=\"$PROJECT_DIR$/capstone-kotlin-code\" gradleHome=\"C:\\Users\\Claudio\\.gradle\\wrapper\\dists\\gradle-8.13-bin\\5xuhj0ry160q40clulazy9h7d\\gradle-8.13\" javaHome=\"C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.8.9-hotspot\" gradleVersion=\"8.13\" />\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 5\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"347m4Nj4oAaQO3K5x4ZnhoZYhIY\" />\r\n  <component name=\"ProjectLevelVcsManager\">\r\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\">{\r\n  &quot;keyToString&quot;: {\r\n    &quot;Gradle.Build CapstoneBackend.executor&quot;: &quot;Run&quot;,\r\n    &quot;Gradle.capstone-kotlin-code [androidDependencies].executor&quot;: &quot;Run&quot;,\r\n    &quot;Gradle.capstone-kotlin-code [assembleAndroidTest].executor&quot;: &quot;Run&quot;,\r\n    &quot;Gradle.capstone-kotlin-code [assembleUnitTest].executor&quot;: &quot;Run&quot;,\r\n    &quot;Gradle.capstone-kotlin-code [assemble].executor&quot;: &quot;Run&quot;,\r\n    &quot;Gradle.capstone-kotlin-code [clean].executor&quot;: &quot;Run&quot;,\r\n    &quot;Gradle.capstone-kotlin-code [signingReport].executor&quot;: &quot;Run&quot;,\r\n    &quot;Gradle.capstone-kotlin-code [sourceSets].executor&quot;: &quot;Run&quot;,\r\n    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,\r\n    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,\r\n    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,\r\n    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,\r\n    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,\r\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,\r\n    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,\r\n    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,\r\n    &quot;Spring Boot.CapstoneBackendApplication.executor&quot;: &quot;Run&quot;,\r\n    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,\r\n    &quot;git-widget-placeholder&quot;: &quot;feature/CG3-49&quot;,\r\n    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,\r\n    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,\r\n    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,\r\n    &quot;last_opened_file_path&quot;: &quot;C:/Users/Claudio/Desktop/capstone_grupo_3&quot;,\r\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\r\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\r\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\r\n    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,\r\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\r\n  }\r\n}</component>\r\n  <component name=\"RunManager\" selected=\"Spring Boot.CapstoneBackendApplication\">\r\n    <configuration name=\"capstone-kotlin-code [assembleAndroidTest]\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$/capstone-kotlin-code\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\"assembleAndroidTest\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <RunAsTest>false</RunAsTest>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"capstone-kotlin-code [assembleUnitTest]\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$/capstone-kotlin-code\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\"assembleUnitTest\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <RunAsTest>false</RunAsTest>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"capstone-kotlin-code [assemble]\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$/capstone-kotlin-code\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\"assemble\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <RunAsTest>false</RunAsTest>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"capstone-kotlin-code [clean]\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$/capstone-kotlin-code\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\"clean\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <RunAsTest>false</RunAsTest>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"capstone-kotlin-code [sourceSets]\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\r\n      <ExternalSystemSettings>\r\n        <option name=\"executionName\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$/capstone-kotlin-code\" />\r\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\r\n        <option name=\"scriptParameters\" />\r\n        <option name=\"taskDescriptions\">\r\n          <list />\r\n        </option>\r\n        <option name=\"taskNames\">\r\n          <list>\r\n            <option value=\"sourceSets\" />\r\n          </list>\r\n        </option>\r\n        <option name=\"vmOptions\" />\r\n      </ExternalSystemSettings>\r\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\r\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\r\n      <DebugAllEnabled>false</DebugAllEnabled>\r\n      <RunAsTest>false</RunAsTest>\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"CapstoneBackendApplication\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\" nameIsGenerated=\"true\">\r\n      <module name=\"CapstoneBackend.main\" />\r\n      <option name=\"SHORTEN_COMMAND_LINE\" value=\"ARGS_FILE\" />\r\n      <option name=\"SPRING_BOOT_MAIN_CLASS\" value=\"org.duocuc.capstonebackend.CapstoneBackendApplication\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"SpringBootApplicationConfigurationType\" factoryName=\"Spring Boot\">\r\n      <option name=\"SHORTEN_COMMAND_LINE\" value=\"ARGS_FILE\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Gradle.capstone-kotlin-code [clean]\" />\r\n        <item itemvalue=\"Gradle.capstone-kotlin-code [assembleUnitTest]\" />\r\n        <item itemvalue=\"Gradle.capstone-kotlin-code [assembleAndroidTest]\" />\r\n        <item itemvalue=\"Gradle.capstone-kotlin-code [assemble]\" />\r\n        <item itemvalue=\"Gradle.capstone-kotlin-code [sourceSets]\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84\" />\r\n        <option value=\"bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"abc26fc0-1a96-4144-9890-a73f0aa8b341\" name=\"Changes\" comment=\"\" />\r\n      <created>1760572793064</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1760572793064</updated>\r\n      <workItem from=\"1760572794170\" duration=\"12200000\" />\r\n      <workItem from=\"1760585664940\" duration=\"21000\" />\r\n      <workItem from=\"1760585925767\" duration=\"11000\" />\r\n      <workItem from=\"1760586105248\" duration=\"43000\" />\r\n      <workItem from=\"1760586274190\" duration=\"1743000\" />\r\n      <workItem from=\"1760647583252\" duration=\"299000\" />\r\n      <workItem from=\"1760895938667\" duration=\"5099000\" />\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"TypeScriptGeneratedFilesManager\">\r\n    <option name=\"version\" value=\"3\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"RECENT_FILTERS\">\r\n      <map>\r\n        <entry key=\"Branch\">\r\n          <value>\r\n            <list>\r\n              <RecentGroup>\r\n                <option name=\"FILTER_VALUES\">\r\n                  <option value=\"feature/CG3-49\" />\r\n                </option>\r\n              </RecentGroup>\r\n            </list>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"feature/CG3-49\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 520108936a801807a2cc5fd46eb47c76bb88a3bd)
++++ b/.idea/workspace.xml	(date 1761351323631)
+@@ -5,18 +5,17 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="abc26fc0-1a96-4144-9890-a73f0aa8b341" name="Changes" comment="">
+-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/config/CacheConfig.kt" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiPdfController.kt" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/Hashing.kt" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/PdfExtractor.kt" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/aplitacion.yml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiDevController.kt" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiQuizDoc.kt" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiQuizRepository.kt" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiSummaryDoc.kt" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiSummaryRepository.kt" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/security/CurrentUser.kt" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/PersistingAiService.kt" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/Checksums.kt" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/build.gradle.kts" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiController.kt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiTestController.kt" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiSummaryDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiSummaryDto.kt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/GeminiAiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/GeminiAiService.kt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/SimpleAiService.kt" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -96,7 +95,7 @@
+     </favorite-branches>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+-  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$/capstone-kotlin-code" gradleHome="C:\Users\Claudio\.gradle\wrapper\dists\gradle-8.13-bin\5xuhj0ry160q40clulazy9h7d\gradle-8.13" javaHome="C:\Program Files\Eclipse Adoptium\jdk-21.0.8.9-hotspot" gradleVersion="8.13" />
++  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend" gradleHome="C:\Users\Claudio\.gradle\wrapper\dists\gradle-8.14.3-bin\cv11ve7ro1n3o1j4so8xd9n66\gradle-8.14.3" javaHome="C:\Program Files\Eclipse Adoptium\jdk-21.0.8.9-hotspot" gradleVersion="8.14.3" />
+   <component name="ProjectColorInfo">{
+   &quot;associatedIndex&quot;: 5
+ }</component>
+@@ -143,6 +142,11 @@
+     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+ }</component>
++  <component name="RecentsManager">
++    <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
++      <recent name="org.duocuc.capstonebackend.nosql" />
++    </key>
++  </component>
+   <component name="RunManager" selected="Spring Boot.CapstoneBackendApplication">
+     <configuration name="capstone-kotlin-code [assembleAndroidTest]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+       <ExternalSystemSettings>
+@@ -299,7 +303,10 @@
+       <workItem from="1760586105248" duration="43000" />
+       <workItem from="1760586274190" duration="1743000" />
+       <workItem from="1760647583252" duration="299000" />
+-      <workItem from="1760895938667" duration="5099000" />
++      <workItem from="1760895938667" duration="11703000" />
++      <workItem from="1761087880136" duration="1798000" />
++      <workItem from="1761095118671" duration="487000" />
++      <workItem from="1761340135708" duration="3264000" />
+     </task>
+     <servers />
+   </component>
+Index: capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/aplitacion.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/aplitacion.yml b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/aplitacion.yml
+new file mode 100644
+--- /dev/null	(date 1760920342258)
++++ b/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/aplitacion.yml	(date 1760920342258)
+@@ -0,0 +1,4 @@
++spring:
++  data:
++    mongodb:
++      uri: mongodb://localhost:27017/capstone
+\ No newline at end of file

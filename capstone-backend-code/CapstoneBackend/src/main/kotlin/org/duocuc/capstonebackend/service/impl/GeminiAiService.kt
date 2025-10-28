@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.genai.Client
 import org.duocuc.capstonebackend.dto.AiQuizDto
-import org.duocuc.capstonebackend.dto.AiQuizQuestionDto   // ⬅️ FALTABA ESTE
+import org.duocuc.capstonebackend.dto.AiQuizQuestionDto
 import org.duocuc.capstonebackend.dto.AiSummaryDto
 import org.duocuc.capstonebackend.service.AiService
 import org.duocuc.capstonebackend.util.PdfTextExtractor
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
-@Service
+@Service("geminiService")
 class GeminiService(
     @param:Value("\${gemini.api-key:}") private val apiKeyProp: String
 ) : AiService {
