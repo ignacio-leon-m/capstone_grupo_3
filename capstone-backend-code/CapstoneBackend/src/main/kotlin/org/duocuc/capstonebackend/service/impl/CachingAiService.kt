@@ -6,15 +6,13 @@ import org.duocuc.capstonebackend.service.AiService
 import org.duocuc.capstonebackend.util.Hashing
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.cache.CacheManager
-import org.springframework.context.annotation.Primary
 import org.springframework.stereotype.Service
 
 /**
  * Decorador de caché para AiService.
- * Mantiene la arquitectura: los controllers siguen inyectando AiService.
+ * Usa "geminiService" como delegado por defecto.
  */
-@Service
-@Primary
+@Service("cachingAiService")
 class CachingAiService(
     @param:Qualifier("geminiService") private val delegate: AiService,
     private val cacheManager: CacheManager
@@ -41,3 +39,4 @@ class CachingAiService(
         return result
     }
 }
+
