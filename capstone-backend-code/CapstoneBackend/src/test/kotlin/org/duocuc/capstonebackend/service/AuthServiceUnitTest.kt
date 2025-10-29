@@ -55,8 +55,10 @@ class AuthServiceUnitTest {
             degreeName = "Ingeniería en Rock"
         )
 
-        val mockRole = Role(id = UUID.randomUUID(), name = "profesor")
-        val mockInstitution = Institution(id = UUID.randomUUID(), name = "Rock University")
+        val mockRole = Role("profesor")
+        mockRole.id = UUID.randomUUID()
+        val mockInstitution = Institution("Rock University")
+        mockInstitution.id = UUID.randomUUID()
         val mockDegree = Degree(id = UUID.randomUUID(), name = "Ingeniería en Rock", institution = mockInstitution)
 
         every { userRepository.findByEmail(req.email) } returns Optional.empty()
