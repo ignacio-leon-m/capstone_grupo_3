@@ -6,135 +6,148 @@
 	},
 	"item": [
 		{
-			"name": "Create an user",
-			"id": "31763307-aabd0c53-d9df-47d2-8318-fd7aeb080228",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"Ignacio\",\r\n  \"lastName\": \"León\",\r\n  \"email\": \"ignacio.leon@gmail.com\",\r\n  \"phone\": \"+56912345678\",\r\n  \"password\": \"123456\",\r\n  \"role\": \"profesor\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{baseUrl}}/api/auth/register",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"api",
-						"auth",
-						"register"
-					],
-					"query": [
-						{
-							"key": "",
-							"value": null,
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Upload Users By Excel File",
-			"id": "31763307-6332e704-651d-425d-9ff1-8ad5c55bba9f",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"uuid": "cf407c05-5e32-40f9-a076-5aae54754bcd",
-							"contentType": "",
-							"src": "/C:/Users/ignac/Downloads/ExcelAlumnos.xlsx"
-						}
-					]
-				},
-				"url": {
-					"raw": "{{baseUrl}}/api/users/upload",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"api",
-						"users",
-						"upload"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Login",
-			"event": [
+			"name": "Auth - User",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"id": "ca09a439-9593-4207-9fe8-c21c908f0809",
-						"exec": [
-							"// Parsea la respuesta JSON\r",
-							"const response = pm.response.json();\r",
-							"\r",
-							"// Verifica si la respuesta es exitosa y contiene el token\r",
-							"if (pm.response.code === 200 && response.jwt) { \r",
-							"    // Guarda el token en una variable de entorno\r",
-							"    pm.environment.set(\"jwt_token\", response.jwt);\r",
-							"    console.log(\"JWT guardado exitosamente.\");\r",
-							"} else {\r",
-							"    console.log(\"No se pudo obtener el JWT. Revisa las credenciales o la estructura de la respuesta.\");\r",
-							"}"
-						],
-						"type": "text/javascript",
-						"packages": {},
-						"requests": {}
-					}
+					"name": "Create User",
+					"id": "31763307-aabd0c53-d9df-47d2-8318-fd7aeb080228",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Ignacio\",\r\n  \"lastName\": \"León\",\r\n  \"email\": \"ignacio.leon@gmail.com\",\r\n  \"phone\": \"+56912345678\",\r\n  \"password\": \"123456\",\r\n  \"role\": \"profesor\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ca09a439-9593-4207-9fe8-c21c908f0809",
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "31763307-91308b77-8e91-4594-b398-6b07d653b1f2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"cecilia.arroyo@duoc.cl\",\r\n    \"password\": \"duoc123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "This POST request to the /api/auth/login endpoint is used to authenticate a user. The request body requires an email and password. Upon successful authentication, the server responds with a JWT token which is saved in the environment for subsequent authorized requests."
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Users By Excel File",
+					"id": "31763307-6332e704-651d-425d-9ff1-8ad5c55bba9f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"uuid": "cf407c05-5e32-40f9-a076-5aae54754bcd",
+									"contentType": "",
+									"src": "/C:/Users/ignac/Downloads/ExcelAlumnos.xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/upload",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"upload"
+							]
+						}
+					},
+					"response": []
 				}
 			],
-			"id": "31763307-91308b77-8e91-4594-b398-6b07d653b1f2",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"ignacio.leon@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{baseUrl}}/api/auth/login",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"api",
-						"auth",
-						"login"
-					]
-				},
-				"description": "This POST request to the /api/auth/login endpoint is used to authenticate a user. The request body requires an email and password. Upon successful authentication, the server responds with a JWT token which is saved in the environment for subsequent authorized requests."
-			},
-			"response": []
+			"id": "31763307-721697da-cf5e-4260-afe4-9657ffd51c76"
 		}
 	]
 }

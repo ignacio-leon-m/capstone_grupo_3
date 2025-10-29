@@ -5,18 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="abc26fc0-1a96-4144-9890-a73f0aa8b341" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/config/CacheConfig.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiPdfController.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/Hashing.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/PdfExtractor.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/aplitacion.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/SaveQuizDto.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/SaveQuizResponseDto.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/model/Question.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/model/Topic.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiQuizDoc.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiQuizRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiSummaryDoc.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/nosql/AiSummaryRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/repository/QuestionRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/repository/TopicRepository.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/security/CurrentUser.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/QuizPersistService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/PersistenceAiService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/QuizPersistServiceImpl.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/util/Checksums.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/script.sql" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/script.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiTestController.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiPdfController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/controller/AiPdfController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiQuizDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiQuizDto.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiQuizQuestionDto.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiSummaryDto.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/dto/AiSummaryDto.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/model/Subject.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/model/Subject.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/CachingAiService.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/GeminiAiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/GeminiAiService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/impl/SimpleAiService.kt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +110,7 @@
     </favorite-branches>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$/capstone-kotlin-code" gradleHome="C:\Users\Claudio\.gradle\wrapper\dists\gradle-8.13-bin\5xuhj0ry160q40clulazy9h7d\gradle-8.13" javaHome="C:\Program Files\Eclipse Adoptium\jdk-21.0.8.9-hotspot" gradleVersion="8.13" />
+  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$/capstone-backend-code/CapstoneBackend" gradleHome="C:\Users\Claudio\.gradle\wrapper\dists\gradle-8.14.3-bin\cv11ve7ro1n3o1j4so8xd9n66\gradle-8.14.3" javaHome="C:\Program Files\Eclipse Adoptium\jdk-21.0.8.9-hotspot" gradleVersion="8.14.3" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
 }</component>
@@ -111,6 +125,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Gradle.Build CapstoneBackend.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.capstone-kotlin-code [androidDependencies].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.capstone-kotlin-code [assembleAndroidTest].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.capstone-kotlin-code [assembleUnitTest].executor&quot;: &quot;Run&quot;,
@@ -129,7 +144,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.CapstoneBackendApplication.executor&quot;: &quot;Run&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/CG3-49&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;CG3-20&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
@@ -143,6 +158,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="org.duocuc.capstonebackend.nosql" />
+    </key>
+  </component>
   <component name="RunManager" selected="Spring Boot.CapstoneBackendApplication">
     <configuration name="capstone-kotlin-code [assembleAndroidTest]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -299,7 +319,13 @@
       <workItem from="1760586105248" duration="43000" />
       <workItem from="1760586274190" duration="1743000" />
       <workItem from="1760647583252" duration="299000" />
-      <workItem from="1760895938667" duration="5099000" />
+      <workItem from="1760895938667" duration="11703000" />
+      <workItem from="1761087880136" duration="1798000" />
+      <workItem from="1761095118671" duration="487000" />
+      <workItem from="1761340135708" duration="5345000" />
+      <workItem from="1761412631812" duration="1684000" />
+      <workItem from="1761497243051" duration="22856000" />
+      <workItem from="1761604431086" duration="502000" />
     </task>
     <servers />
   </component>
