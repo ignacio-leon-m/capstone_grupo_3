@@ -211,13 +211,20 @@
 			],
 			"id": "31763307-721697da-cf5e-4260-afe4-9657ffd51c76",
 			"auth": {
-				"type": "bearer"
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJjZWNpbGlhLmFycm95b0BkdW9jLmNsIiwicm9sZXMiOlsiYWRtaW4iXSwiaWF0IjoxNzYxODQ3NjMwLCJleHAiOjE3NjE5MzQwMzB9.THtlvIdM12RaybUPpPO_Ts-deqPFnjjWvAU9T1PQmFkWBrU_YW4ie5fuwHPj-s49",
+						"type": "string"
+					}
+				]
 			},
 			"event": [
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "8d526be1-7d1e-4a76-a7a7-d8f4abeb1d4d",
+						"id": "41d697cf-d728-47b7-bf5b-6e1ca91db425",
 						"type": "text/javascript",
 						"packages": {},
 						"requests": {},
@@ -229,7 +236,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "23d26e17-7b2d-4f18-b84a-2a69db93273d",
+						"id": "9a80a64f-fb2f-41fd-8776-f1a1c690f296",
 						"type": "text/javascript",
 						"packages": {},
 						"requests": {},
