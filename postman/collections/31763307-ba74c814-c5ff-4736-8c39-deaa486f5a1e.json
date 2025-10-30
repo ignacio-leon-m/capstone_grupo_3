@@ -10,6 +10,68 @@
 			"item": [
 				{
 					"name": "Create User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3b7e50f3-57ca-4ca1-a29e-3b74a553ad0e",
+								"exec": [
+									"const users = [\r",
+									"    {\r",
+									"      \"name\": \"soy-sadmin\",\r",
+									"      \"email\": \"admin@duoc.cl\",\r",
+									"      \"password\": \"duoc123\",\r",
+									"      \"confirmPassword\": \"duoc123\",\r",
+									"      \"active\": true,\r",
+									"      \"role\": \"admin\"\r",
+									"    },\r",
+									"    {\r",
+									"      \"name\": \"soy-profesor\",\r",
+									"      \"email\": \"profe@duoc.cl\",\r",
+									"      \"password\": \"duoc123\",\r",
+									"      \"confirmPassword\": \"duoc123\",\r",
+									"      \"active\": true,\r",
+									"      \"role\": \"admin\"\r",
+									"    },\r",
+									"    {\r",
+									"      \"name\": \"soy-user\",\r",
+									"      \"email\": \"user@duoc.cl\",\r",
+									"      \"password\": \"duoc123\",\r",
+									"      \"confirmPassword\": \"duoc123\",\r",
+									"      \"active\": true,\r",
+									"      \"role\": \"user\"\r",
+									"    }\r",
+									"];\r",
+									"\r",
+									"users.forEach(user => {\r",
+									"    const request = {\r",
+									"        url: 'http://localhost:8080/api/auth/register',\r",
+									"        method: 'POST',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        },\r",
+									"        body: {\r",
+									"            mode: 'raw',\r",
+									"            raw: JSON.stringify(user)\r",
+									"        }\r",
+									"    };\r",
+									"\r",
+									"    pm.sendRequest(request, (err, response) => {\r",
+									"        if (err) {\r",
+									"            console.error(err);\r",
+									"        } else {\r",
+									"            console.log(`Usuario ${user.name} creado:`, response.json());\r",
+									"        }\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
 					"id": "31763307-aabd0c53-d9df-47d2-8318-fd7aeb080228",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -19,7 +81,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Ignacio\",\r\n  \"lastName\": \"León\",\r\n  \"email\": \"ignacio.leon@gmail.com\",\r\n  \"phone\": \"+56912345678\",\r\n  \"password\": \"123456\",\r\n  \"role\": \"profesor\"\r\n}",
+							"raw": "{\r\n  \"name\": \"Ignacio\",\r\n  \"lastName\": \"León\",\r\n  \"email\": \"ignacio.leon@gmail.com\",\r\n  \"phone\": \"+56912345678\",\r\n  \"password\": \"123456\",\r\n  \"role\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
