@@ -209,7 +209,36 @@
 					"response": []
 				}
 			],
-			"id": "31763307-721697da-cf5e-4260-afe4-9657ffd51c76"
+			"id": "31763307-721697da-cf5e-4260-afe4-9657ffd51c76",
+			"auth": {
+				"type": "bearer"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8d526be1-7d1e-4a76-a7a7-d8f4abeb1d4d",
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "23d26e17-7b2d-4f18-b84a-2a69db93273d",
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	]
 }
