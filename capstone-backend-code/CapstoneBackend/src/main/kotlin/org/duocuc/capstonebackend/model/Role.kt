@@ -12,11 +12,11 @@ import java.util.UUID
 @Entity
 @Table(name = "roles")
 class Role(
-    @Column(name = "nombre", nullable = false, unique = true, length = 50)
-    var name: String
-) {
     @Id
     @UuidGenerator
     @Column(name = "id", updatable = false, nullable = false)
-    var id: UUID? = null
-}
+    val id: UUID? = null,
+    
+    @Column(name = "nombre", nullable = false, unique = true, length = 50)
+    var name: String
+)

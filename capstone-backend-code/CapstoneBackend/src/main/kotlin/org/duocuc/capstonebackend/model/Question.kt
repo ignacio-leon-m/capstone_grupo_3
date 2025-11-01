@@ -7,6 +7,11 @@ import java.util.UUID
 @Entity
 @Table(name = "preguntas", schema = "public")
 class Question(
+    @Id
+    @UuidGenerator
+    @Column(name = "id", updatable = false, nullable = false)
+    val id: UUID? = null,
+
     @Column(name = "texto", nullable = false, columnDefinition = "text")
     var text: String,
 
@@ -20,9 +25,4 @@ class Question(
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_tema", nullable = false)
     var topic: Topic
-) {
-    @Id
-    @UuidGenerator
-    @Column(name = "id", updatable = false, nullable = false)
-    var id: UUID? = null
-}
+)

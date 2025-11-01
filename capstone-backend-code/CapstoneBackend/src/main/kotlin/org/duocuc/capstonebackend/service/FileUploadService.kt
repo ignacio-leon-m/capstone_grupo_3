@@ -35,6 +35,7 @@ class FileUploadService {
             students.add(RegisterRequestDto(
                 name = firstName,
                 lastName = lastName,
+                rut = rut,
                 email = "$rut@duocuc.cl",
                 phone = "",
                 password = rut

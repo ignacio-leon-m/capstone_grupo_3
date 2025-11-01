@@ -8,14 +8,16 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import org.hibernate.annotations.UuidGenerator
 import java.util.UUID
 
 @Entity
 @Table(name = "carreras")
 class Degree(
     @Id
+    @UuidGenerator
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    var id: UUID? = null,
+    val id: UUID? = null,
 
     @Column(name = "nombre", nullable = false, length = 100)
     var name: String,

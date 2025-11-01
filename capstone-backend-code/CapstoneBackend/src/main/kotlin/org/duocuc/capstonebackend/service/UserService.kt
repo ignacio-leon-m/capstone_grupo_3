@@ -12,6 +12,7 @@ class UserService (
         val students = userRepository.findUsersByRoleName("alumno")
         return students.map { user ->
             StudentRequestDto(
+                rut = user.rut,
                 name = user.firstName,
                 lastName = user.lastName,
                 email = user.email,

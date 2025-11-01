@@ -5,6 +5,7 @@ import java.util.UUID
 
     data class UserResponseDto(
         val id: UUID?,
+        val rut: String,
         val name: String,
         val lastName: String,
         val email: String,

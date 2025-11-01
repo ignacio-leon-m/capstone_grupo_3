@@ -16,6 +16,11 @@ import java.util.UUID
 @Entity
 @Table(name = "asignaturas", schema = "public")
 class Subject (
+    @Id
+    @UuidGenerator
+    @Column(name = "id", updatable = false, nullable = false)
+    val id: UUID? = null,
+
     @Column(name = "nombre", nullable = false, length = 100)
     var nombre: String,
 
@@ -34,9 +39,4 @@ class Subject (
             foreignKey = ForeignKey(name = "fk_asig_sem_semestre"))]
     )
     var semesters: MutableList<Semester> = mutableListOf()
-) {
-    @Id
-    @UuidGenerator
-    @Column(name = "id", updatable = false, nullable = false)
-    var id: UUID? = null
-}
+)

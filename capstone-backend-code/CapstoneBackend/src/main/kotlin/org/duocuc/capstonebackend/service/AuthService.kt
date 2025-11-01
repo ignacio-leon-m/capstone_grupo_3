@@ -45,6 +45,7 @@ class AuthService (
             ?: throw IllegalStateException("La carrera '${degreeName}' no es válida o no existe.")
 
         val newUser = User(
+            rut = request.rut,
             firstName = request.name,
             lastName = request.lastName,
             role = role,
@@ -76,6 +77,7 @@ class AuthService (
             ?: throw IllegalStateException("La carrera '${degreeName}' para el estudiante de excel no es válida o no existe.")
 
         val newUser = User(
+            rut = request.rut,
             firstName = request.name,
             lastName = request.lastName,
             role = role,
@@ -95,6 +97,7 @@ class AuthService (
     fun userResponse(user: User): UserResponseDto {
         return UserResponseDto(
             id = user.id,
+            rut = user.rut,
             name = user.firstName,
             lastName = user.lastName,
             role = user.role,
