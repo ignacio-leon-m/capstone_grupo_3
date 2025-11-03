@@ -189,41 +189,6 @@
 						"description": "This POST request to the /api/auth/login endpoint is used to authenticate a user. The request body requires an email and password. Upon successful authentication, the server responds with a JWT token which is saved in the environment for subsequent authorized requests."
 					},
 					"response": []
-				},
-				{
-					"name": "Upload Users By Excel File",
-					"id": "31763307-6332e704-651d-425d-9ff1-8ad5c55bba9f",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"uuid": "cf407c05-5e32-40f9-a076-5aae54754bcd",
-									"contentType": "",
-									"src": "/C:/Users/ignac/Downloads/ExcelAlumnos.xlsx"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{baseUrl}}/api/users/upload",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"api",
-								"users",
-								"upload"
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"id": "31763307-721697da-cf5e-4260-afe4-9657ffd51c76",
