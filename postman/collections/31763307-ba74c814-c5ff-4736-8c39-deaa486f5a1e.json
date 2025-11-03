@@ -80,11 +80,21 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJjZWNpbGlhLmFycm95b0BkdW9jLmNsIiwicm9sZXMiOlsiYWRtaW4iXSwiaWF0IjoxNzYyMTgyNzIwLCJleHAiOjE3NjIyNjkxMjB9.UQxfx6fKAnxK7iTW7RQJKLvFpw2swnc_tLSJPtz3FHMYT_HO6CMsB7aLlPdVXpFW",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"test\",\r\n  \"lastName\": \"test\",\r\n  \"email\": \"test@test.com\",\r\n  \"phone\": \"+56912345678\",\r\n  \"password\": \"test\",\r\n  \"degree\": \"Ingeniería en Informática\",\r\n  \"role\": \"admin\"\r\n}",
+							"raw": "{\r\n  \"name\": \"test\",\r\n  \"lastName\": \"test\",\r\n  \"email\": \"test@test.com\",\r\n  \"phone\": \"+56912345678\",\r\n  \"password\": \"test\",\r\n  \"role\": \"admin\",\r\n  \"degreeName\": \"Ingeniería en Informática\",\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
