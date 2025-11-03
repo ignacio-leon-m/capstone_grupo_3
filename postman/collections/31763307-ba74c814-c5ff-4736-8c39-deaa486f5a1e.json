@@ -24,7 +24,7 @@
 									"        \"confirmPassword\": \"duoc123\",\r",
 									"        \"active\": true,\r",
 									"        \"role\": \"admin\",\r",
-									"        \"degreeName\": \"Ingeniería en Informática\",\r",
+									"        \"degreeName\": \"ing-informatica\",\r",
 									"    },\r",
 									"    {\r",
 									"        \"name\": \"soy-profesor\",\r",
@@ -33,7 +33,7 @@
 									"        \"confirmPassword\": \"duoc123\",\r",
 									"        \"active\": true,\r",
 									"        \"role\": \"admin\",\r",
-									"        \"degreeName\": \"Ingeniería en Informática\",\r",
+									"        \"degreeName\": \"ing-informatica\",\r",
 									"    },\r",
 									"    {\r",
 									"        \"name\": \"soy-user\",\r",
@@ -42,7 +42,7 @@
 									"        \"confirmPassword\": \"duoc123\",\r",
 									"        \"active\": true,\r",
 									"        \"role\": \"user\",\r",
-									"        \"degreeName\": \"Ingeniería en Informática\",\r",
+									"        \"degreeName\": \"ing-informatica\",\r",
 									"    }\r",
 									"];\r",
 									"\r",
@@ -80,21 +80,11 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJjZWNpbGlhLmFycm95b0BkdW9jLmNsIiwicm9sZXMiOlsiYWRtaW4iXSwiaWF0IjoxNzYyMTg0NTA5LCJleHAiOjE3NjIyNzA5MDl9.J5165rbR3tnfY2mWy05rakcBQyHRoHE7xN8HPQUTBASg8fs46m-r82I3U-NKxmuo",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"test\",\r\n  \"lastName\": \"test\",\r\n  \"email\": \"test@test.com\",\r\n  \"phone\": \"+56912345678\",\r\n  \"password\": \"test\",\r\n  \"role\": \"admin\",\r\n  \"degreeName\": \"Ingeniería en Informática\"\r\n}",
+							"raw": "{\r\n  \"name\": \"test\",\r\n  \"lastName\": \"test\",\r\n  \"email\": \"test@test.com\",\r\n  \"phone\": \"+56912345678\",\r\n  \"password\": \"test\",\r\n  \"role\": \"admin\",\r\n  \"degreeName\": \"ing-informatica\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
