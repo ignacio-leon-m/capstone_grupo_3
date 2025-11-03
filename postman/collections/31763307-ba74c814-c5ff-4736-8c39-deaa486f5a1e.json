@@ -84,7 +84,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"test\",\r\n  \"lastName\": \"test\",\r\n  \"email\": \"test@test.com\",\r\n  \"phone\": \"+56912345678\",\r\n  \"password\": \"test\",\r\n  \"role\": \"admin\",\r\n  \"degreeName\": \"ing-informatica\"\r\n}",
+							"raw": "{\r\n  \"name\": \"test\",\r\n  \"lastName\": \"test\",\r\n  \"rut\": \"12345\",\r\n  \"email\": \"test@test.com\",\r\n  \"phone\": \"+56912345678\",\r\n  \"password\": \"test\",\r\n  \"role\": \"admin\",\r\n  \"degreeName\": \"ing-informatica\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
