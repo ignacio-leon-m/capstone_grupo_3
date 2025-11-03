@@ -228,7 +228,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJjZWNpbGlhLmFycm95b0BkdW9jLmNsIiwicm9sZXMiOlsiYWRtaW4iXSwiaWF0IjoxNzYyMTgyNzIwLCJleHAiOjE3NjIyNjkxMjB9.UQxfx6fKAnxK7iTW7RQJKLvFpw2swnc_tLSJPtz3FHMYT_HO6CMsB7aLlPdVXpFW",
+						"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJjZWNpbGlhLmFycm95b0BkdW9jLmNsIiwicm9sZXMiOlsiYWRtaW4iXSwiaWF0IjoxNzYyMTg0NTA5LCJleHAiOjE3NjIyNzA5MDl9.J5165rbR3tnfY2mWy05rakcBQyHRoHE7xN8HPQUTBASg8fs46m-r82I3U-NKxmuo",
 						"type": "string"
 					}
 				]
@@ -237,7 +237,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "097d5544-90d1-4416-ba04-d6fe337f217c",
+						"id": "6594886e-9a04-457a-9140-5440d9e2ca55",
 						"type": "text/javascript",
 						"packages": {},
 						"requests": {},
@@ -249,7 +249,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "4107e52d-0f33-47d8-a0b7-569fd2fb8b18",
+						"id": "4d3831b1-ae00-4ae9-8612-11dc0f69022a",
 						"type": "text/javascript",
 						"packages": {},
 						"requests": {},
