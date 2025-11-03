@@ -24,7 +24,7 @@
 									"        \"confirmPassword\": \"duoc123\",\r",
 									"        \"active\": true,\r",
 									"        \"role\": \"admin\",\r",
-									"        \"degree\": \"Ingeniería en Informática\",\r",
+									"        \"degreeName\": \"Ingeniería en Informática\",\r",
 									"    },\r",
 									"    {\r",
 									"        \"name\": \"soy-profesor\",\r",
@@ -33,7 +33,7 @@
 									"        \"confirmPassword\": \"duoc123\",\r",
 									"        \"active\": true,\r",
 									"        \"role\": \"admin\",\r",
-									"        \"degree\": \"Ingeniería en Informática\",\r",
+									"        \"degreeName\": \"Ingeniería en Informática\",\r",
 									"    },\r",
 									"    {\r",
 									"        \"name\": \"soy-user\",\r",
@@ -42,7 +42,7 @@
 									"        \"confirmPassword\": \"duoc123\",\r",
 									"        \"active\": true,\r",
 									"        \"role\": \"user\",\r",
-									"        \"degree\": \"Ingeniería en Informática\",\r",
+									"        \"degreeName\": \"Ingeniería en Informática\",\r",
 									"    }\r",
 									"];\r",
 									"\r",
@@ -94,7 +94,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"test\",\r\n  \"lastName\": \"test\",\r\n  \"email\": \"test@test.com\",\r\n  \"phone\": \"+56912345678\",\r\n  \"password\": \"test\",\r\n  \"role\": \"admin\",\r\n  \"degreeName\": \"Ingeniería en Informática\",\r\n}",
+							"raw": "{\r\n  \"name\": \"test\",\r\n  \"lastName\": \"test\",\r\n  \"email\": \"test@test.com\",\r\n  \"phone\": \"+56912345678\",\r\n  \"password\": \"test\",\r\n  \"role\": \"admin\",\r\n  \"degreeName\": \"Ingeniería en Informática\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
