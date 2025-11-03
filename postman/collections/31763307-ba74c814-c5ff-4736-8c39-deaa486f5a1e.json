@@ -46,7 +46,7 @@
 									"  \"phone\": \"+56912345678\",\r",
 									"  \"password\": \"duoc123\",\r",
 									"  \"role\": \"profesor\",\r",
-									"  \"degreeName\": \"ing-informatica\"\r",
+									"  \"degreeName\": \"\"\r",
 									"}\r",
 									"];\r",
 									"\r",
@@ -98,7 +98,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n}",
+							"raw": "{\r\n  \"name\": \"soy-test\",\r\n  \"lastName\": \"test\",\r\n  \"rut\": \"12345678\",\r\n  \"email\": \"test@duoc.cl\",\r\n  \"phone\": \"+523123\",\r\n  \"password\": \"duoc123\",\r\n  \"role\": \"admin\",\r\n  \"degreeName\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
