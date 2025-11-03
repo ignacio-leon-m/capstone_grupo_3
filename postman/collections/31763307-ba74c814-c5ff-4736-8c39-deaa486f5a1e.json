@@ -9,7 +9,7 @@
 			"name": "Auth - User",
 			"item": [
 				{
-					"name": "Create User",
+					"name": "Register User",
 					"event": [
 						{
 							"listen": "prerequest",
