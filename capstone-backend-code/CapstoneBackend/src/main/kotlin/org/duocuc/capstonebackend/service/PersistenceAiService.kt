@@ -1,4 +1,4 @@
-package org.duocuc.capstonebackend.service.impl
+package org.duocuc.capstonebackend.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.duocuc.capstonebackend.dto.AiQuizDto
@@ -8,7 +8,6 @@ import org.duocuc.capstonebackend.nosql.AiQuizRepository
 import org.duocuc.capstonebackend.nosql.AiSummaryDoc
 import org.duocuc.capstonebackend.nosql.AiSummaryRepository
 import org.duocuc.capstonebackend.security.CurrentUser
-import org.duocuc.capstonebackend.service.AiService
 import org.duocuc.capstonebackend.util.Checksums
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service

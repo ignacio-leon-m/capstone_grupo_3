@@ -7,6 +7,7 @@ import java.util.UUID
         val id: UUID?,
         val name: String,
         val lastName: String,
+        val rut: String,
+        val role: Role,
         val email: String,
-        val role: Role
         )

@@ -19,38 +19,11 @@ import java.util.UUID
 @RequestMapping("/api/ai/pdf")
 class AiPdfController(
     // IA + persistencia en Mongo
-    @Qualifier("persistingAiService") private val aiService: AiService,
+    @param:Qualifier("persistingAiService") private val aiService: AiService,
     // Persistencia de preguntas en Postgres
     private val quizPersistService: QuizPersistService
 ) {
 
-    companion object {
-        private val log = LoggerFactory.getLogger(AiPdfController::class.java)
-    }
-
-    /**
-     * Resumen (3 líneas). El documento y el resumen se guardan en Mongo
-     * vía PersistingAiService.
-     */
-    @PostMapping(
-        "/resumen",
-        consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
-        produces = [MediaType.APPLICATION_JSON_VALUE]
-    )
-    @PreAuthorize("hasAnyAuthority('profesor','admin')")
-    fun resumir(
-        @RequestParam("file") file: MultipartFile
-    ): AiSummaryDto {
-        val bytes = file.bytes
-        val mime = file.contentType ?: "application/pdf"
-        val title = file.originalFilename ?: "documento.pdf"
-        return aiService.summarizeDocument(bytes, mime, title)
-    }
-
-    /**
-     * Genera un quiz desde PDF (NO persiste en Postgres).
-     * El quiz generado se deja en Mongo como historial (PersistingAiService).
-     */
     @PostMapping(
         "/quiz",
         consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],

@@ -24,6 +24,9 @@ class User (
     @Column(name = "apellido", nullable = false, length = 100)
     val lastName: String,
 
+    @Column(name = "rut", nullable = false, unique = true, length = 12)
+    val rut: String,
+
     @ManyToOne
     @JoinColumn(name = "id_rol", nullable = false)
     val role: Role,

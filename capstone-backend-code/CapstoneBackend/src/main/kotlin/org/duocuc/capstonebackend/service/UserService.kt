@@ -19,4 +19,16 @@ class UserService (
             )
         }
     }
+
+    fun getAllProfessors(): List<StudentRequestDto> {
+        val professors = userRepository.findUsersByRoleName("profesor")
+        return professors.map { user ->
+            StudentRequestDto(
+                name = user.firstName,
+                lastName = user.lastName,
+                email = user.email,
+                lastLoginAt = user.lastLoginAt,
+            )
+        }
+    }
 }

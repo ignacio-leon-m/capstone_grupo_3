@@ -47,8 +47,6 @@ class AuthController (
         }
         val userDetails = customUserDetailsService.loadUserByUsername(request.email)
         val token: String = jwtTokenService.generateToken(userDetails)
-        
-        // Modificado: Se obtiene el rol directamente (sin prefijo) y se asume que siempre existe.
         val role: String = userDetails.authorities.map { it.authority }.first()
 
         return ResponseEntity(LoginResponseDto(token, role), HttpStatus.OK)

@@ -19,7 +19,7 @@ import java.time.LocalDateTime
 class AuthService (
     private val userRepository: UserRepository,
     private val roleRepository: RoleRepository,
-    private val degreeRepository: DegreeRepository, // Inyectado
+    private val degreeRepository: DegreeRepository,
     private val securityConfig: SecurityConfig,
     private val authenticationManager: AuthenticationManager,
     private val customUserDetailsService: CustomUserDetailsService,
@@ -28,27 +28,30 @@ class AuthService (
     private val log = LoggerFactory.getLogger(AuthService::class.java)
 
     fun userRegistry(request: RegisterRequestDto): UserResponseDto {
+        // Verify if the user already exists
         if (userRepository.findByEmail(request.email).isPresent) {
             throw IllegalStateException("El usuario con el email '${request.email}' ya existe.")
         }
-
-        // Validar y buscar Rol
-        val roleName = request.role?.takeIf { it.isNotBlank() } 
+        // Verify by RUT
+        if (userRepository.findByRut(request.rut).isPresent) {
+            throw IllegalStateException("El usuario con el RUT '${request.rut}' ya existe.")
+        }
+        // Validate and find the Role
+        val roleName = request.role.takeIf { it?.isNotBlank() ?: false }
             ?: throw IllegalArgumentException("El rol no puede ser nulo o vacío.")
         val role = roleRepository.findByName(roleName.lowercase()) 
             ?: throw IllegalStateException("El rol '${roleName}' no es válido o no existe.")
 
-        // Validar y buscar Carrera (Degree)
-        val degreeName = request.degreeName?.takeIf { it.isNotBlank() } 
-            ?: throw IllegalArgumentException("El nombre de la carrera no puede ser nulo o vacío.")
-        val degree = degreeRepository.findByName(degreeName) 
+        val degreeName = "ing-informatica"
+        val degree = degreeRepository.findByName(degreeName)
             ?: throw IllegalStateException("La carrera '${degreeName}' no es válida o no existe.")
 
         val newUser = User(
             firstName = request.name,
             lastName = request.lastName,
+            rut = request.rut,
             role = role,
-            degree = degree, // Carrera asignada
+            degree = degree,
             passwordHash = securityConfig.passwordEncoder().encode(request.password),
             email = request.email,
             state = true,
@@ -62,22 +65,26 @@ class AuthService (
     }
 
     fun registerStudentFromExcel(request: RegisterRequestDto) {
+        // Verify if the user already exists
         if (userRepository.findByEmail(request.email).isPresent) {
             log.info("Usuario con email ${request.email} ya existe. Omitiendo creación.")
             return
         }
-
+        if (userRepository.findByRut(request.rut).isPresent) {
+            throw IllegalStateException("El usuario con el RUT '${request.rut}' ya existe.")
+        }
+        // Validate and find the Role
         val role = roleRepository.findByName("alumno") ?: throw IllegalStateException("El rol 'alumno' no existe.")
         
-        // Asumimos que para la carga de excel, la carrera viene en el DTO
-        val degreeName = request.degreeName?.takeIf { it.isNotBlank() } 
-            ?: throw IllegalArgumentException("El nombre de la carrera no puede ser nulo para el estudiante de excel.")
-        val degree = degreeRepository.findByName(degreeName) 
-            ?: throw IllegalStateException("La carrera '${degreeName}' para el estudiante de excel no es válida o no existe.")
+        // Validate and find the Degree (Carrera)
+        val degreeName = "ing-informatica"
+        val degree = degreeRepository.findByName(degreeName)
+            ?: throw IllegalStateException("La carrera '${degreeName}' no es válida o no existe.")
 
         val newUser = User(
             firstName = request.name,
             lastName = request.lastName,
+            rut = request.rut,
             role = role,
             degree = degree, // Carrera asignada
             passwordHash = securityConfig.passwordEncoder().encode(request.password),
@@ -97,8 +104,9 @@ class AuthService (
             id = user.id,
             name = user.firstName,
             lastName = user.lastName,
+            rut = user.rut,
             role = user.role,
-            email = user.email,
+            email = user.email
         )
     }
 

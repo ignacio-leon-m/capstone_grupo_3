@@ -17,4 +17,10 @@ class UserController (
         val students = userService.getAllStudents()
         return students
     }
+
+    @GetMapping("/professors")
+    fun getAllProfessors(): List<StudentRequestDto> {
+        val professors = userService.getAllProfessors()
+        return professors
+    }
 }

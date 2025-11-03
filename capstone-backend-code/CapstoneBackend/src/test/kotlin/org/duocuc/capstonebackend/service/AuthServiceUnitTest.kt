@@ -48,6 +48,7 @@ class AuthServiceUnitTest {
         val req = RegisterRequestDto(
             name = "Mick",
             lastName = "Jagger",
+            rut = "12345678-9",
             email = "mr.jagger@duocuc.cl",
             phone = "123456",
             password = "abc1234",
@@ -65,7 +66,7 @@ class AuthServiceUnitTest {
         every { securityConfig.passwordEncoder() } returns passwordEncoder
         every { passwordEncoder.encode(req.password) } returns "hashed-password"
         every { roleRepository.findByName(req.role!!.lowercase()) } returns mockRole
-        every { degreeRepository.findByName(req.degreeName!!) } returns mockDegree // Mock para la carrera
+        every { degreeRepository.findByName(req.degreeName) } returns mockDegree // Mock para la carrera
 
         var capturedUser: User? = null
         every { userRepository.save(any()) } answers { firstArg<User>().also { capturedUser = it } }
@@ -94,7 +95,7 @@ class AuthServiceUnitTest {
     @Test
     fun `userRegistry throws exception if user already exists`() {
         // Arrange
-        val req = RegisterRequestDto("Test", "User", "test@test.com", null, "pass", "alumno", "Carrera Test")
+        val req = RegisterRequestDto("Test", "User", "12345678-9", "test@test.com", null, "pass", "alumno", "Carrera Test")
         every { userRepository.findByEmail(req.email) } returns Optional.of(mockk())
 
         // Act & Assert
@@ -105,7 +106,7 @@ class AuthServiceUnitTest {
     @Test
     fun `userRegistry throws exception if role is null or blank`() {
         // Arrange
-        val req = RegisterRequestDto("Test", "User", "test@test.com", null, "pass", "", "Carrera Test")
+        val req = RegisterRequestDto("Test", "User", "12345678-9", "test@test.com", null, "pass", "", "Carrera Test")
         
         // Act & Assert
         val exception = assertThrows<IllegalArgumentException> { service.userRegistry(req) }
@@ -115,7 +116,7 @@ class AuthServiceUnitTest {
     @Test
     fun `userRegistry throws exception if degreeName is null or blank`() {
         // Arrange
-        val req = RegisterRequestDto("Test", "User", "test@test.com", null, "pass", "alumno", "")
+        val req = RegisterRequestDto("Test", "User", "12345678-9", "test@test.com", null, "pass", "alumno", "")
         every { roleRepository.findByName("alumno") } returns mockk()
 
         // Act & Assert
@@ -126,7 +127,7 @@ class AuthServiceUnitTest {
     @Test
     fun `userRegistry throws exception if degree does not exist`() {
         // Arrange
-        val req = RegisterRequestDto("Test", "User", "test@test.com", null, "pass", "alumno", "Carrera Inexistente")
+        val req = RegisterRequestDto("Test", "User", "12345678-9", "test@test.com", null, "pass", "alumno", "Carrera Inexistente")
         every { userRepository.findByEmail(req.email) } returns Optional.empty()
         every { roleRepository.findByName("alumno") } returns mockk()
         every { degreeRepository.findByName("Carrera Inexistente") } returns null // La carrera no se encuentra
