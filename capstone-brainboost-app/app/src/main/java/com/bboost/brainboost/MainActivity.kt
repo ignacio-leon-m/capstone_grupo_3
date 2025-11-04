@@ -14,7 +14,6 @@ import com.bboost.brainboost.util.SessionManager
 
 class MainActivity : AppCompatActivity() {
 
-    // ViewBinding para acceder fácil a la UI
     private lateinit var binding: ActivityMainBinding
     private lateinit var sessionManager: SessionManager
 
@@ -59,8 +58,11 @@ class MainActivity : AppCompatActivity() {
                     if (token != null && role != null) {
                         Log.i("LOGIN_SUCCESS", "Token: $token, Rol: $role")
 
-                        // 1. Guardar la sesión
-                        sessionManager.saveAuth(token, role)
+                        // ✅ ACTUALIZADO: Guardar también el nombre del usuario
+                        // Extraer el nombre del email (parte antes del @) como fallback
+                        val userName = extractNameFromEmail(email)
+
+                        sessionManager.saveAuth(token, role, userName)
 
                         // 2. Ir a Home
                         goToHome()
@@ -81,11 +83,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Extrae un nombre amigable del email
+     * Ejemplo: "juan.perez@gmail.com" -> "Juan Perez"
+     */
+    private fun extractNameFromEmail(email: String): String {
+        return try {
+            val namePart = email.substringBefore("@") // "juan.perez"
+            namePart
+                .replace(".", " ") // "juan perez"
+                .split(" ")
+                .joinToString(" ") { it ->
+                    it.replaceFirstChar { char ->
+                        if (char.isLowerCase()) char.titlecase() else char.toString()
+                    }
+                } // "Juan Perez"
+        } catch (e: Exception) {
+            // Si hay algún error, usar la parte antes del @ o un valor por defecto
+            email.substringBefore("@").ifEmpty { "Usuario" }
+        }
+    }
+
     private fun goToHome() {
         val intent = Intent(this, HomeActivity::class.java)
-        // Banderas para que el usuario no pueda volver al Login con el botón "atrás"
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
-
 }

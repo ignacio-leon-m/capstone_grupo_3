@@ -8,9 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class WebConfig: WebMvcConfigurer {
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**")
-            .allowedOrigins("http://localhost:8080") // Specific origin
+            // 💡 SOLUCIÓN: Reemplaza "*" por la IP específica de tu notebook y localhost
+            .allowedOrigins("http://localhost:8080", "http://192.168.1.14:8080")
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .allowedHeaders("*")
-            .allowCredentials(true)
+            .allowCredentials(true) // Ahora funciona porque los orígenes son explícitos
     }
 }

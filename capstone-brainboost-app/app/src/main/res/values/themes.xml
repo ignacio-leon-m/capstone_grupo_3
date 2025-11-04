@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Brainboost" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.Brainboost" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/brainboost_cyan</item>
+        <item name="colorAccent">@color/brainboost_cyan</item>
     </style>
 </resources>

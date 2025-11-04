@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:background="@drawable/bg_app_gradient"
+    android:padding="24dp"
     tools:context=".ContentUploadActivity">
 
     <TextView
@@ -14,77 +15,112 @@
         android:text="Carga de Contenido"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="@color/text_white"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <TextView
+        android:id="@+id/txtSubjectInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Asignatura: No seleccionada - Tema: No seleccionado"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:background="@drawable/bg_rounded_card"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtTitle" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSelectFile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="1. Seleccionar PDF"
+        app:cornerRadius="12dp"
+        android:elevation="6dp"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/brainboost_cyan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtTitle" />
+        app:layout_constraintTop_toBottomOf="@id/txtSubjectInfo" />
 
     <TextView
         android:id="@+id/txtFileName"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Archivo: (Ninguno)"
-        android:gravity="center_horizontal"
+        android:layout_height="wrap_content" android:layout_marginTop="8dp"
+        android:text="Ningún archivo seleccionado"
+        android:textStyle="italic"
+        android:textColor="@color/text_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnSelectFile" />
 
-    <LinearLayout
-        android:id="@+id/buttonContainer"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGenerateSummary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:orientation="horizontal"
+        android:text="2. Generar Resumen"
+        app:cornerRadius="12dp"
+        android:elevation="6dp"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/brainboost_cyan"
+        android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtFileName">
+        app:layout_constraintTop_toBottomOf="@id/txtFileName" />
 
-        <Button
-            android:id="@+id/btnGenerateSummary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:text="Generar Resumen" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGenerateQuiz"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="3. Generar Quiz (Vista Previa)"
+        app:cornerRadius="12dp"
+        android:elevation="6dp"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/brainboost_cyan"
+        android:enabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnGenerateSummary" />
 
-        <Space
-            android:layout_width="16dp"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:id="@+id/btnGenerateQuiz"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:text="Generar Quiz" />
-    </LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSaveQuiz"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="4. Guardar Quiz en Base de Datos"
+        app:cornerRadius="12dp"
+        android:elevation="6dp"
+        app:backgroundTint="@color/brainboost_orange_accent"
+        android:enabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnGenerateQuiz" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonContainer"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@id/btnSaveQuiz"
+        />
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
+        android:background="@drawable/bg_rounded_card"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,10 +130,11 @@
             android:id="@+id/txtApiResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#EEEEEE"
-            android:padding="8dp"
-            android:text="Respuesta de la API..."
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:text="Aquí aparecerán los resultados..."
+            android:padding="16dp"
+            android:textIsSelectable="true"
+            android:textColor="@android:color/black" />
+
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

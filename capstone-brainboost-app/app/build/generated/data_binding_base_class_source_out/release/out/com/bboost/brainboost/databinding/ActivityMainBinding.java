@@ -4,7 +4,6 @@ package com.bboost.brainboost.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.bboost.brainboost.R;
+import com.google.android.material.button.MaterialButton;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -22,7 +22,7 @@ public final class ActivityMainBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
-  public final Button btnLogin;
+  public final MaterialButton btnLogin;
 
   @NonNull
   public final EditText etEmail;
@@ -33,7 +33,7 @@ public final class ActivityMainBinding implements ViewBinding {
   @NonNull
   public final TextView tvResult;
 
-  private ActivityMainBinding(@NonNull LinearLayout rootView, @NonNull Button btnLogin,
+  private ActivityMainBinding(@NonNull LinearLayout rootView, @NonNull MaterialButton btnLogin,
       @NonNull EditText etEmail, @NonNull EditText etPassword, @NonNull TextView tvResult) {
     this.rootView = rootView;
     this.btnLogin = btnLogin;
@@ -70,7 +70,7 @@ public final class ActivityMainBinding implements ViewBinding {
     int id;
     missingId: {
       id = R.id.btnLogin;
-      Button btnLogin = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnLogin = ViewBindings.findChildViewById(rootView, id);
       if (btnLogin == null) {
         break missingId;
       }

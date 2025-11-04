@@ -4,7 +4,6 @@ package com.bboost.brainboost.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -12,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.bboost.brainboost.R;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import java.lang.NullPointerException;
 import java.lang.Override;
@@ -22,7 +22,7 @@ public final class ActivityCreateTeacherBinding implements ViewBinding {
   private final ScrollView rootView;
 
   @NonNull
-  public final Button btnCreate;
+  public final MaterialButton btnCreate;
 
   @NonNull
   public final TextInputEditText etEmail;
@@ -39,10 +39,10 @@ public final class ActivityCreateTeacherBinding implements ViewBinding {
   @NonNull
   public final TextView tvResult;
 
-  private ActivityCreateTeacherBinding(@NonNull ScrollView rootView, @NonNull Button btnCreate,
-      @NonNull TextInputEditText etEmail, @NonNull TextInputEditText etLastName,
-      @NonNull TextInputEditText etName, @NonNull TextInputEditText etPassword,
-      @NonNull TextView tvResult) {
+  private ActivityCreateTeacherBinding(@NonNull ScrollView rootView,
+      @NonNull MaterialButton btnCreate, @NonNull TextInputEditText etEmail,
+      @NonNull TextInputEditText etLastName, @NonNull TextInputEditText etName,
+      @NonNull TextInputEditText etPassword, @NonNull TextView tvResult) {
     this.rootView = rootView;
     this.btnCreate = btnCreate;
     this.etEmail = etEmail;
@@ -80,7 +80,7 @@ public final class ActivityCreateTeacherBinding implements ViewBinding {
     int id;
     missingId: {
       id = R.id.btnCreate;
-      Button btnCreate = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnCreate = ViewBindings.findChildViewById(rootView, id);
       if (btnCreate == null) {
         break missingId;
       }

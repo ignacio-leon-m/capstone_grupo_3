@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
-    android:gravity="center_horizontal"
+    android:gravity="center"
+    android:background="@drawable/bg_app_gradient"
     tools:context=".UploadStudentsActivity">
 
     <TextView
@@ -15,21 +17,27 @@
         android:text="Carga de Alumnos"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_marginTop="32dp"/>
+        android:textColor="@color/text_white"
+        android:layout_marginTop="40dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="El archivo debe ser un Excel (.xlsx)"
         android:textSize="16sp"
+        android:textColor="@color/text_white"
         android:layout_marginTop="8dp"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSelectFile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Seleccionar Archivo"/>
+        android:text="Seleccionar Archivo"
+        app:cornerRadius="12dp"
+        android:elevation="6dp"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/brainboost_cyan" />
 
     <TextView
         android:id="@+id/tvFileName"
@@ -37,14 +45,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Ningún archivo seleccionado"
+        android:textColor="@color/text_white"
         android:textAlignment="center"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnUpload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Cargar"
+        app:cornerRadius="12dp"
+        android:elevation="6dp"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/brainboost_cyan"
         android:enabled="false"
         tools:enabled="true"/>
 
@@ -53,6 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:textColor="@color/brainboost_error"
         android:textAlignment="center"
         tools:text="Error: Archivo no válido"/>
 

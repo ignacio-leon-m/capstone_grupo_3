@@ -17,6 +17,7 @@
     <uses-permission android:name="com.bboost.brainboost.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 
     <application
+        android:name="com.bboost.brainboost.BrainBoostApp"
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -47,6 +48,12 @@
         </activity>
         <activity
             android:name="com.bboost.brainboost.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.bboost.brainboost.AdminContentActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.bboost.brainboost.TeacherContentActivity"
             android:exported="false" />
         <activity
             android:name="androidx.compose.ui.tooling.PreviewActivity"

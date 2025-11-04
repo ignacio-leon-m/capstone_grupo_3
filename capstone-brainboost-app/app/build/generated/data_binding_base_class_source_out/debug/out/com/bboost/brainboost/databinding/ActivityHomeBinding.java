@@ -4,7 +4,6 @@ package com.bboost.brainboost.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -12,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.bboost.brainboost.R;
+import com.google.android.material.button.MaterialButton;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -21,26 +21,36 @@ public final class ActivityHomeBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
-  public final Button btnContent;
+  public final MaterialButton btnAdminContent;
 
   @NonNull
-  public final Button btnLogout;
+  public final MaterialButton btnContent;
 
   @NonNull
-  public final Button btnUploadStudents;
+  public final MaterialButton btnLogout;
 
   @NonNull
-  public final Button btnUsers;
+  public final MaterialButton btnUploadContent;
+
+  @NonNull
+  public final MaterialButton btnUploadStudents;
+
+  @NonNull
+  public final MaterialButton btnUsers;
 
   @NonNull
   public final TextView tvWelcome;
 
-  private ActivityHomeBinding(@NonNull LinearLayout rootView, @NonNull Button btnContent,
-      @NonNull Button btnLogout, @NonNull Button btnUploadStudents, @NonNull Button btnUsers,
+  private ActivityHomeBinding(@NonNull LinearLayout rootView,
+      @NonNull MaterialButton btnAdminContent, @NonNull MaterialButton btnContent,
+      @NonNull MaterialButton btnLogout, @NonNull MaterialButton btnUploadContent,
+      @NonNull MaterialButton btnUploadStudents, @NonNull MaterialButton btnUsers,
       @NonNull TextView tvWelcome) {
     this.rootView = rootView;
+    this.btnAdminContent = btnAdminContent;
     this.btnContent = btnContent;
     this.btnLogout = btnLogout;
+    this.btnUploadContent = btnUploadContent;
     this.btnUploadStudents = btnUploadStudents;
     this.btnUsers = btnUsers;
     this.tvWelcome = tvWelcome;
@@ -73,26 +83,38 @@ public final class ActivityHomeBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.btnAdminContent;
+      MaterialButton btnAdminContent = ViewBindings.findChildViewById(rootView, id);
+      if (btnAdminContent == null) {
+        break missingId;
+      }
+
       id = R.id.btnContent;
-      Button btnContent = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnContent = ViewBindings.findChildViewById(rootView, id);
       if (btnContent == null) {
         break missingId;
       }
 
       id = R.id.btnLogout;
-      Button btnLogout = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnLogout = ViewBindings.findChildViewById(rootView, id);
       if (btnLogout == null) {
         break missingId;
       }
 
+      id = R.id.btnUploadContent;
+      MaterialButton btnUploadContent = ViewBindings.findChildViewById(rootView, id);
+      if (btnUploadContent == null) {
+        break missingId;
+      }
+
       id = R.id.btnUploadStudents;
-      Button btnUploadStudents = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnUploadStudents = ViewBindings.findChildViewById(rootView, id);
       if (btnUploadStudents == null) {
         break missingId;
       }
 
       id = R.id.btnUsers;
-      Button btnUsers = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnUsers = ViewBindings.findChildViewById(rootView, id);
       if (btnUsers == null) {
         break missingId;
       }
@@ -103,8 +125,8 @@ public final class ActivityHomeBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityHomeBinding((LinearLayout) rootView, btnContent, btnLogout,
-          btnUploadStudents, btnUsers, tvWelcome);
+      return new ActivityHomeBinding((LinearLayout) rootView, btnAdminContent, btnContent,
+          btnLogout, btnUploadContent, btnUploadStudents, btnUsers, tvWelcome);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

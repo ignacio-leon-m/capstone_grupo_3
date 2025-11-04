@@ -1,5 +1,9 @@
 [
     {
+        "merged": "com.bboost.brainboost.app-mergeReleaseResources-51:/layout/activity_subject_selection.xml",
+        "source": "com.bboost.brainboost.app-main-53:/layout/activity_subject_selection.xml"
+    },
+    {
         "merged": "com.bboost.brainboost.app-mergeReleaseResources-51:/layout/activity_create_teacher.xml",
         "source": "com.bboost.brainboost.app-main-53:/layout/activity_create_teacher.xml"
     },
@@ -10,5 +14,17 @@
     {
         "merged": "com.bboost.brainboost.app-mergeReleaseResources-51:/layout/activity_main.xml",
         "source": "com.bboost.brainboost.app-main-53:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.bboost.brainboost.app-mergeReleaseResources-51:/layout/activity_admin_content.xml",
+        "source": "com.bboost.brainboost.app-main-53:/layout/activity_admin_content.xml"
+    },
+    {
+        "merged": "com.bboost.brainboost.app-mergeReleaseResources-51:/layout/activity_content_upload.xml",
+        "source": "com.bboost.brainboost.app-main-53:/layout/activity_content_upload.xml"
+    },
+    {
+        "merged": "com.bboost.brainboost.app-mergeReleaseResources-51:/layout/activity_upload_students.xml",
+        "source": "com.bboost.brainboost.app-main-53:/layout/activity_upload_students.xml"
     }
 ]

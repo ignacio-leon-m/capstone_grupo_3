@@ -1,25 +1,45 @@
 package com.bboost.brainboost.network
 
-import com.bboost.brainboost.dto.LoginRequestDto
-import com.bboost.brainboost.dto.LoginResponseDto
-import com.bboost.brainboost.dto.RegisterRequestDto
-import com.bboost.brainboost.dto.UserResponseDto
+import com.bboost.brainboost.dto.*
 import okhttp3.MultipartBody
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.Header
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
+import retrofit2.http.*
+import java.util.UUID
 
 interface ApiService {
     @POST("api/auth/login")
     suspend fun login(@Body request: LoginRequestDto): Response<LoginResponseDto>
 
-    @Multipart // 4. Indicar que es una subida multipart
-    @POST("api/files/upload") // 5. La URL de tu controlador
+
+    @Multipart
+    @POST("api/users/upload")
     suspend fun uploadStudents(
         @Header("Authorization") token: String,
         @Part file: MultipartBody.Part
     ): Response<String>
+
+    // Resto de endpoints...
+    @GET("api/subjects/my-subjects")
+    suspend fun getMySubjects(): Response<List<SubjectDto>>
+
+    @GET("api/subjects/all")
+    suspend fun getAllSubjects(): Response<List<SubjectDto>>
+
+    @GET("api/subjects/topics/{subjectId}")
+    suspend fun getTopicsBySubject(@Path("subjectId") subjectId: UUID): Response<List<TopicDto>>
+
+    @POST("api/subjects/topics-query")
+    suspend fun createTopic(
+        @Query("subjectId") subjectId: String,
+        @Query("topicName") topicName: String
+    ): Response<TopicDto>
+
+    @Multipart
+    @POST("api/ai/pdf/quiz/persist")
+    suspend fun quizPersist(
+        @Part file: MultipartBody.Part,
+        @Query("asignaturaId") asignaturaId: String,
+        @Query("tema") tema: String,
+        @Query("numQuestions") numQuestions: Int
+    ): Response<Map<String, Any>>
 }

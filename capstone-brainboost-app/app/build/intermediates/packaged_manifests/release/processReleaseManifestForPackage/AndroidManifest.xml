@@ -17,6 +17,7 @@
     <uses-permission android:name="com.bboost.brainboost.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 
     <application
+        android:name="com.bboost.brainboost.BrainBoostApp"
         android:allowBackup="true"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -29,7 +30,10 @@
         android:theme="@style/Theme.Brainboost"
         android:usesCleartextTraffic="true" >
         <activity
-            android:name="com.bboost.brainboost.CreateTeacherActivity"
+            android:name="com.bboost.brainboost.ContentUploadActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.bboost.brainboost.UploadStudentsActivity"
             android:exported="false" />
         <activity
             android:name="com.bboost.brainboost.MainActivity"
@@ -43,6 +47,9 @@
         <activity
             android:name="com.bboost.brainboost.HomeActivity"
             android:exported="false" />
+        <activity
+            android:name="com.bboost.brainboost.AdminContentActivity"
+            android:exported="false" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"
@@ -53,9 +60,6 @@
                 android:value="androidx.startup" />
             <meta-data
                 android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-                android:value="androidx.startup" />
-            <meta-data
-                android:name="okhttp3.internal.platform.PlatformInitializer"
                 android:value="androidx.startup" />
             <meta-data
                 android:name="androidx.profileinstaller.ProfileInstallerInitializer"

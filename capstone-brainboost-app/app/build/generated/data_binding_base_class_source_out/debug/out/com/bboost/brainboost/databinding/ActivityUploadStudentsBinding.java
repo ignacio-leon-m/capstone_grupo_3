@@ -4,7 +4,6 @@ package com.bboost.brainboost.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -12,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.bboost.brainboost.R;
+import com.google.android.material.button.MaterialButton;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -21,10 +21,10 @@ public final class ActivityUploadStudentsBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
-  public final Button btnSelectFile;
+  public final MaterialButton btnSelectFile;
 
   @NonNull
-  public final Button btnUpload;
+  public final MaterialButton btnUpload;
 
   @NonNull
   public final TextView tvFileName;
@@ -33,8 +33,8 @@ public final class ActivityUploadStudentsBinding implements ViewBinding {
   public final TextView tvResult;
 
   private ActivityUploadStudentsBinding(@NonNull LinearLayout rootView,
-      @NonNull Button btnSelectFile, @NonNull Button btnUpload, @NonNull TextView tvFileName,
-      @NonNull TextView tvResult) {
+      @NonNull MaterialButton btnSelectFile, @NonNull MaterialButton btnUpload,
+      @NonNull TextView tvFileName, @NonNull TextView tvResult) {
     this.rootView = rootView;
     this.btnSelectFile = btnSelectFile;
     this.btnUpload = btnUpload;
@@ -70,13 +70,13 @@ public final class ActivityUploadStudentsBinding implements ViewBinding {
     int id;
     missingId: {
       id = R.id.btnSelectFile;
-      Button btnSelectFile = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnSelectFile = ViewBindings.findChildViewById(rootView, id);
       if (btnSelectFile == null) {
         break missingId;
       }
 
       id = R.id.btnUpload;
-      Button btnUpload = ViewBindings.findChildViewById(rootView, id);
+      MaterialButton btnUpload = ViewBindings.findChildViewById(rootView, id);
       if (btnUpload == null) {
         break missingId;
       }
