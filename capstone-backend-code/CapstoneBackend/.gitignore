@@ -38,3 +38,6 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+### AI Documentation (for AI assistants context) ###
+.ai-docs/
