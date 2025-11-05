@@ -1,13 +1,14 @@
 -- Eliminar tablas si existen (en orden inverso de creación para manejar dependencias)
+DROP TABLE IF EXISTS metricas_juego_hangman CASCADE;
+DROP TABLE IF EXISTS resultados_juego_hangman CASCADE;
+DROP TABLE IF EXISTS metricas_juego_crisscross CASCADE;  -- Descomentar cuando se implemente
+DROP TABLE IF EXISTS resultados_juego_crisscross CASCADE;  -- Descomentar cuando se implemente
 DROP TABLE IF EXISTS metricas CASCADE;
 DROP TABLE IF EXISTS puntajes CASCADE;
 DROP TABLE IF EXISTS juegos CASCADE;
-DROP TABLE IF EXISTS conceptos CASCADE; -- Añadido
+DROP TABLE IF EXISTS conceptos CASCADE;
 DROP TABLE IF EXISTS preguntas CASCADE;
-DROP TABLE IF EXISTS temas CASCADE; -- Añadido
-DROP TABLE IF EXISTS cargas CASCADE;
-DROP TABLE IF EXISTS tipos_carga CASCADE;
-DROP TABLE IF EXISTS estados_carga CASCADE;
+DROP TABLE IF EXISTS temas CASCADE;
 DROP TABLE IF EXISTS usuarios CASCADE;
 DROP TABLE IF EXISTS asignaturas_semestre CASCADE;
 DROP TABLE IF EXISTS asignaturas CASCADE;
@@ -91,28 +92,8 @@ CREATE TABLE usuarios (
                           FOREIGN KEY (id_rol) REFERENCES roles(id),
                           FOREIGN KEY (id_carrera) REFERENCES carreras(id)
 );
--- Tablas de Carga y Auditoría (Sin Cambios)
-CREATE TABLE estados_carga (
-                               id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-                               nombre_estado VARCHAR(50) NOT NULL UNIQUE
-);
-CREATE TABLE tipos_carga (
-                             id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-                             nombre_tipo VARCHAR(100) NOT NULL UNIQUE
-);
-CREATE TABLE cargas (
-                        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-                        id_usuario_carga UUID NOT NULL,
-                        fecha_hora_carga TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        nombre_archivo VARCHAR(255) NOT NULL,
-                        id_estado UUID NOT NULL,
-                        detalle_error TEXT,
-                        id_tipo_carga UUID NOT NULL,
-                        FOREIGN KEY (id_usuario_carga) REFERENCES usuarios(id),
-                        FOREIGN KEY (id_estado) REFERENCES estados_carga(id),
-                        FOREIGN KEY (id_tipo_carga) REFERENCES tipos_carga(id)
-);
--- Tablas de Gamificación (Sin Cambios)
+
+-- Tablas de Gamificación
 CREATE TABLE temas (
                        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                        nombre VARCHAR(100) NOT NULL,
@@ -132,6 +113,8 @@ CREATE TABLE preguntas (
 CREATE TABLE conceptos (
                            id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                            palabra_concepto VARCHAR(255) NOT NULL,
+                           hint TEXT,  -- Pista corta generada por Gemini IA
+                           fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                            id_tema UUID NOT NULL,
                            FOREIGN KEY (id_tema) REFERENCES temas(id)
 );
@@ -169,7 +152,107 @@ CREATE TABLE metricas (
                           FOREIGN KEY (id_pregunta) REFERENCES preguntas(id)
 );
 
-/*********************** INSERCIÓN DE DATOS ***********************/
+-- ============================================================
+-- TABLAS ESPECÍFICAS POR JUEGO (PATRÓN ESCALABLE)
+-- Nomenclatura: metricas_juego_{nombre} + resultados_juego_{nombre}
+-- ============================================================
+
+-- JUEGO: HANGMAN (AHORCADO)
+CREATE TABLE metricas_juego_hangman (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id_juego UUID NOT NULL,
+    id_usuario UUID NOT NULL,
+    id_concepto UUID NOT NULL,
+    letra_intentada CHAR(1) NOT NULL,
+    es_correcta BOOLEAN NOT NULL,
+    posicion_letra INT,  -- Posición en la palabra (0-indexed)
+    tiempo_respuesta_ms INT,
+    fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_juego) REFERENCES juegos(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_concepto) REFERENCES conceptos(id) ON DELETE CASCADE
+);
+
+CREATE TABLE resultados_juego_hangman (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id_juego UUID NOT NULL,
+    id_concepto UUID NOT NULL,
+    adivinado BOOLEAN NOT NULL,  -- TRUE si completó la palabra
+    intentos_usados INT NOT NULL,  -- Cuántos errores tuvo en esta palabra
+    tiempo_total_ms INT,
+    puntaje_obtenido NUMERIC(10, 2),
+    vidas_restantes INT,  -- Vidas que quedaban al terminar esta palabra
+    fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_juego) REFERENCES juegos(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_concepto) REFERENCES conceptos(id) ON DELETE CASCADE,
+    UNIQUE (id_juego, id_concepto)
+);
+
+-- JUEGO: CRISS-CROSS PUZZLE (CRUCIGRAMA) - EJEMPLO PARA FUTUROS JUEGOS
+-- Descomentar cuando se implemente este juego
+/*
+CREATE TABLE metricas_juego_crisscross (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id_juego UUID NOT NULL,
+    id_usuario UUID NOT NULL,
+    id_concepto UUID NOT NULL,
+    posicion_fila INT NOT NULL,
+    posicion_columna INT NOT NULL,
+    direccion VARCHAR(20),  -- 'HORIZONTAL', 'VERTICAL'
+    letra_colocada CHAR(1) NOT NULL,
+    es_correcta BOOLEAN NOT NULL,
+    tiempo_respuesta_ms INT,
+    pista_usada BOOLEAN DEFAULT FALSE,
+    fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_juego) REFERENCES juegos(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_concepto) REFERENCES conceptos(id) ON DELETE CASCADE
+);
+
+CREATE TABLE resultados_juego_crisscross (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id_juego UUID NOT NULL,
+    id_concepto UUID NOT NULL,
+    completado BOOLEAN NOT NULL,
+    casillas_correctas INT,
+    casillas_totales INT,
+    pistas_usadas INT DEFAULT 0,
+    tiempo_total_ms INT,
+    puntaje_obtenido NUMERIC(10, 2),
+    fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_juego) REFERENCES juegos(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_concepto) REFERENCES conceptos(id) ON DELETE CASCADE,
+    UNIQUE (id_juego, id_concepto)
+);
+*/
+
+-- INDICES PARA MEJORAR PERFORMANCE
+
+-- Indices para conceptos
+CREATE INDEX idx_conceptos_tema ON conceptos(id_tema);
+CREATE INDEX idx_conceptos_fecha ON conceptos(fecha_creacion DESC);
+
+-- Indices para metricas Hangman
+CREATE INDEX idx_metricas_hangman_juego ON metricas_juego_hangman(id_juego);
+CREATE INDEX idx_metricas_hangman_usuario ON metricas_juego_hangman(id_usuario);
+CREATE INDEX idx_metricas_hangman_concepto ON metricas_juego_hangman(id_concepto);
+CREATE INDEX idx_metricas_hangman_fecha ON metricas_juego_hangman(fecha_hora DESC);
+
+-- Indices para resultados Hangman
+CREATE INDEX idx_resultados_hangman_juego ON resultados_juego_hangman(id_juego);
+CREATE INDEX idx_resultados_hangman_adivinado ON resultados_juego_hangman(adivinado);
+
+-- COMENTARIOS PARA DOCUMENTACION
+
+COMMENT ON TABLE conceptos IS 'Conceptos académicos extraídos automáticamente por IA (Gemini) desde PDFs';
+COMMENT ON TABLE metricas_juego_hangman IS 'Métricas granulares del juego Hangman - cada intento de letra';
+COMMENT ON TABLE resultados_juego_hangman IS 'Resultados finales del juego Hangman - por palabra completada';
+
+COMMENT ON COLUMN conceptos.hint IS 'Pista corta generada automáticamente por Gemini para juegos de adivinanza';
+COMMENT ON COLUMN conceptos.palabra_concepto IS 'Concepto en MAYUSCULAS extraído del PDF académico';
+COMMENT ON COLUMN conceptos.fecha_creacion IS 'Timestamp de cuando Gemini procesó y extrajo el concepto';
+
+/**********************INSERCION DE DATOS***********************/
 
 WITH ins_pais AS (
     INSERT INTO paises (nombre) VALUES ('Chile') RETURNING id
@@ -217,17 +300,6 @@ WITH ins_pais AS (
                     'cecilia.arroyo@duoc.cl', '1234567'
              FROM ins_rol_1, ins_carrera RETURNING id
      ),
-     ins_estado_carga AS (
-         INSERT INTO estados_carga (nombre_estado) VALUES ('Completado') RETURNING id
-     ),
-     ins_tipo_carga AS (
-         INSERT INTO tipos_carga (nombre_tipo) VALUES ('Carga Masiva Apuntes') RETURNING id
-     ),
-     ins_carga AS (
-         INSERT INTO cargas (id_usuario_carga, nombre_archivo, id_estado, id_tipo_carga)
-             SELECT ins_usuario.id, 'apuntes_semana_1.pdf', ins_estado_carga.id, ins_tipo_carga.id
-             FROM ins_usuario, ins_estado_carga, ins_tipo_carga
-     ),
      ins_tema AS (
          -- NUEVO CTE: Se inserta el tema para usar su ID en preguntas
          INSERT INTO temas (nombre, id_asignatura)
@@ -240,8 +312,11 @@ WITH ins_pais AS (
              FROM ins_asignatura, ins_tema RETURNING id
      ),
     inst_concepto AS (
-        INSERT INTO conceptos (palabra_concepto, id_tema)
-            SELECT 'variable', ins_tema.id FROM ins_tema
+        INSERT INTO conceptos (palabra_concepto, hint, id_tema)
+            SELECT 'VARIABLE', 
+                   'Espacio en memoria que almacena un valor', 
+                   ins_tema.id 
+            FROM ins_tema RETURNING id
     ),
      ins_juego AS (
          INSERT INTO juegos(id_usuario, id_asignatura, puntaje)

@@ -1,28 +1,30 @@
 package org.duocuc.capstonebackend.model
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
+import jakarta.persistence.*
+import org.hibernate.annotations.UuidGenerator
+import java.math.BigDecimal
+import java.time.LocalDate
 import java.util.UUID
 
 @Entity
-@Table(name = "puntajes")
+@Table(name = "puntajes", schema = "public")
 class Score (
-    @Id
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    val id: UUID = UUID.randomUUID(),
-
-    @Column(name = "nombre", nullable = false, length = 100)
-    val name: String = "",
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_usuario", nullable = false)
-    val user: User,
+    var user: User,
 
-    @ManyToOne
-    @JoinColumn(name = "id_materia", nullable = false)
-    val subject: Subject,
-)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_asignatura", nullable = false)
+    var subject: Subject,
+
+    @Column(name = "puntaje", nullable = false, precision = 10, scale = 2)
+    var score: BigDecimal,
+
+    @Column(name = "fecha_asignacion", nullable = false)
+    var assignmentDate: LocalDate = LocalDate.now()
+) {
+    @Id
+    @UuidGenerator
+    @Column(name = "id", updatable = false, nullable = false)
+    var id: UUID? = null
+}

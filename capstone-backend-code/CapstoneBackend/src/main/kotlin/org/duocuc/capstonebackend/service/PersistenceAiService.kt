@@ -1,63 +1,38 @@
 package org.duocuc.capstonebackend.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.duocuc.capstonebackend.dto.AiQuizDto
-import org.duocuc.capstonebackend.dto.AiSummaryDto
-import org.duocuc.capstonebackend.nosql.AiQuizDoc
-import org.duocuc.capstonebackend.nosql.AiQuizRepository
-import org.duocuc.capstonebackend.nosql.AiSummaryDoc
-import org.duocuc.capstonebackend.nosql.AiSummaryRepository
+import org.duocuc.capstonebackend.nosql.AiQueryLog
+import org.duocuc.capstonebackend.nosql.AiQueryLogRepository
 import org.duocuc.capstonebackend.security.CurrentUser
-import org.duocuc.capstonebackend.util.Checksums
+import org.duocuc.capstonebackend.util.Hashing
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
 /**
  * Decorador de persistencia (Mongo) para AiService.
- * Persiste summaries y quizzes generados, y luego retorna el DTO original.
+ * Loguea todas las consultas a la IA.
  */
 @Service("persistingAiService")
 class PersistenceAiService(
-    @Qualifier("geminiService") private val delegate: AiService,
-    private val summaryRepo: AiSummaryRepository,
-    private val quizRepo: AiQuizRepository,
-    private val currentUser: CurrentUser,
-    private val mapper: ObjectMapper = ObjectMapper()
+    @Qualifier("cachingAiService") private val delegate: AiService,
+    private val queryLogRepo: AiQueryLogRepository,
+    private val currentUser: CurrentUser
 ) : AiService {
 
-    override fun summarizeDocument(bytes: ByteArray, mimeType: String, title: String): AiSummaryDto {
-        val dto = delegate.summarizeDocument(bytes, mimeType, title)
+    override fun query(text: String, prompt: String): String {
+        val response = delegate.query(text, prompt)
 
         val userId = currentUser.id()
-        val sha1 = Checksums.sha1(bytes)
+        val textSha1 = Hashing.sha256Hex(text)
 
-        summaryRepo.save(
-            AiSummaryDoc(
+        queryLogRepo.save(
+            AiQueryLog(
                 userId = userId,
-                title = title,
-                mimeType = mimeType,
-                sizeBytes = bytes.size.toLong(),
-                sha1 = sha1,
-                summary = dto.summary
-            )
-        )
-        return dto
-    }
-
-    override fun generateQuizFromText(text: String, numQuestions: Int): AiQuizDto {
-        val quiz = delegate.generateQuizFromText(text, numQuestions)
-
-        val userId = currentUser.id()
-        quizRepo.save(
-            AiQuizDoc(
-                userId = userId,
-                sourceTitle = "Texto libre",
-                sourceSha1 = null,
-                numQuestions = quiz.questions.size,
-                payload = mapper.writeValueAsString(quiz)
+                textSha1 = textSha1,
+                prompt = prompt,
+                response = response
             )
         )
 
-        return quiz
+        return response
     }
 }

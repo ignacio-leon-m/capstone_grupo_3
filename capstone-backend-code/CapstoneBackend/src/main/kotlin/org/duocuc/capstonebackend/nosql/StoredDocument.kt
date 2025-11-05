@@ -5,13 +5,15 @@ import org.springframework.data.mongodb.core.mapping.Document
 import java.time.Instant
 import java.util.UUID
 
-@Document("ai_quizzes")
-data class AiQuizDoc(
-    @Id val id: String? = null,
+@Document(collection = "stored_documents")
+data class StoredDocument(
+    @Id
+    val id: String = UUID.randomUUID().toString(),
     val userId: UUID,
-    val sourceTitle: String?,
-    val sourceSha1: String?,
-    val numQuestions: Int,
-    val payload: String,          // JSON del quiz
+    val fileName: String,
+    val filePath: String,
+    val mimeType: String,
+    val sizeBytes: Long,
+    val sha1: String,
     val createdAt: Instant = Instant.now()
 )

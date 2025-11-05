@@ -5,14 +5,13 @@ import org.springframework.data.mongodb.core.mapping.Document
 import java.time.Instant
 import java.util.UUID
 
-@Document("ai_summaries")
-data class AiSummaryDoc(
-    @Id val id: String? = null,
+@Document(collection = "ai_query_logs")
+data class AiQueryLog(
+    @Id
+    val id: String = UUID.randomUUID().toString(),
     val userId: UUID,
-    val title: String,
-    val mimeType: String,
-    val sizeBytes: Long,
-    val sha1: String,
-    val summary: String,
+    val textSha1: String,
+    val prompt: String,
+    val response: String,
     val createdAt: Instant = Instant.now()
 )
