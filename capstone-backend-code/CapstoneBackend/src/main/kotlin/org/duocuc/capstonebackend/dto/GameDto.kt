@@ -3,31 +3,31 @@ package org.duocuc.capstonebackend.dto
 import java.util.UUID
 
 /**
- * DTO para iniciar un nuevo juego.
+ * DTO to start a new game.
  */
 data class GameStartDto(
-    val idUsuario: UUID,
-    val idAsignatura: UUID,
-    val nombreJuego: String
+    val userId: UUID,
+    val subjectId: UUID,
+    val gameName: String
 )
 
 /**
- * DTO para respuesta de juego en curso.
+ * DTO for game in progress response.
  */
 data class GameResponseDto(
     val id: UUID,
-    val nombreJuego: String,
-    val estadoPartida: String,
-    val intentosRestantes: Int?,
-    val puntaje: String?,
-    val fechaInicio: String,
-    val fechaFin: String?
+    val gameName: String,
+    val gameStatus: String,
+    val attemptsRemaining: Int?,
+    val score: String?,
+    val startDate: String,
+    val endDate: String?
 )
 
 /**
- * DTO para finalizar un juego.
+ * DTO to end a game.
  */
 data class GameEndDto(
-    val idJuego: UUID,
-    val puntajeFinal: String
+    val gameId: UUID,
+    val finalScore: String
 )

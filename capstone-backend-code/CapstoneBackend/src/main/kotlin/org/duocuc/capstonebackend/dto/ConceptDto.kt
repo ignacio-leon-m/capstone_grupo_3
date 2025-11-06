@@ -3,22 +3,22 @@ package org.duocuc.capstonebackend.dto
 import java.util.UUID
 
 /**
- * DTO para crear un nuevo concepto (generalmente desde extracción de IA).
+ * DTO to create a new concept (usually from AI extraction).
  */
 data class ConceptCreateDto(
-    val palabraConcepto: String,
+    val word: String,
     val hint: String?,
-    val idTema: UUID
+    val topicId: UUID
 )
 
 /**
- * DTO para respuesta de concepto.
+ * DTO for concept response.
  */
 data class ConceptResponseDto(
     val id: UUID,
-    val palabraConcepto: String,
+    val word: String,
     val hint: String?,
-    val idTema: UUID,
-    val nombreTema: String,
-    val fechaCreacion: String
+    val topicId: UUID,
+    val topicName: String,
+    val createdAt: String
 )
