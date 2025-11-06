@@ -75,8 +75,32 @@ class HangmanService(
         val concept = conceptRepository.findById(request.conceptId)
             .orElseThrow { ResourceNotFoundException("Concepto no encontrado con ID: ${request.conceptId}") }
 
+        // ✅ VALIDACIÓN 1: Verificar que es una letra (solo alfabético)
+        val inputLetter = request.letter.trim()
+        if (inputLetter.length != 1 || !inputLetter[0].isLetter()) {
+            // ❌ Caracteres especiales o números: PENALIZA
+            if (game.attemptsRemaining > 0) {
+                game.attemptsRemaining -= 1
+                gameRepository.save(game)
+                logger.warn("Invalid character attempted: '$inputLetter'. Lives remaining: ${game.attemptsRemaining}")
+            }
+            
+            throw BadRequestException("Solo se permiten letras. Vidas restantes: ${game.attemptsRemaining}")
+        }
+
+        val letter = inputLetter.lowercase()
+        
+        // ✅ VALIDACIÓN 2: Verificar si la letra ya fue usada (revisar métricas previas)
+        val previousAttempts = hangmanMetricRepository.findByGameAndConcept(game, concept)
+        val usedLetters = previousAttempts.map { it.attemptedLetter }.toSet()
+        
+        if (letter in usedLetters) {
+            // ❌ Letra repetida: NO penaliza, solo informa
+            logger.debug("Letter '$letter' already attempted for this concept")
+            throw BadRequestException("Ya has intentado la letra '$letter'. Letras usadas: ${usedLetters.joinToString(", ")}")
+        }
+
         // Verificar si la letra está en la palabra (case-insensitive)
-        val letter = request.letter.lowercase()
         val word = concept.word.lowercase()
         val isCorrect = word.contains(letter)
 
@@ -99,11 +123,11 @@ class HangmanService(
         )
         hangmanMetricRepository.save(metric)
 
-        // Si la letra es incorrecta, reducir vidas
+        // Si la letra es incorrecta, reducir vidas (3 TOTALES para toda la partida)
         if (!isCorrect && game.attemptsRemaining > 0) {
             game.attemptsRemaining -= 1
             gameRepository.save(game)
-            logger.info("Incorrect letter. Lives remaining: ${game.attemptsRemaining}")
+            logger.info("Incorrect letter '$letter'. Lives remaining: ${game.attemptsRemaining}")
         }
 
         return HangmanAttemptResponseDto(

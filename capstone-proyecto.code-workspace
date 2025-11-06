@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"name": "Backend (Spring Boot)",
+			"path": "capstone-backend-code/CapstoneBackend"
+		},
+		{
+			"name": "Frontend (Kotlin App)",
+			"path": "capstone-frontend-code"
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/node_modules": true,
+			"**/.gradle": true,
+			"**/build": true
+		}
+	}
+}
