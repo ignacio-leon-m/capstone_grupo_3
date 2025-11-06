@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS juegos CASCADE;
 DROP TABLE IF EXISTS conceptos CASCADE;
 DROP TABLE IF EXISTS preguntas CASCADE;
 DROP TABLE IF EXISTS temas CASCADE;
+DROP TABLE IF EXISTS usuario_asignatura CASCADE;
 DROP TABLE IF EXISTS usuarios CASCADE;
 DROP TABLE IF EXISTS asignaturas_semestre CASCADE;
 DROP TABLE IF EXISTS asignaturas CASCADE;
@@ -91,6 +92,19 @@ CREATE TABLE usuarios (
                           fecha_ultimo_login TIMESTAMP,
                           FOREIGN KEY (id_rol) REFERENCES roles(id),
                           FOREIGN KEY (id_carrera) REFERENCES carreras(id)
+);
+
+-- Tabla de Relación Usuario-Asignatura (Unificada para Profesores y Alumnos)
+-- El rol del usuario determina si es profesor o alumno
+CREATE TABLE usuario_asignatura (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id_usuario UUID NOT NULL,
+    id_asignatura UUID NOT NULL,
+    fecha_asignacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_asignatura) REFERENCES asignaturas(id) ON DELETE CASCADE,
+    UNIQUE (id_usuario, id_asignatura)
 );
 
 -- Tablas de Gamificación
@@ -228,6 +242,11 @@ CREATE TABLE resultados_juego_crisscross (
 
 -- INDICES PARA MEJORAR PERFORMANCE
 
+-- Indices para relaciones usuario-asignatura
+CREATE INDEX idx_usuario_asignatura_usuario ON usuario_asignatura(id_usuario);
+CREATE INDEX idx_usuario_asignatura_asignatura ON usuario_asignatura(id_asignatura);
+CREATE INDEX idx_usuario_asignatura_activo ON usuario_asignatura(activo);
+
 -- Indices para conceptos
 CREATE INDEX idx_conceptos_tema ON conceptos(id_tema);
 CREATE INDEX idx_conceptos_fecha ON conceptos(fecha_creacion DESC);
@@ -244,6 +263,7 @@ CREATE INDEX idx_resultados_hangman_adivinado ON resultados_juego_hangman(adivin
 
 -- COMENTARIOS PARA DOCUMENTACION
 
+COMMENT ON TABLE usuario_asignatura IS 'Relación N:M entre usuarios y asignaturas. El rol del usuario determina si es profesor o alumno.';
 COMMENT ON TABLE conceptos IS 'Conceptos académicos extraídos automáticamente por IA (Gemini) desde PDFs';
 COMMENT ON TABLE metricas_juego_hangman IS 'Métricas granulares del juego Hangman - cada intento de letra';
 COMMENT ON TABLE resultados_juego_hangman IS 'Resultados finales del juego Hangman - por palabra completada';

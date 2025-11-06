@@ -6,27 +6,25 @@ import org.duocuc.capstonebackend.dto.GameEndDto
 import org.duocuc.capstonebackend.exception.BadRequestException
 import org.duocuc.capstonebackend.exception.ResourceNotFoundException
 import org.duocuc.capstonebackend.model.Game
-import org.duocuc.capstonebackend.model.Score
 import org.duocuc.capstonebackend.repository.GameRepository
-import org.duocuc.capstonebackend.repository.ScoreRepository
 import org.duocuc.capstonebackend.repository.SubjectRepository
 import org.duocuc.capstonebackend.repository.UserRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
-import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 @Service
 class GameService(
     private val gameRepository: GameRepository,
     private val userRepository: UserRepository,
-    private val subjectRepository: SubjectRepository,
-    private val scoreRepository: ScoreRepository
+    private val subjectRepository: SubjectRepository
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
+    private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
     companion object {
         const val INITIAL_LIVES = 3 // 3 vidas totales por partida
@@ -83,18 +81,18 @@ class GameService(
         // Actualizar juego
         game.gameStatus = "finalizado"
         game.endDate = LocalDateTime.now()
-        game.score = request.finalScore
+        game.score = BigDecimal(request.finalScore)
 
         val updatedGame = gameRepository.save(game)
 
-        // Crear registro de puntaje
-        val score = Score(
-            user = game.user,
-            subject = game.subject,
-            score = BigDecimal.valueOf(request.finalScore.toLong()),
-            assignmentDate = LocalDate.now()
-        )
-        scoreRepository.save(score)
+        // TODO: Crear registro de puntaje cuando el modelo Score esté implementado
+        // val score = Score(
+        //     user = game.user,
+        //     subject = game.subject,
+        //     score = BigDecimal(request.finalScore),
+        //     assignmentDate = LocalDate.now()
+        // )
+        // scoreRepository.save(score)
 
         logger.info("Game $gameId finalized with score ${request.finalScore}")
 
@@ -123,13 +121,11 @@ class GameService(
 
     private fun Game.toResponseDto() = GameResponseDto(
         id = id!!,
-        userId = user.id!!,
-        subjectId = subject.id!!,
-        gameName = gameName,
-        attemptsRemaining = attemptsRemaining,
+        gameName = gameName ?: "",
         gameStatus = gameStatus,
-        startDate = startDate,
-        endDate = endDate,
-        score = score
+        attemptsRemaining = attemptsRemaining,
+        score = score?.toString(),
+        startDate = startDate.format(dateFormatter),
+        endDate = endDate?.format(dateFormatter)
     )
 }

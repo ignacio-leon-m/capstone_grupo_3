@@ -51,11 +51,11 @@ class HangmanService(
 
         return HangmanGameStateDto(
             gameId = gameResponse.id,
-            userId = gameResponse.userId,
-            subjectId = gameResponse.subjectId,
+            userId = request.userId,
+            subjectId = request.subjectId,
             concepts = selectedConcepts.map { it.toHangmanConceptDto() },
             currentConceptIndex = 0,
-            livesRemaining = gameResponse.attemptsRemaining,
+            livesRemaining = gameResponse.attemptsRemaining ?: 3,
             gameStatus = gameResponse.gameStatus,
             score = 0
         )
@@ -79,22 +79,24 @@ class HangmanService(
         val inputLetter = request.letter.trim()
         if (inputLetter.length != 1 || !inputLetter[0].isLetter()) {
             // ❌ Caracteres especiales o números: PENALIZA
-            if (game.attemptsRemaining > 0) {
-                game.attemptsRemaining -= 1
+            val currentLives = game.attemptsRemaining ?: 0
+            if (currentLives > 0) {
+                game.attemptsRemaining = currentLives - 1
                 gameRepository.save(game)
                 logger.warn("Invalid character attempted: '$inputLetter'. Lives remaining: ${game.attemptsRemaining}")
             }
             
-            throw BadRequestException("Solo se permiten letras. Vidas restantes: ${game.attemptsRemaining}")
+            throw BadRequestException("Solo se permiten letras. Vidas restantes: ${game.attemptsRemaining ?: 0}")
         }
 
         val letter = inputLetter.lowercase()
+        val letterChar = letter[0]
         
         // ✅ VALIDACIÓN 2: Verificar si la letra ya fue usada (revisar métricas previas)
         val previousAttempts = hangmanMetricRepository.findByGameAndConcept(game, concept)
         val usedLetters = previousAttempts.map { it.attemptedLetter }.toSet()
         
-        if (letter in usedLetters) {
+        if (letterChar in usedLetters) {
             // ❌ Letra repetida: NO penaliza, solo informa
             logger.debug("Letter '$letter' already attempted for this concept")
             throw BadRequestException("Ya has intentado la letra '$letter'. Letras usadas: ${usedLetters.joinToString(", ")}")
@@ -116,16 +118,17 @@ class HangmanService(
             game = game,
             user = game.user,
             concept = concept,
-            attemptedLetter = letter,
+            attemptedLetter = letterChar,
             isCorrect = isCorrect,
             letterPosition = if (positions.isNotEmpty()) positions.first() else null,
-            responseTimeMs = request.responseTimeMs
+            responseTimeMs = request.responseTimeMs?.toInt()
         )
         hangmanMetricRepository.save(metric)
 
         // Si la letra es incorrecta, reducir vidas (3 TOTALES para toda la partida)
-        if (!isCorrect && game.attemptsRemaining > 0) {
-            game.attemptsRemaining -= 1
+        val currentLives = game.attemptsRemaining ?: 0
+        if (!isCorrect && currentLives > 0) {
+            game.attemptsRemaining = currentLives - 1
             gameRepository.save(game)
             logger.info("Incorrect letter '$letter'. Lives remaining: ${game.attemptsRemaining}")
         }
@@ -133,8 +136,8 @@ class HangmanService(
         return HangmanAttemptResponseDto(
             isCorrect = isCorrect,
             positions = positions,
-            livesRemaining = game.attemptsRemaining,
-            gameOver = game.attemptsRemaining == 0
+            livesRemaining = game.attemptsRemaining ?: 0,
+            gameOver = (game.attemptsRemaining ?: 0) == 0
         )
     }
 
@@ -158,7 +161,7 @@ class HangmanService(
         val attemptsUsed = metrics.size
 
         // Calcular puntaje (1 punto si adivinó la palabra)
-        val scoreObtained = if (guessed) POINTS_PER_CONCEPT else 0
+        val scoreObtained = if (guessed) java.math.BigDecimal(POINTS_PER_CONCEPT) else java.math.BigDecimal.ZERO
 
         // Guardar resultado
         val result = HangmanResult(
@@ -166,7 +169,7 @@ class HangmanService(
             concept = concept,
             guessed = guessed,
             attemptsUsed = attemptsUsed,
-            totalTimeMs = timeMs,
+            totalTimeMs = timeMs.toInt(),
             scoreObtained = scoreObtained,
             livesRemaining = game.attemptsRemaining
         )
@@ -180,8 +183,8 @@ class HangmanService(
             guessed = guessed,
             attemptsUsed = attemptsUsed,
             totalTimeMs = timeMs,
-            scoreObtained = scoreObtained,
-            livesRemaining = game.attemptsRemaining
+            scoreObtained = scoreObtained.toInt(),
+            livesRemaining = game.attemptsRemaining ?: 0
         )
     }
 
@@ -195,7 +198,7 @@ class HangmanService(
         val results = hangmanResultRepository.findByGame(game)
         
         // Calcular puntaje total
-        val totalScore = results.sumOf { it.scoreObtained }
+        val totalScore = results.mapNotNull { it.scoreObtained }.fold(java.math.BigDecimal.ZERO) { acc, value -> acc.add(value) }
 
         // Obtener conceptos del juego (desde las métricas únicas)
         val gameMetrics = hangmanMetricRepository.findByGame(game)
@@ -207,9 +210,9 @@ class HangmanService(
             subjectId = game.subject.id!!,
             concepts = conceptsInGame.map { it.toHangmanConceptDto() },
             currentConceptIndex = results.size,
-            livesRemaining = game.attemptsRemaining,
+            livesRemaining = game.attemptsRemaining ?: 0,
             gameStatus = game.gameStatus,
-            score = totalScore
+            score = totalScore.toInt()
         )
     }
 
@@ -226,20 +229,20 @@ class HangmanService(
 
         // Obtener todos los resultados
         val results = hangmanResultRepository.findByGame(game)
-        val totalScore = results.sumOf { it.scoreObtained }
+        val totalScore = results.mapNotNull { it.scoreObtained }.fold(java.math.BigDecimal.ZERO) { acc, value -> acc.add(value) }
 
         // Finalizar juego usando GameService
-        val endDto = GameEndDto(finalScore = totalScore)
+        val endDto = GameEndDto(gameId = gameId, finalScore = totalScore.toString())
         gameService.endGame(gameId, endDto)
 
         logger.info("Hangman game $gameId finalized. Total score: $totalScore")
 
         return HangmanGameResultDto(
             gameId = gameId,
-            finalScore = totalScore,
+            finalScore = totalScore.toInt(),
             conceptsCompleted = results.count { it.guessed },
             totalConcepts = results.size,
-            livesRemaining = game.attemptsRemaining,
+            livesRemaining = game.attemptsRemaining ?: 0,
             conceptResults = results.map { it.toConceptResultDto() }
         )
     }
@@ -255,8 +258,8 @@ class HangmanService(
         word = concept.word,
         guessed = guessed,
         attemptsUsed = attemptsUsed,
-        totalTimeMs = totalTimeMs,
-        scoreObtained = scoreObtained,
-        livesRemaining = livesRemaining
+        totalTimeMs = (totalTimeMs ?: 0).toLong(),
+        scoreObtained = (scoreObtained ?: java.math.BigDecimal.ZERO).toInt(),
+        livesRemaining = livesRemaining ?: 0
     )
 }
