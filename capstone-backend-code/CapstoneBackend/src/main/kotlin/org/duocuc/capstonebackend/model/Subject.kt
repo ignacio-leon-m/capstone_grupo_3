@@ -17,14 +17,14 @@ import java.util.UUID
 @Table(name = "asignaturas", schema = "public")
 class Subject (
     @Column(name = "nombre", nullable = false, length = 100)
-    var nombre: String,
+    var name: String,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_carrera", nullable = false,
         foreignKey = ForeignKey(name = "fk_asignatura_carrera"))
     var degree: Degree,
 
-    // Relación ManyToMany con Semestre
+    // Many-to-Many relation with Semester
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "asignaturas_semestre",

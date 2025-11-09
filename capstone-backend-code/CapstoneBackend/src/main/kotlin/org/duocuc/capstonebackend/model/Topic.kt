@@ -4,7 +4,14 @@ import jakarta.persistence.*
 import org.hibernate.annotations.UuidGenerator
 import java.util.UUID
 
-// Topic.kt
+/**
+ * Topic (Theme) for organizing academic content.
+ * Can be created from:
+ * - PDF document analysis (via Content Service)
+ * - Manual creation by professors
+ * 
+ * Each topic contains multiple concepts for games.
+ */
 @Entity
 @Table(
     name = "temas",
@@ -20,7 +27,11 @@ class Topic(
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_asignatura", nullable = false)
-    var subject: Subject
+    var subject: Subject,
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "id_documento", nullable = true)
+    var document: Document? = null
 ) {
     @Id
     @UuidGenerator

@@ -3,80 +3,87 @@ package org.duocuc.capstonebackend.dto
 import java.util.UUID
 
 /**
- * DTO para iniciar una partida de Hangman.
+ * DTO to start a Hangman game.
  */
 data class HangmanGameStartDto(
-    val idUsuario: UUID,
-    val idAsignatura: UUID,
-    val idTema: UUID,
-    val cantidadConceptos: Int = 10  // 10-12 conceptos por partida
+    val userId: UUID,
+    val subjectId: UUID,
+    val topicId: UUID,
+    val conceptCount: Int = 10  // 10-12 concepts per game
 )
 
 /**
- * DTO para el estado actual de una partida de Hangman.
+ * DTO for current state of a Hangman game.
  */
 data class HangmanGameStateDto(
-    val idJuego: UUID,
-    val conceptoActual: HangmanConceptDto,
-    val vidasRestantes: Int,
-    val puntajeActual: Int,
-    val conceptoNumero: Int,
-    val totalConceptos: Int,
-    val letrasUsadas: List<Char>,
-    val palabraProgreso: String  // Ej: "_ _ C _ R S I _ _ "
+    val gameId: UUID,
+    val userId: UUID,
+    val subjectId: UUID,
+    val concepts: List<HangmanConceptDto>,
+    val currentConceptIndex: Int,
+    val livesRemaining: Int,
+    val gameStatus: String,
+    val score: Int
 )
 
 /**
- * DTO para un concepto en Hangman.
+ * DTO for a concept in Hangman.
  */
 data class HangmanConceptDto(
-    val idConcepto: UUID,
-    val palabraOculta: String,  // Solo para backend, no enviar al frontend
-    val hint: String,
-    val longitud: Int
+    val id: UUID,
+    val word: String,
+    val hint: String?
 )
 
 /**
- * DTO para intentar una letra en Hangman.
+ * DTO to attempt a letter in Hangman.
  */
 data class HangmanAttemptDto(
-    val idJuego: UUID,
-    val idConcepto: UUID,
-    val letra: Char
+    val conceptId: UUID,
+    val letter: String,
+    val responseTimeMs: Long? = null
 )
 
 /**
- * DTO para respuesta de un intento en Hangman.
+ * DTO for response to an attempt in Hangman.
  */
 data class HangmanAttemptResponseDto(
-    val esCorrecta: Boolean,
-    val mensaje: String,
-    val palabraProgreso: String,
-    val vidasRestantes: Int,
-    val conceptoCompletado: Boolean,
-    val juegoTerminado: Boolean,
-    val puntajeFinal: Int?
+    val isCorrect: Boolean,
+    val positions: List<Int>,
+    val livesRemaining: Int,
+    val gameOver: Boolean
 )
 
 /**
- * DTO para el resultado final de una partida de Hangman.
+ * DTO for final result of a Hangman game.
  */
 data class HangmanGameResultDto(
-    val idJuego: UUID,
-    val conceptosCompletados: Int,
-    val totalConceptos: Int,
-    val puntajeFinal: Int,
-    val vidasUsadas: Int,
-    val tiempoTotalMs: Int?,
-    val resultadosPorConcepto: List<HangmanConceptResultDto>
+    val gameId: UUID,
+    val finalScore: Int,
+    val conceptsCompleted: Int,
+    val totalConcepts: Int,
+    val livesRemaining: Int,
+    val conceptResults: List<HangmanConceptResultDto>
 )
 
 /**
- * DTO para el resultado de un concepto individual en Hangman.
+ * DTO for individual concept result in Hangman.
  */
 data class HangmanConceptResultDto(
-    val palabraConcepto: String,
-    val adivinado: Boolean,
-    val intentosUsados: Int,
-    val tiempoMs: Int?
+    val conceptId: UUID,
+    val word: String,
+    val guessed: Boolean,
+    val attemptsUsed: Int,
+    val totalTimeMs: Long,
+    val scoreObtained: Int,
+    val livesRemaining: Int
+)
+
+/**
+ * DTO to submit a concept completion/result.
+ */
+data class HangmanConceptSubmitDto(
+    val conceptId: UUID,
+    val guessed: Boolean,
+    val timeMs: Long
 )

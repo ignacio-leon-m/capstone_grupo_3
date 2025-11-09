@@ -42,8 +42,7 @@ class AuthControllerTest {
             email = "test.user@example.com",
             phone = "123456789",
             password = "password",
-            role = "alumno",
-            degreeName = "Ingeniería en Informática"
+            role = "alumno"
         )
 
         val role = Role("alumno").apply { id = UUID.randomUUID() }
@@ -53,8 +52,7 @@ class AuthControllerTest {
             lastName = "User",
             rut = "12345678-9",
             role = role,
-            email = "test.user@example.com",
-            degreeName = "Ingeniería en Informática"
+            email = "test.user@example.com"
         )
 
         every { authService.userRegistry(any()) } returns userResponse

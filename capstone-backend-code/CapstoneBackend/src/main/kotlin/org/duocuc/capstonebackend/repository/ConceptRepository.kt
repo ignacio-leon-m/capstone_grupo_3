@@ -11,4 +11,5 @@ interface ConceptRepository : JpaRepository<Concept, UUID> {
     fun findByTopic(topic: Topic): List<Concept>
     fun findByTopicId(topicId: UUID): List<Concept>
     fun findByWordContainingIgnoreCase(word: String): List<Concept>
+    fun countByTopic(topic: Topic): Int
 }
