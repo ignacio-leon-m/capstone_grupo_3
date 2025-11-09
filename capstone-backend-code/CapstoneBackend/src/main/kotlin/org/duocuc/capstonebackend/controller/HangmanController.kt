@@ -11,6 +11,11 @@ import java.util.UUID
 /**
  * REST Controller for Hangman game operations.
  * Provides endpoints to start, play, and complete Hangman games.
+ * 
+ * Architecture update:
+ * - Content upload/extraction moved to ContentController (Content Service)
+ * - This controller focuses ONLY on game logic (Game Engine responsibility)
+ * - Uses topicId to fetch content (decoupled from document processing)
  */
 @RestController
 @RequestMapping("/api/hangman")

@@ -34,6 +34,7 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+            .cors { it.disable() }
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it.requestMatchers("/api/auth/**", "/api/hangman/**", "/", "/index.html", "/login.html", "/home.html", "/user.html",

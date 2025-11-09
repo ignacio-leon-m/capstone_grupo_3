@@ -66,7 +66,7 @@ class AuthServiceUnitTest {
         every { securityConfig.passwordEncoder() } returns passwordEncoder
         every { passwordEncoder.encode(req.password) } returns "hashed-password"
         every { roleRepository.findByName(req.role!!.lowercase()) } returns mockRole
-        every { degreeRepository.findByName(req.degreeName) } returns mockDegree // Mock para la carrera
+        every { degreeRepository.findByName("Ingeniería en Rock") } returns mockDegree // Mock para la carrera
 
         var capturedUser: User? = null
         every { userRepository.save(any()) } answers { firstArg<User>().also { capturedUser = it } }

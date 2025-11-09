@@ -31,17 +31,17 @@ class HangmanService(
     fun startHangmanGame(request: HangmanGameStartDto): HangmanGameStateDto {
         logger.info("Starting Hangman game for user ${request.userId}, subject ${request.subjectId}, topic ${request.topicId}")
 
-        // Validar que el tema existe y tiene suficientes conceptos
+        // Validate that topic exists and has enough concepts
         val availableConcepts = conceptRepository.findByTopicId(request.topicId)
         if (availableConcepts.size < MIN_CONCEPTS) {
-            throw BadRequestException("El tema debe tener al menos $MIN_CONCEPTS conceptos. Encontrados: ${availableConcepts.size}")
+            throw BadRequestException("Topic must have at least $MIN_CONCEPTS concepts. Found: ${availableConcepts.size}")
         }
 
-        // Seleccionar 10-12 conceptos aleatorios
+        // Select 10-12 random concepts
         val selectedConcepts = availableConcepts.shuffled().take(MAX_CONCEPTS)
         logger.debug("Selected ${selectedConcepts.size} random concepts for Hangman game")
 
-        // Crear partida usando GameService
+        // Create game using GameService
         val gameStartDto = GameStartDto(
             userId = request.userId,
             subjectId = request.subjectId,
@@ -66,19 +66,19 @@ class HangmanService(
         logger.debug("Processing letter attempt for game $gameId: letter=${request.letter}, conceptId=${request.conceptId}")
 
         val game = gameRepository.findById(gameId)
-            .orElseThrow { ResourceNotFoundException("Juego no encontrado con ID: $gameId") }
+            .orElseThrow { ResourceNotFoundException("Game not found with ID: $gameId") }
 
         if (game.gameStatus != "activo") {
-            throw BadRequestException("El juego no está activo")
+            throw BadRequestException("Game is not active")
         }
 
         val concept = conceptRepository.findById(request.conceptId)
-            .orElseThrow { ResourceNotFoundException("Concepto no encontrado con ID: ${request.conceptId}") }
+            .orElseThrow { ResourceNotFoundException("Concept not found with ID: ${request.conceptId}") }
 
-        // ✅ VALIDACIÓN 1: Verificar que es una letra (solo alfabético)
+        // ✅ VALIDATION 1: Verify it's a letter (alphabetic only)
         val inputLetter = request.letter.trim()
         if (inputLetter.length != 1 || !inputLetter[0].isLetter()) {
-            // ❌ Caracteres especiales o números: PENALIZA
+            // ❌ Special characters or numbers: PENALIZED
             val currentLives = game.attemptsRemaining ?: 0
             if (currentLives > 0) {
                 game.attemptsRemaining = currentLives - 1
@@ -86,34 +86,34 @@ class HangmanService(
                 logger.warn("Invalid character attempted: '$inputLetter'. Lives remaining: ${game.attemptsRemaining}")
             }
             
-            throw BadRequestException("Solo se permiten letras. Vidas restantes: ${game.attemptsRemaining ?: 0}")
+            throw BadRequestException("Only letters are allowed. Lives remaining: ${game.attemptsRemaining ?: 0}")
         }
 
         val letter = inputLetter.lowercase()
         val letterChar = letter[0]
         
-        // ✅ VALIDACIÓN 2: Verificar si la letra ya fue usada (revisar métricas previas)
+        // ✅ VALIDATION 2: Check if letter was already used (check previous metrics)
         val previousAttempts = hangmanMetricRepository.findByGameAndConcept(game, concept)
         val usedLetters = previousAttempts.map { it.attemptedLetter }.toSet()
         
         if (letterChar in usedLetters) {
-            // ❌ Letra repetida: NO penaliza, solo informa
+            // ❌ Repeated letter: NOT penalized, just inform
             logger.debug("Letter '$letter' already attempted for this concept")
-            throw BadRequestException("Ya has intentado la letra '$letter'. Letras usadas: ${usedLetters.joinToString(", ")}")
+            throw BadRequestException("You already tried letter '$letter'. Used letters: ${usedLetters.joinToString(", ")}")
         }
 
-        // Verificar si la letra está en la palabra (case-insensitive)
+        // Check if letter is in the word (case-insensitive)
         val word = concept.word.lowercase()
         val isCorrect = word.contains(letter)
 
-        // Encontrar todas las posiciones de la letra
+        // Find all positions of the letter
         val positions = if (isCorrect) {
             word.indices.filter { word[it].toString() == letter }
         } else {
             emptyList()
         }
 
-        // Guardar métrica granular
+        // Save granular metric
         val metric = HangmanMetric(
             game = game,
             user = game.user,
@@ -125,7 +125,7 @@ class HangmanService(
         )
         hangmanMetricRepository.save(metric)
 
-        // Si la letra es incorrecta, reducir vidas (3 TOTALES para toda la partida)
+        // If letter is incorrect, reduce lives (3 TOTAL for entire game)
         val currentLives = game.attemptsRemaining ?: 0
         if (!isCorrect && currentLives > 0) {
             game.attemptsRemaining = currentLives - 1
@@ -146,24 +146,24 @@ class HangmanService(
         logger.info("Submitting result for game $gameId, concept $conceptId: guessed=$guessed, timeMs=$timeMs")
 
         val game = gameRepository.findById(gameId)
-            .orElseThrow { ResourceNotFoundException("Juego no encontrado con ID: $gameId") }
+            .orElseThrow { ResourceNotFoundException("Game not found with ID: $gameId") }
 
         val concept = conceptRepository.findById(conceptId)
-            .orElseThrow { ResourceNotFoundException("Concepto no encontrado con ID: $conceptId") }
+            .orElseThrow { ResourceNotFoundException("Concept not found with ID: $conceptId") }
 
-        // Verificar que no exista ya un resultado para este concepto en este juego
+        // Verify that result doesn't already exist for this concept in this game
         if (hangmanResultRepository.existsByGameAndConcept(game, concept)) {
-            throw BadRequestException("Ya existe un resultado para este concepto en este juego")
+            throw BadRequestException("Result already exists for this concept in this game")
         }
 
-        // Calcular intentos usados (contar métricas de este concepto en este juego)
+        // Calculate attempts used (count metrics for this concept in this game)
         val metrics = hangmanMetricRepository.findByGameAndConcept(game, concept)
         val attemptsUsed = metrics.size
 
-        // Calcular puntaje (1 punto si adivinó la palabra)
+        // Calculate score (1 point if word was guessed)
         val scoreObtained = if (guessed) java.math.BigDecimal(POINTS_PER_CONCEPT) else java.math.BigDecimal.ZERO
 
-        // Guardar resultado
+        // Save result
         val result = HangmanResult(
             game = game,
             concept = concept,
@@ -192,15 +192,15 @@ class HangmanService(
         logger.debug("Fetching game progress for game $gameId")
 
         val game = gameRepository.findById(gameId)
-            .orElseThrow { ResourceNotFoundException("Juego no encontrado con ID: $gameId") }
+            .orElseThrow { ResourceNotFoundException("Game not found with ID: $gameId") }
 
-        // Obtener todos los resultados del juego
+        // Get all game results
         val results = hangmanResultRepository.findByGame(game)
         
-        // Calcular puntaje total
+        // Calculate total score
         val totalScore = results.mapNotNull { it.scoreObtained }.fold(java.math.BigDecimal.ZERO) { acc, value -> acc.add(value) }
 
-        // Obtener conceptos del juego (desde las métricas únicas)
+        // Get game concepts (from unique metrics)
         val gameMetrics = hangmanMetricRepository.findByGame(game)
         val conceptsInGame = gameMetrics.map { it.concept }.distinctBy { it.id }
 
@@ -221,17 +221,17 @@ class HangmanService(
         logger.info("Ending Hangman game $gameId")
 
         val game = gameRepository.findById(gameId)
-            .orElseThrow { ResourceNotFoundException("Juego no encontrado con ID: $gameId") }
+            .orElseThrow { ResourceNotFoundException("Game not found with ID: $gameId") }
 
         if (game.gameStatus != "activo") {
-            throw BadRequestException("El juego no está activo")
+            throw BadRequestException("Game is not active")
         }
 
-        // Obtener todos los resultados
+        // Get all results
         val results = hangmanResultRepository.findByGame(game)
         val totalScore = results.mapNotNull { it.scoreObtained }.fold(java.math.BigDecimal.ZERO) { acc, value -> acc.add(value) }
 
-        // Finalizar juego usando GameService
+        // End game using GameService
         val endDto = GameEndDto(gameId = gameId, finalScore = totalScore.toString())
         gameService.endGame(gameId, endDto)
 

@@ -12,7 +12,7 @@ class GeminiAiService(
     private val apiKey: String = when {
         apiKeyProp.isNotBlank() -> apiKeyProp
         System.getenv("GOOGLE_API_KEY")?.isNotBlank() == true -> System.getenv("GOOGLE_API_KEY")
-        else -> throw IllegalStateException("Falta la API key de Gemini: define gemini.api-key o GOOGLE_API_KEY")
+        else -> throw IllegalStateException("Missing Gemini API key: define gemini.api-key or GOOGLE_API_KEY")
     }
 
     private val client: Client = Client.builder().apiKey(apiKey).build()
@@ -22,7 +22,7 @@ class GeminiAiService(
         val fullPrompt = """
             $prompt
 
-            Texto de referencia:
+            Reference text:
             ---
             $text
             ---

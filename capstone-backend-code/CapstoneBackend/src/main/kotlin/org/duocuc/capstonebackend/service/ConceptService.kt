@@ -26,7 +26,7 @@ class ConceptService(
         logger.info("Creating ${concepts.size} concepts for topic $topicId")
 
         val topic = topicRepository.findById(topicId)
-            .orElseThrow { ResourceNotFoundException("Tema no encontrado con ID: $topicId") }
+            .orElseThrow { ResourceNotFoundException("Topic not found with ID: $topicId") }
 
         val entities = concepts.map { dto ->
             Concept(
@@ -47,7 +47,7 @@ class ConceptService(
         logger.debug("Fetching concepts for topic $topicId")
 
         if (!topicRepository.existsById(topicId)) {
-            throw ResourceNotFoundException("Tema no encontrado con ID: $topicId")
+            throw ResourceNotFoundException("Topic not found with ID: $topicId")
         }
 
         return conceptRepository.findByTopicId(topicId).map { it.toResponseDto() }
@@ -62,7 +62,7 @@ class ConceptService(
         logger.debug("Fetching concept with ID: $conceptId")
         
         val concept = conceptRepository.findById(conceptId)
-            .orElseThrow { ResourceNotFoundException("Concepto no encontrado con ID: $conceptId") }
+            .orElseThrow { ResourceNotFoundException("Concept not found with ID: $conceptId") }
         
         return concept.toResponseDto()
     }
