@@ -9,7 +9,10 @@ import java.io.ByteArrayOutputStream
 
 class FileUploadServiceUnitTest {
 
-    private val service = FileUploadService()
+    private val service = FileUploadService(
+        storedDocumentRepository = TODO(),
+        currentUser = TODO()
+    )
 
     //@Test
     fun `processExcelFile successfully processes a valid file`() {
@@ -53,7 +56,7 @@ class FileUploadServiceUnitTest {
         assertEquals("11.111.111-1@duocuc.cl", student1.email)
         assertEquals("11111234", student1.password) // Últimos 4 del RUT + 1234
         assertEquals("alumno", student1.role)
-        assertEquals("Ingeniería en Informática", student1.degreeName) // Carrera del encabezado
+        assertEquals("Ingeniería en Informática", student1.name) // Carrera del encabezado
 
         // Verificar Alumno 2
         val student2 = result[1]
@@ -63,7 +66,7 @@ class FileUploadServiceUnitTest {
         assertEquals("22.222.222-2@duocuc.cl", student2.email)
         assertEquals("22221234", student2.password)
         assertEquals("alumno", student2.role)
-        assertEquals("Ingeniería en Informática", student2.degreeName) // Carrera del encabezado
+        assertEquals("Ingeniería en Informática", student2.name) // Carrera del encabezado
     }
 
     //@Test
@@ -71,7 +74,7 @@ class FileUploadServiceUnitTest {
         // Arrange: Crear un Excel sin la carrera en la celda C6
         val workbook = XSSFWorkbook()
         val sheet = workbook.createSheet("Alumnos")
-        sheet.createRow(11) // Crear una fila de alumno para que el procesamiento comience
+        sheet.createRow(11) // Crear una fila de para que el procesamiento comience
 
         val outputStream = ByteArrayOutputStream()
         workbook.write(outputStream)
