@@ -17,7 +17,7 @@ import java.util.UUID
 @Table(name = "asignaturas", schema = "public")
 class Subject (
     @Column(name = "nombre", nullable = false, length = 100)
-    var nombre: String,
+    var name: String,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_carrera", nullable = false,

@@ -52,6 +52,4 @@ class User (
 
     @Column(name = "fecha_ultimo_login")
     var lastLoginAt: LocalDateTime? = null
-
-    // La propiedad 'version' ha sido eliminada para alinear la entidad con el script.sql
 )

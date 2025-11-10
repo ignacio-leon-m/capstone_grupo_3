@@ -90,7 +90,7 @@ class GameService(
         //     user = game.user,
         //     subject = game.subject,
         //     score = BigDecimal(request.finalScore),
-        //     assignmentDate = LocalDate.now()
+        //     enrollmentDate = LocalDate.now()
         // )
         // scoreRepository.save(score)
 

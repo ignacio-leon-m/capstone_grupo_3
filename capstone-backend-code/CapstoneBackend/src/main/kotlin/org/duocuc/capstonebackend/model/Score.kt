@@ -21,7 +21,7 @@ class Score (
     var score: BigDecimal,
 
     @Column(name = "fecha_asignacion", nullable = false)
-    var assignmentDate: LocalDate = LocalDate.now()
+    var enrollmentDate: LocalDate = LocalDate.now()
 ) {
     @Id
     @UuidGenerator

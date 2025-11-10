@@ -16,7 +16,7 @@ import java.util.UUID
         UniqueConstraint(columnNames = ["id_usuario", "id_asignatura"])
     ]
 )
-class UsuarioAsignatura(
+class UserSubject(
     @Id
     @UuidGenerator
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
@@ -24,27 +24,16 @@ class UsuarioAsignatura(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
-    val usuario: User,
+    val user: User,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_asignatura", nullable = false)
-    val asignatura: Subject,
+    val subject: Subject,
 
     @Column(name = "fecha_asignacion", nullable = false)
-    val fechaAsignacion: LocalDateTime = LocalDateTime.now(),
+    val enrollmentDate: LocalDateTime = LocalDateTime.now(),
 
     @Column(name = "activo", nullable = false)
-    var activo: Boolean = true
+    var active: Boolean = true
 ) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is UsuarioAsignatura) return false
-        return id != null && id == other.id
-    }
-
-    override fun hashCode(): Int = javaClass.hashCode()
-
-    override fun toString(): String {
-        return "UsuarioAsignatura(id=$id, usuarioId=${usuario.id}, asignaturaId=${asignatura.id}, activo=$activo)"
-    }
 }
