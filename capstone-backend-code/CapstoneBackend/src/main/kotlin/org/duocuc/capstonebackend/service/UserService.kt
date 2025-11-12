@@ -31,4 +31,9 @@ class UserService (
             )
         }
     }
+
+    fun getRoleByEmail(email: String): String {
+        val user = userRepository.findByEmail(email).orElseThrow()
+        return user.role.name
+    }
 }

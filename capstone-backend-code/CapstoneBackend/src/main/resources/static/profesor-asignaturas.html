@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mis Asignaturas - Profesor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/home.css" />
+  <link rel="icon" href="/images/bb-logo.png" />
+  <style>
+    .subjects { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+    .subject { padding: 10px 14px; background: #eef3ff; border-radius: 8px; cursor: pointer; }
+    .subject:hover { background: #dfe9ff; }
+    .students { margin-top: 16px; }
+    .students table { width: 100%; border-collapse: collapse; }
+    .students th, .students td { border-bottom: 1px solid #eee; padding: 8px; text-align: left; }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <img src="/images/bb-logo.png" alt="BrainBoost Logo" class="logo" />
+  </header>
+
+  <div class="container">
+    <a href="/home.html" class="back-button" title="Volver a Inicio"><i class="fas fa-arrow-left"></i></a>
+    <div class="content-box">
+      <h1 class="welcome-message">Mis Asignaturas</h1>
+      <p class="instruction">Selecciona una asignatura para ver sus alumnos.</p>
+      <div id="subjects" class="subjects"></div>
+      <div id="students" class="students" style="display:none;">
+        <h2 id="subjectTitle"></h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Alumno</th>
+              <th>Estado</th>
+              <th>Fecha Inscripción</th>
+            </tr>
+          </thead>
+          <tbody id="studentsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="logout-fixed-container">
+    <a href="#" id="logout-button" class="logout-icon-button" title="Cerrar Sesión">
+      <i class="fas fa-power-off"></i>
+      <span class="logout-tooltip">Cerrar Sesión</span>
+    </a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const token = localStorage.getItem('jwtToken');
+      const role = localStorage.getItem('userRole');
+      if (!token) { window.location.href = '/index.html'; return; }
+      if (role !== 'profesor' && role !== 'admin') {
+        alert('Acceso denegado'); window.location.href = '/home.html'; return;
+      }
+
+      // Obtener mi id y rol desde el backend
+      const meRes = await fetch('/api/users/me', { headers: { 'Authorization': `Bearer ${token}` } });
+      if (!meRes.ok) { alert('No se pudo obtener el usuario actual'); return; }
+      const me = await meRes.json();
+      const myId = me.id;
+
+      // Cargar mis asignaturas (como profesor)
+      const subRes = await fetch(`/api/subjects/professor/${myId}`, { headers: { 'Authorization': `Bearer ${token}` } });
+      const container = document.getElementById('subjects');
+      if (subRes.ok) {
+        const subjects = await subRes.json();
+        if (subjects.length === 0) {
+          container.innerHTML = '<p>No tienes asignaturas asignadas aún.</p>';
+        } else {
+          subjects.forEach(s => {
+            const el = document.createElement('button');
+            el.className = 'subject';
+            el.textContent = s.name;
+            el.addEventListener('click', () => loadStudents(s.id, s.name));
+            container.appendChild(el);
+          });
+        }
+      } else {
+        container.innerHTML = '<p>Error al cargar asignaturas.</p>';
+      }
+
+      async function loadStudents(subjectId, subjectName) {
+        const stRes = await fetch(`/api/subjects/${subjectId}/students`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const box = document.getElementById('students');
+        const body = document.getElementById('studentsBody');
+        const title = document.getElementById('subjectTitle');
+        body.innerHTML = '';
+        title.textContent = `Alumnos de ${subjectName}`;
+        box.style.display = 'block';
+        if (stRes.ok) {
+          const list = await stRes.json();
+          if (list.length === 0) {
+            body.innerHTML = '<tr><td colspan="3">Sin alumnos inscritos.</td></tr>';
+            return;
+          }
+          list.forEach(u => {
+            const tr = document.createElement('tr');
+            const name = document.createElement('td');
+            name.textContent = u.userName;
+            const active = document.createElement('td');
+            active.textContent = u.active ? 'Activo' : 'Inactivo';
+            const date = document.createElement('td');
+            date.textContent = new Date(u.enrollmentDate).toLocaleString();
+            tr.appendChild(name); tr.appendChild(active); tr.appendChild(date);
+            body.appendChild(tr);
+          });
+        } else {
+          body.innerHTML = '<tr><td colspan="3">Error al cargar alumnos.</td></tr>';
+        }
+      }
+
+      document.getElementById('logout-button').addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('userRole');
+        window.location.href = '/index.html';
+      });
+    });
+  </script>
+</body>
+</html>

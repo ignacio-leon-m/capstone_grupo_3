@@ -39,11 +39,20 @@ class SecurityConfig(
                 it.requestMatchers(
                     "/api/auth/**",
                     "/api/hangman/**",
-                    "/api/topics/*/questions",   //
-                    "/", "/index.html", "/login.html", "/home.html", "/user.html",
-                    "/crear-profesor.html", "/content-upload.html", "/content.html",
-                    "/css/**", "/js/**", "/images/**",
-                    "/download/**", "/user-upload.html"
+                    "/",
+                    "/index.html",
+                    "/login.html",
+                    "/home.html",
+                    "/user.html",
+                    "/crear-profesor.html",
+                    "/profesor-asignaturas.html",
+                    "/content-upload.html",
+                    "/content.html",
+                    "/css/**",
+                    "/js/**",
+                    "/images/**",
+                    "/download/**",
+                    "/user-upload.html"
                 ).permitAll()
                     .anyRequest().authenticated()
             }

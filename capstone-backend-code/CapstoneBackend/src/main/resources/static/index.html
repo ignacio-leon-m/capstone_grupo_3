@@ -63,7 +63,7 @@
                         localStorage.setItem('jwtToken', data.token);
                         console.log("Login successful, token stored.");
                         // Redirect based on role
-                        if(data.role === 'admin' || data.role === 'profesor') { // Modificado: de ROLE_ a roles limpios
+                        if(data.role === 'admin' || data.role === 'profesor') {
                             window.location.href = '/home.html';
                         } else {
                             alert('Acceso denegado: No tienes privilegios para ingresar al sitio.');

@@ -78,6 +78,12 @@
               uploadStudentsLink.className = 'option-button users-button'; // Reutilizando estilo
               uploadStudentsLink.textContent = 'Carga de Alumnos';
               optionsContainer.appendChild(uploadStudentsLink);
+
+              const mySubjectsLink = document.createElement('a');
+              mySubjectsLink.href = '/profesor-asignaturas.html';
+              mySubjectsLink.className = 'option-button content-button';
+              mySubjectsLink.textContent = 'Mis Asignaturas';
+              optionsContainer.appendChild(mySubjectsLink);
           }
 
           console.log('Usuario autenticado con rol:', role);
