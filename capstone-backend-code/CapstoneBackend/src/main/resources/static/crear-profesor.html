@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="/css/home.css" />
     <link rel="stylesheet" href="/css/forms.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="icon" href="/images/bb-logo.png" />
 </head>
 <body>
@@ -48,16 +49,13 @@
                     <select id="subjects" name="subjects" multiple size="6" required></select>
                     <small>Puedes seleccionar múltiples asignaturas con Ctrl/Cmd + clic.</small>
                 </div>
-                <button type="submit" class="submit-button">Crear Profesor</button>
+                <button type="submit" class="submit-button btn btn-primary">Crear Profesor</button>
             </form>
         </div>
     </div>
 
     <div class="logout-fixed-container">
-        <a href="#" id="logout-button" class="logout-icon-button" title="Cerrar Sesión">
-            <i class="fas fa-power-off"></i>
-            <span class="logout-tooltip">Cerrar Sesión</span>
-        </a>
+        <button id="logout-button" class="btn btn-outline-danger btn-sm" title="Cerrar Sesión">Cerrar sesión</button>
     </div>
 
     <script>
@@ -172,5 +170,7 @@
             });
         });
     </script>
+    <script src="/js/jwt-logic.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>
