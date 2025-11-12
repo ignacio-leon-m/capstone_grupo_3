@@ -2,6 +2,7 @@ package org.duocuc.capstonebackend.controller
 
 import org.duocuc.capstonebackend.dto.EnrollSubjectDto
 import org.duocuc.capstonebackend.dto.SubjectInfoDto
+import org.duocuc.capstonebackend.dto.UserSubjectDto
 import org.duocuc.capstonebackend.service.UserSubjectService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -39,7 +40,7 @@ class UserSubjectController(
 
     // Enroll user to subject
     @PostMapping("/admin/subjects/enroll")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     fun enrollUserToSubject(@RequestBody dto: EnrollSubjectDto): ResponseEntity<Any> {
         return try {
             val enrollment = userSubjectService.enrollToSubject(dto)
@@ -49,25 +50,17 @@ class UserSubjectController(
         }
     }
 
-    // Get professors of a subject
-    @GetMapping("/subjects/{subjectId}/professor")
-    @PreAuthorize("hasRole('admin')")
-    fun findProfessorOfSubject(@PathVariable subjectId: UUID): ResponseEntity<List<SubjectInfoDto>> {
-        val professors = userSubjectService.getProfessorSubjects(subjectId)
-        return ResponseEntity.ok(professors)
-    }
-
     // Get students of a subject
     @GetMapping("/subjects/{subjectId}/students")
-    @PreAuthorize("hasAnyRole('profesor', 'admin')")
-    fun findStudentsOfSubject(@PathVariable subjectId: UUID): ResponseEntity<List<SubjectInfoDto>> {
-        val students = userSubjectService.getStudentSubjects(subjectId)
+    @PreAuthorize("hasAnyAuthority('profesor', 'admin')")
+    fun findStudentsOfSubject(@PathVariable subjectId: UUID): ResponseEntity<List<UserSubjectDto>> {
+        val students = userSubjectService.getStudentsOfSubject(subjectId)
         return ResponseEntity.ok(students)
     }
 
     // Deactivate a relationship between user/subject
     @PutMapping("/admin/subjects/deactivate")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     fun deactivateEnrollment(
         @RequestParam userId: UUID,
         @RequestParam subjectId: UUID
@@ -82,7 +75,7 @@ class UserSubjectController(
 
     // Reactivate a relationship between user/subject
     @PutMapping("/admin/subjects/reactivate")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     fun reactivateEnrollment(
         @RequestParam userId: UUID,
         @RequestParam subjectId: UUID

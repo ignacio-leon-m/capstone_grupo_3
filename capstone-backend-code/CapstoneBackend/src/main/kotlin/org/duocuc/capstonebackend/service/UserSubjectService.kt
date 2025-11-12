@@ -10,7 +10,6 @@ import org.duocuc.capstonebackend.repository.UserSubjectRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 import java.util.UUID
 
 @Service
@@ -86,13 +85,14 @@ class UserSubjectService(
 
     // Method to get all the students of a subject
     fun  getStudentsOfSubject(subjectId: UUID): List<UserSubjectDto> {
-        val subjectId = subjectRepository.findByIdOrNull(subjectId)?.id ?: throw IllegalArgumentException("Subject no existe.")
-        val enrollments = userSubjectRepository.findStudentsBySubject(subjectId)
+        val foundSubjectId = subjectRepository.findByIdOrNull(subjectId)?.id
+            ?: throw IllegalArgumentException("Subject no existe.")
+        val enrollments = userSubjectRepository.findStudentsBySubject(foundSubjectId)
         return enrollments.map { enrollment ->
             UserSubjectDto(
                 id = enrollment.id!!,
                 userId = enrollment.user.id!!,
-                userName = enrollment.user.lastName,
+                userName = "${enrollment.user.firstName} ${enrollment.user.lastName}",
                 subjectId = enrollment.subject.id!!,
                 subjectName = enrollment.subject.name,
                 active = enrollment.active,
@@ -100,7 +100,6 @@ class UserSubjectService(
                 enrollmentDate = enrollment.enrollmentDate
             )
         }
-
     }
 
     // Method to turn off the relationship between user and subject

@@ -27,4 +27,11 @@ class CurrentUser(private val userRepository: UserRepository) {
             ?: throw IllegalStateException("No hay autenticación en SecurityContext")
         return auth.name
     }
+
+    fun role(): String {
+        val auth = SecurityContextHolder.getContext().authentication
+            ?: throw IllegalStateException("No hay autenticación en SecurityContext")
+        return auth.authorities.firstOrNull()?.authority
+            ?: throw IllegalStateException("Usuario sin autoridad")
+    }
 }
