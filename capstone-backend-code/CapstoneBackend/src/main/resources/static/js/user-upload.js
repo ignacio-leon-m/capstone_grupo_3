@@ -2,11 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('jwtToken');
     const role = localStorage.getItem('userRole');
 
-    // 1. Seguridad: Redirigir si no hay token o el rol no es 'profesor'
+    // Redirecciona si no hay token
     if (!token) {
         window.location.href = '/index.html';
         return;
     }
+    // Redirecciona si el rol no es profesor
     if (role !== 'profesor') {
         alert('Acceso denegado. Solo los profesores pueden acceder a esta página.');
         window.location.href = '/home.html';
@@ -49,11 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadButton.textContent = 'Subiendo...';
 
         try {
-            // 2. Lógica de subida corregida
-            const res = await fetch('/api/files/upload', { // URL corregida
+            const res = await fetch('/api/files/upload-excel', {
                 method: 'POST',
                 headers: {
-                    // NO incluir 'Content-Type', el navegador lo gestiona con FormData
+                    // NO incluye 'Content-Type' porque el navegador lo gestiona con FormData
                     'Authorization': `Bearer ${token}` // 3. Autenticación con Token
                 },
                 body: formData
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Lógica del botón de logout
-    const logoutButton = document.querySelector('.logout-icon-button');
+    const logoutButton = document.querySelector('.logout-button');
     if(logoutButton) {
         logoutButton.addEventListener('click', (e) => {
             e.preventDefault();
@@ -87,4 +87,13 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = '/index.html';
         });
     }
-});
+
+    const returnButton = document.querySelector('.return-button');
+    if(returnButton) {
+        returnButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.history.back();
+        });
+    }
+}
+);
