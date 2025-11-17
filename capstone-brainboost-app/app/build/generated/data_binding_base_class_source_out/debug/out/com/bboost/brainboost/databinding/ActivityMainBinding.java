@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.bboost.brainboost.R;
@@ -19,7 +19,7 @@ import java.lang.String;
 
 public final class ActivityMainBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final ConstraintLayout rootView;
 
   @NonNull
   public final Button btnLogin;
@@ -31,20 +31,29 @@ public final class ActivityMainBinding implements ViewBinding {
   public final EditText etPassword;
 
   @NonNull
+  public final ConstraintLayout rootLogin;
+
+  @NonNull
   public final TextView tvResult;
 
-  private ActivityMainBinding(@NonNull LinearLayout rootView, @NonNull Button btnLogin,
-      @NonNull EditText etEmail, @NonNull EditText etPassword, @NonNull TextView tvResult) {
+  @NonNull
+  public final TextView tvTitle;
+
+  private ActivityMainBinding(@NonNull ConstraintLayout rootView, @NonNull Button btnLogin,
+      @NonNull EditText etEmail, @NonNull EditText etPassword, @NonNull ConstraintLayout rootLogin,
+      @NonNull TextView tvResult, @NonNull TextView tvTitle) {
     this.rootView = rootView;
     this.btnLogin = btnLogin;
     this.etEmail = etEmail;
     this.etPassword = etPassword;
+    this.rootLogin = rootLogin;
     this.tvResult = tvResult;
+    this.tvTitle = tvTitle;
   }
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public ConstraintLayout getRoot() {
     return rootView;
   }
 
@@ -87,14 +96,22 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      ConstraintLayout rootLogin = (ConstraintLayout) rootView;
+
       id = R.id.tvResult;
       TextView tvResult = ViewBindings.findChildViewById(rootView, id);
       if (tvResult == null) {
         break missingId;
       }
 
-      return new ActivityMainBinding((LinearLayout) rootView, btnLogin, etEmail, etPassword,
-          tvResult);
+      id = R.id.tvTitle;
+      TextView tvTitle = ViewBindings.findChildViewById(rootView, id);
+      if (tvTitle == null) {
+        break missingId;
+      }
+
+      return new ActivityMainBinding((ConstraintLayout) rootView, btnLogin, etEmail, etPassword,
+          rootLogin, tvResult, tvTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

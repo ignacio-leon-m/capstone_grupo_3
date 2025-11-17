@@ -2,6 +2,9 @@ package org.duocuc.capstonebackend.controller
 
 import org.duocuc.capstonebackend.dto.EnrollSubjectDto
 import org.duocuc.capstonebackend.dto.SubjectInfoDto
+import org.duocuc.capstonebackend.dto.UserSubjectDto
+import org.duocuc.capstonebackend.security.CurrentUser   // ⬅️ NUEVO
+import org.duocuc.capstonebackend.repository.UserRepository // ⬅️ NUEVO
 import org.duocuc.capstonebackend.service.UserSubjectService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -9,90 +12,112 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
 
-
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = ["http://localhost:5173", "http://localhost:3000"]) // Ajustar según tu frontend
+@CrossOrigin(origins = ["http://localhost:5173", "http://localhost:3000"])
 class UserSubjectController(
-    private val userSubjectService: UserSubjectService
+    private val userSubjectService: UserSubjectService,
+    private val currentUser: CurrentUser,         // ⬅️ NUEVO
+    private val userRepository: UserRepository    // ⬅️ NUEVO
 ) {
-    // Get professor subjects
+    // -------- existentes por usuario (dejan SubjectInfoDto) --------
+
+    // Get professor subjects (OK con el service actual)
     @GetMapping("/subjects/professor/{professorId}")
-    fun findProfessorSubjects(@PathVariable professorId: UUID): ResponseEntity<List<SubjectInfoDto>> {
-        return try {
-            val subjects = userSubjectService.getProfessorSubjects(professorId)
-            ResponseEntity.ok(subjects)
+    fun findProfessorSubjects(@PathVariable professorId: UUID): ResponseEntity<List<SubjectInfoDto>> =
+        try {
+            ResponseEntity.ok(userSubjectService.getProfessorSubjects(professorId))
         } catch (e: IllegalArgumentException) {
             ResponseEntity.badRequest().build()
         }
-    }
-    // Get student subjects
+
+    // Get student subjects (OK con el service actual)
     @GetMapping("/subjects/student/{studentId}")
-    fun findStudentSubjects(@PathVariable studentId: UUID): ResponseEntity<List<SubjectInfoDto>> {
-        return try {
-            val subjects = userSubjectService.getStudentSubjects(studentId)
-            ResponseEntity.ok(subjects)
+    fun findStudentSubjects(@PathVariable studentId: UUID): ResponseEntity<List<SubjectInfoDto>> =
+        try {
+            ResponseEntity.ok(userSubjectService.getStudentSubjects(studentId))
         } catch (e: IllegalArgumentException) {
             ResponseEntity.badRequest().build()
         }
+
+    // ----------------- NUEVO: mis asignaturas (sin UUID) -----------------
+    @GetMapping("/me/subjects")
+    @PreAuthorize("hasAnyAuthority('alumno','profesor','admin')")
+    fun findMySubjects(): ResponseEntity<List<SubjectInfoDto>> {
+        val meId = currentUser.id()
+        val me = userRepository.findById(meId).orElseThrow()
+        val role = me.role.name.lowercase()
+
+        val subjects = when (role) {
+            "alumno"   -> userSubjectService.getStudentSubjects(meId)
+            "profesor" -> userSubjectService.getProfessorSubjects(meId)
+            "admin"    -> emptyList() // o podrías devolver todas si lo defines en tu service
+            else       -> emptyList()
+        }
+        return ResponseEntity.ok(subjects)
     }
 
-    // Enroll user to subject
+    /** Inscribe un usuario (admin) */
     @PostMapping("/admin/subjects/enroll")
-    @PreAuthorize("hasRole('admin')")
-    fun enrollUserToSubject(@RequestBody dto: EnrollSubjectDto): ResponseEntity<Any> {
-        return try {
+    @PreAuthorize("hasAuthority('admin')")
+    fun enrollUserToSubject(@RequestBody dto: EnrollSubjectDto): ResponseEntity<Any> =
+        try {
             val enrollment = userSubjectService.enrollToSubject(dto)
             ResponseEntity.status(HttpStatus.CREATED).body(enrollment)
         } catch (e: IllegalArgumentException) {
             ResponseEntity.badRequest().body(mapOf("error" to e.message))
+        } catch (e: Exception) {
+            ResponseEntity.internalServerError().body(mapOf("error" to "Error interno al inscribir usuario."))
         }
-    }
 
-    // Get professors of a subject
-    @GetMapping("/subjects/{subjectId}/professor")
-    @PreAuthorize("hasRole('admin')")
-    fun findProfessorOfSubject(@PathVariable subjectId: UUID): ResponseEntity<List<SubjectInfoDto>> {
-        val professors = userSubjectService.getProfessorSubjects(subjectId)
-        return ResponseEntity.ok(professors)
-    }
-
-    // Get students of a subject
+    /**
+     * Estudiantes de un ramo (profesor o admin)
+     */
     @GetMapping("/subjects/{subjectId}/students")
-    @PreAuthorize("hasAnyRole('profesor', 'admin')")
-    fun findStudentsOfSubject(@PathVariable subjectId: UUID): ResponseEntity<List<SubjectInfoDto>> {
-        val students = userSubjectService.getStudentSubjects(subjectId)
-        return ResponseEntity.ok(students)
-    }
+    @PreAuthorize("hasAnyAuthority('profesor','admin')")
+    fun findStudentsOfSubject(@PathVariable subjectId: UUID): ResponseEntity<List<UserSubjectDto>> =
+        try {
+            ResponseEntity.ok(userSubjectService.getStudentsOfSubject(subjectId))
+        } catch (e: Exception) {
+            ResponseEntity.internalServerError().build()
+        }
 
-    // Deactivate a relationship between user/subject
+    /**
+     * Profesores de un ramo (admin)
+     */
+    @GetMapping("/subjects/{subjectId}/professor")
+    @PreAuthorize("hasAuthority('admin')")
+    fun findProfessorOfSubject(@PathVariable subjectId: UUID): ResponseEntity<Any> =
+        ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
+            .body(mapOf("error" to "No implementado en el servicio. Agrega getProfessorsOfSubject(subjectId)."))
+
+    /** Desactivar inscripción (admin) */
     @PutMapping("/admin/subjects/deactivate")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     fun deactivateEnrollment(
         @RequestParam userId: UUID,
         @RequestParam subjectId: UUID
-    ): ResponseEntity<Any> {
-        return try {
-            val enrollment = userSubjectService.deactivateEnrollment(userId, subjectId)
-            ResponseEntity.ok(enrollment)
+    ): ResponseEntity<Any> =
+        try {
+            ResponseEntity.ok(userSubjectService.deactivateEnrollment(userId, subjectId))
         } catch (e: IllegalArgumentException) {
             ResponseEntity.badRequest().body(mapOf("error" to e.message))
+        } catch (e: Exception) {
+            ResponseEntity.internalServerError().body(mapOf("error" to "Error interno al desactivar inscripción."))
         }
-    }
 
-    // Reactivate a relationship between user/subject
+    /** Reactivar inscripción (admin) */
     @PutMapping("/admin/subjects/reactivate")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     fun reactivateEnrollment(
         @RequestParam userId: UUID,
         @RequestParam subjectId: UUID
-    ): ResponseEntity<Any> {
-        return try {
-            val enrollment = userSubjectService.reactivateEnrollment(userId, subjectId)
-            ResponseEntity.ok(enrollment)
+    ): ResponseEntity<Any> =
+        try {
+            ResponseEntity.ok(userSubjectService.reactivateEnrollment(userId, subjectId))
         } catch (e: IllegalArgumentException) {
             ResponseEntity.badRequest().body(mapOf("error" to e.message))
+        } catch (e: Exception) {
+            ResponseEntity.internalServerError().body(mapOf("error" to "Error interno al reactivar inscripción."))
         }
-    }
-
 }

@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="18dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvSubjectTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hangman"
+        android:textStyle="bold"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvLives"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vidas: 3"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/tvHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pista: ..."
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/tvMaskedWord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="_ _ _ _"
+        android:textSize="28sp"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"/>
+
+    <GridLayout
+        android:id="@+id/gridLetters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:rowCount="3"
+        android:columnCount="9"
+        android:useDefaultMargins="true"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Siguiente"
+        android:layout_marginTop="12dp"
+        android:enabled="false"/>
+</LinearLayout>

@@ -18,7 +18,13 @@ class JwtTokenService(
     private val expirationMillis: Long
 ) {
     private val key: SecretKey by lazy {
-        Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret))
+        try {
+            // Si secret está en Base64, esto funciona
+            Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret))
+        } catch (_: Exception) {
+            // Fallback: secreto "en claro"
+            Keys.hmacShaKeyFor(secret.toByteArray(Charsets.UTF_8))
+        }
     }
 
     fun generateToken(userDetails: UserDetails): String {

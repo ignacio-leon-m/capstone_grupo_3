@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.bboost.brainboost.app-mergeDebugResources-49:/values-v22/values-v22.xml",
+            "outputFile": "com.bboost.brainboost.app-mergeDebugResources-62:/values-v22/values-v22.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ignac\\.gradle\\caches\\8.14.3\\transforms\\5e871e02d9a74dc3300376e11ee55157\\transformed\\appcompat-1.7.1\\res\\values-v22\\values-v22.xml",
+                    "source": "C:\\Users\\Claudio\\.gradle\\caches\\8.14.3\\transforms\\5e871e02d9a74dc3300376e11ee55157\\transformed\\appcompat-1.7.1\\res\\values-v22\\values-v22.xml",
                     "from": {
                         "startLines": "2,3,4,9",
                         "startColumns": "4,4,4,4",
