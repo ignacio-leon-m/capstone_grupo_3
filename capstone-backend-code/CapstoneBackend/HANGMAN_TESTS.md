@@ -139,24 +139,182 @@ curl -X POST http://localhost:8080/api/hangman/games/1/attempt \
 
 ## 4. Enviar resultado de un concepto
 
+Este endpoint permite enviar el resultado final de un concepto en el juego Hangman después de que el estudiante haya completado (o no) la palabra.
+
+### Request
+
+**Endpoint:** `POST /api/hangman/games/{gameId}/concepts/submit`
+
+**Path Parameters:**
+- `gameId` (UUID): ID del juego activo
+
+**Request Body (HangmanConceptSubmitDto):**
+```json
+{
+  "conceptId": "550e8400-e29b-41d4-a716-446655440000",
+  "guessed": true,
+  "timeMs": 45000
+}
+```
+
+**Campos:**
+- `conceptId` (UUID, requerido): ID del concepto completado
+- `guessed` (boolean, requerido): `true` si adivinó la palabra completa, `false` si no
+- `timeMs` (long, requerido): Tiempo total en milisegundos que tardó en este concepto
+
+### Response
+
+**Response Body (HangmanConceptResultDto):**
+```json
+{
+  "conceptId": "550e8400-e29b-41d4-a716-446655440000",
+  "word": "ALGORITMO",
+  "guessed": true,
+  "attemptsUsed": 4,
+  "totalTimeMs": 45000,
+  "scoreObtained": 1,
+  "livesRemaining": 2
+}
+```
+
+**Campos de respuesta:**
+- `conceptId` (UUID): ID del concepto
+- `word` (String): La palabra completa del concepto
+- `guessed` (boolean): Si adivinó la palabra
+- `attemptsUsed` (int): Cantidad de intentos incorrectos realizados
+- `totalTimeMs` (long): Tiempo total en milisegundos
+- `scoreObtained` (int): Puntaje obtenido (1 punto si adivinó, 0 si no)
+- `livesRemaining` (int): Vidas restantes después de completar este concepto
+
+### Ejemplos
+
+#### Ejemplo 1: Concepto adivinado correctamente
+
+**Request:**
 ```bash
-curl -X POST http://localhost:8080/api/hangman/games/1/concepts/submit \
+curl -X POST http://localhost:8080/api/hangman/games/a1b2c3d4-e5f6-7890-abcd-ef1234567890/concepts/submit \
   -H "Content-Type: application/json" \
   -d '{
-    "conceptId": 1,
-    "responseTimeMs": 15000,
-    "attemptsRemaining": 1
+    "conceptId": "550e8400-e29b-41d4-a716-446655440000",
+    "guessed": true,
+    "timeMs": 45000
   }'
 ```
 
-**Respuesta esperada:**
+**Response (200 OK):**
 ```json
 {
-  "conceptId": 1,
-  "scoreObtained": 1.0,
-  "message": "Concepto completado exitosamente"
+  "conceptId": "550e8400-e29b-41d4-a716-446655440000",
+  "word": "ALGORITMO",
+  "guessed": true,
+  "attemptsUsed": 3,
+  "totalTimeMs": 45000,
+  "scoreObtained": 1,
+  "livesRemaining": 2
 }
 ```
+
+#### Ejemplo 2: Concepto no adivinado (se quedó sin vidas)
+
+**Request:**
+```bash
+curl -X POST http://localhost:8080/api/hangman/games/a1b2c3d4-e5f6-7890-abcd-ef1234567890/concepts/submit \
+  -H "Content-Type: application/json" \
+  -d '{
+    "conceptId": "660f9511-f3a0-4826-b827-556766551111",
+    "guessed": false,
+    "timeMs": 62000
+  }'
+```
+
+**Response (200 OK):**
+```json
+{
+  "conceptId": "660f9511-f3a0-4826-b827-556766551111",
+  "word": "RECURSIVIDAD",
+  "guessed": false,
+  "attemptsUsed": 5,
+  "totalTimeMs": 62000,
+  "scoreObtained": 0,
+  "livesRemaining": 0
+}
+```
+
+#### Ejemplo 3: Concepto rápido con pocas fallas
+
+**Request:**
+```bash
+curl -X POST http://localhost:8080/api/hangman/games/a1b2c3d4-e5f6-7890-abcd-ef1234567890/concepts/submit \
+  -H "Content-Type: application/json" \
+  -d '{
+    "conceptId": "770g0622-g4b1-5937-c938-667877662222",
+    "guessed": true,
+    "timeMs": 18500
+  }'
+```
+
+**Response (200 OK):**
+```json
+{
+  "conceptId": "770g0622-g4b1-5937-c938-667877662222",
+  "word": "VARIABLE",
+  "guessed": true,
+  "attemptsUsed": 1,
+  "totalTimeMs": 18500,
+  "scoreObtained": 1,
+  "livesRemaining": 3
+}
+```
+
+### Validaciones y reglas de negocio
+
+1. **Juego válido**: El juego debe existir y estar en estado "activo"
+2. **Concepto único**: No puede enviar resultado para el mismo concepto más de una vez en el mismo juego
+3. **Concepto existente**: El concepto debe existir en la base de datos
+4. **Cálculo de intentos**: El sistema cuenta automáticamente los intentos usados basándose en las métricas registradas durante el juego
+5. **Puntaje**: 
+   - 1 punto si `guessed = true`
+   - 0 puntos si `guessed = false`
+
+### Errores posibles
+
+**404 Not Found - Juego no encontrado:**
+```json
+{
+  "error": "Juego no encontrado con ID: a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+}
+```
+
+**404 Not Found - Concepto no encontrado:**
+```json
+{
+  "error": "Concepto no encontrado con ID: 550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+**400 Bad Request - Resultado duplicado:**
+```json
+{
+  "error": "Ya existe un resultado para este concepto en este juego"
+}
+```
+
+**400 Bad Request - Juego no activo:**
+```json
+{
+  "error": "El juego no está activo"
+}
+```
+
+### Flujo de uso
+
+1. El estudiante intenta letras usando `/games/{gameId}/attempt`
+2. Cuando completa la palabra o se queda sin vidas para ese concepto:
+   - La aplicación móvil calcula el tiempo total (`timeMs`)
+   - Determina si adivinó la palabra (`guessed`)
+   - Envía el resultado usando este endpoint
+3. El backend registra el resultado en `resultados_juego_hangman`
+4. Retorna el resumen del concepto con puntaje y estadísticas
 
 ## 5. Finalizar el juego
 

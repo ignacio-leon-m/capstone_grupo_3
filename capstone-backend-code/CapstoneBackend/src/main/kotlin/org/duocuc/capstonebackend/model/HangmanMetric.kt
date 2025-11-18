@@ -5,10 +5,6 @@ import org.hibernate.annotations.UuidGenerator
 import java.time.LocalDateTime
 import java.util.UUID
 
-/**
- * Métricas granulares del juego Hangman - cada intento de letra.
- * Patrón escalable: metricas_juego_{nombre}
- */
 @Entity
 @Table(name = "metricas_juego_hangman", schema = "public")
 class HangmanMetric(

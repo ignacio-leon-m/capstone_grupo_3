@@ -3,7 +3,6 @@ const UPLOAD_URL = '/api/files/upload-query-pdf';
 document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('fileInput');
     const uploadButton = document.getElementById('uploadButton');
-    const contentInput = document.getElementById('contentInput');
 
     // If PDF file input is missing, disable the upload button
     if (!fileInput) {
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadButton.disabled = !(hasFiles);
     };
 
-    if (contentInput) contentInput.addEventListener('input', updateButtonState);
     if (fileInput) fileInput.addEventListener('change', updateButtonState);
 
     // Drag & Drop area
@@ -49,11 +47,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = new FormData();
 
-
+        // El endpoint espera UN archivo con nombre 'file' (singular) y un 'prompt'
         if (fileInput?.files && fileInput.files.length > 0) {
-            for (let i = 0; i < fileInput.files.length; i++) {
-                formData.append('files', fileInput.files[i]);
-            }
+            // Tomar solo el primer archivo
+            formData.append('file', fileInput.files[0]);
+            
+            // Agregar prompt (puede ser del textarea o uno por defecto)
+            const contentInput = document.getElementById('contentInput');
+            const prompt = contentInput?.value.trim() || 'Analiza este documento y proporciona un resumen completo.';
+            formData.append('prompt', prompt);
+        } else {
+            alert('Por favor selecciona un archivo PDF');
+            return;
         }
 
         try {
@@ -83,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(resultText);
 
             // limpiar inputs
-            if (contentInput) contentInput.value = '';
             if (fileInput) fileInput.value = '';
             updateButtonState();
 

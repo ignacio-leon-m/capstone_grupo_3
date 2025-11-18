@@ -66,6 +66,8 @@ class FileUploadController(
             log.error("Error al procesar el archivo Excel", e)
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Error al procesar el archivo Excel: ${e.message}")
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al procesar el archivo Excel: ${e.message}")
         }
     }
 

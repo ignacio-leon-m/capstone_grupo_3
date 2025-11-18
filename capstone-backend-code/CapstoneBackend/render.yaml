@@ -19,9 +19,9 @@ services:
     
     # Environment variables (valores sensibles se configuran en Render Dashboard)
     envVars:
-      # Spring Boot Profile
+      # Spring Boot Profile - PRODUCCIÓN
       - key: SPRING_PROFILES_ACTIVE
-        value: production
+        value: prod
       
       # Server Configuration
       - key: PORT

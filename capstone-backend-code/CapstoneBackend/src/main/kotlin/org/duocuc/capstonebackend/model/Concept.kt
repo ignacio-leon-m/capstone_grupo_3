@@ -5,10 +5,7 @@ import org.hibernate.annotations.UuidGenerator
 import java.time.LocalDateTime
 import java.util.UUID
 
-/**
- * Concepto académico extraído automáticamente por IA (Gemini) desde PDFs.
- * Tabla simplificada - todos los conceptos provienen de extracción automatizada.
- */
+
 @Entity
 @Table(name = "conceptos", schema = "public")
 class Concept(
