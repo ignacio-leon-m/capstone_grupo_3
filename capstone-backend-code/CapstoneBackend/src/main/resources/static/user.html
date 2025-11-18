@@ -4,28 +4,36 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BrainBoost - Listado de Usuarios</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
-    <link rel="stylesheet" href="/css/user.css" />
     <link rel="icon" href="/images/bb-logo.png" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/user.css" />
   </head>
   <body>
-    <div class="header-container">
-      <div class="logo-area">
-        <a href="/home.html" class="logo-link">
-          <img src="/images/bb-logo.png" alt="BrainBoost Logo" class="logo" />
+    <!-- Navbar -->
+    <nav class="navbar navbar-light bg-white shadow-sm">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/home.html">
+          <img src="/images/bb-logo.png" alt="BrainBoost Logo" height="40">
+        </a>
+        <a href="/user-upload.html" class="btn btn-primary">
+          <i class="fas fa-upload me-2"></i>Carga de Alumnos
         </a>
       </div>
-      <a href="/user-upload.html" class="btn btn-secondary btn-sm">Carga de Alumnos</a>
-    </div>
+    </nav>
 
-    <div class="list-container">
-      <h1 class="page-title">Alumnos Inscritos</h1>
-
-      <table class="users-table">
+    <!-- Main Content -->
+    <div class="container my-4">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="mb-4">Alumnos Inscritos</h1>
+          
+          <!-- Card para la tabla -->
+          <div class="card shadow-sm border-0">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
         <thead>
           <tr>
             <th>Nombre</th>
@@ -48,12 +56,21 @@
             <td>B</td>
           </tr>
         </tbody>
-      </table>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="logout-fixed-container">
-      <button class="btn btn-outline-danger btn-sm logout-button" title="Cerrar Sesión">Cerrar sesión</button>
+    
+    <!-- Logout Button -->
+    <div class="position-fixed bottom-0 end-0 p-3">
+      <button class="btn btn-outline-danger logout-button" title="Cerrar Sesión">
+        <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
+      </button>
     </div>
-    <script src="/js/jwt-logic.js"></script>
+    <script src="/js/utils.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
   </body>
 </html>

@@ -2,14 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('jwtToken');
     const role = localStorage.getItem('userRole');
 
-    // Redirecciona si no hay token
+    // Redireccionar si no hay token
     if (!token) {
         window.location.href = '/index.html';
         return;
     }
-    // Redirecciona si el rol no es profesor
+    
     if (role !== 'profesor') {
-        alert('Acceso denegado. Solo los profesores pueden acceder a esta página.');
+        alert('Acceso denegado. Solo los profesores pueden acceder a la carga masiva de alumnos.');
         window.location.href = '/home.html';
         return;
     }
@@ -54,46 +54,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: {
                     // NO incluye 'Content-Type' porque el navegador lo gestiona con FormData
-                    'Authorization': `Bearer ${token}` // 3. Autenticación con Token
+                    'Authorization': `Bearer ${token}`
                 },
                 body: formData
             });
 
+            // Leer la respuesta como texto
             const responseText = await res.text();
+            
+            console.log('Status:', res.status);
+            console.log('Response:', responseText);
 
             if (res.ok) {
-                alert('Éxito: ' + responseText);
-                fileInput.value = ''; // Limpiar el input
-                fileNameSpan.textContent = 'Ningún archivo seleccionado';
+                // Verificar que la respuesta contenga información de procesamiento exitoso
+                if (responseText.includes('procesado') || responseText.includes('creados') || responseText.includes('actualizados')) {
+                    alert('✓ ' + responseText);
+                    fileInput.value = '';
+                    fileNameSpan.textContent = 'Ningún archivo seleccionado';
+                    uploadButton.disabled = true;
+                } else {
+                    // Respuesta 200/201 pero sin confirmación clara de procesamiento
+                    console.warn('Respuesta inesperada:', responseText);
+                    alert('Advertencia: ' + responseText);
+                }
             } else {
-                alert('Error: ' + responseText);
+                // Error HTTP (4xx, 5xx)
+                alert('✗ Error (' + res.status + '): ' + responseText);
             }
         } catch (err) {
             console.error('Error de red al subir el archivo:', err);
-            alert('Error de red. No se pudo conectar con el servidor.');
+            alert('✗ Error de red. No se pudo conectar con el servidor.');
         } finally {
             uploadButton.disabled = false;
             uploadButton.textContent = 'Cargar';
         }
     });
-
-    // Lógica del botón de logout
-    const logoutButton = document.querySelector('.logout-button');
-    if(logoutButton) {
-        logoutButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('jwtToken');
-            localStorage.removeItem('userRole');
-            window.location.href = '/index.html';
-        });
     }
-
-    const returnButton = document.querySelector('.return-button');
-    if(returnButton) {
-        returnButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.history.back();
-        });
-    }
-}
 );
