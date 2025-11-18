@@ -45,10 +45,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a956ff6d-9d30-488a-90a0-10e9bfe24984" name="Changes" comment="codigo inicial app móvil">
-      <change beforePath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/UserSubjectService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/src/main/kotlin/org/duocuc/capstonebackend/service/UserSubjectService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.14.3/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.14.3/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.14.3/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.14.3/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/src/main/resources/static/js/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/canva-app/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/canva-app/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/canva-app/src/app.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/canva-app/src/components/BackButton.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/canva-app/src/components/LogoutButton.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/canva-app/src/components/NavigationBar.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/canva-app/src/state/auth.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/canva-app/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/src/main/resources/static/content.html" beforeDir="false" afterPath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/src/main/resources/static/content.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/src/main/resources/static/js/user-upload.js" beforeDir="false" afterPath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/src/main/resources/static/js/user-upload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/src/main/resources/static/user-upload.html" beforeDir="false" afterPath="$PROJECT_DIR$/../capstone-backend-code/CapstoneBackend/src/main/resources/static/user-upload.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,11 +149,10 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "android.gradle.sync.needed": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "com.google.services.firebase.aqiPopupShown": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feature/app-web-close",
     "ignore.virus.scanning.warn.message": "true",
     "run.code.analysis.last.selected.profile": "pProject Default",
     "settings.editor.selected.configurable": "device.mirroring"
@@ -292,12 +302,12 @@
       <map>
         <entry key="com.bboost.brainboost">
           <value>
-            <CheckInfo lastCheckTimestamp="1762355517319" />
+            <CheckInfo lastCheckTimestamp="1763171573178" />
           </value>
         </entry>
         <entry key="com.bboost.brainboost.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1762355517317" />
+            <CheckInfo lastCheckTimestamp="1763171573175" />
           </value>
         </entry>
       </map>

@@ -4,74 +4,82 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BrainBoost - Carga de Usuarios</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <link rel="stylesheet" href="/css/user-upload.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="icon" href="/images/bb-logo.png" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/user-upload.css" />
   </head>
   <body>
-    <div class="header-container">
-        <button class="btn btn-secondary btn-sm return-button" title="Volver">Volver</button>
-    </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-light bg-white shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/home.html">
+                <img src="/images/bb-logo.png" alt="BrainBoost Logo" height="40">
+            </a>
+            <button class="btn btn-outline-secondary return-button" title="Volver">
+                <i class="fas fa-arrow-left me-2"></i>Volver
+            </button>
+        </div>
+    </nav>
 
-    <div class="page-container">
-      <h1 class="page-title">Carga de Alumnos</h1>
+    <!-- Main Content -->
+    <div class="container my-4">
+      <h1 class="mb-4">Carga de Alumnos</h1>
 
-      <div class="upload-section">
-        <h2>Subir Archivo de Alumnos</h2>
-        <p>
-          El archivo debe ser un Excel (.xlsx) con el siguiente formato:
-        </p>
-        
-        <p class="download-link-container">
-          <a href="/download/ExcelAlumnos.xlsx" download
-            >Descargar formato de ejemplo (.xlsx)</a
-          >
-        </p>
+      <!-- Card para upload -->
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white border-0 py-3">
+          <h2 class="h5 mb-0">Subir Archivo de Alumnos</h2>
+        </div>
+        <div class="card-body">
+          <p class="text-muted">
+            El archivo debe ser un Excel (.xlsx) con el siguiente formato:
+          </p>
+          
+          <div class="alert alert-info">
+            <i class="fas fa-download me-2"></i>
+            <a href="/download/ExcelAlumnos.xlsx" download class="alert-link">
+              Descargar formato de ejemplo (.xlsx)
+            </a>
+          </div>
 
-        <form id="uploadForm">
-          <input
-            type="file"
-            id="fileInput"
-            accept=".xlsx"
-            style="display: none"
-          />
-          <label for="fileInput" class="custom-file-upload">
-            Seleccionar Archivo
-          </label>
-          <span id="fileName">Ningún archivo seleccionado</span>
-          <button type="submit" id="uploadButton" class="btn btn-primary btn-sm" disabled>Cargar</button>
-        </form>
+          <form id="uploadForm">
+            <div class="input-group">
+              <input
+                type="file"
+                id="fileInput"
+                accept=".xlsx"
+                class="form-control"
+              />
+              <button type="submit" id="uploadButton" class="btn btn-primary" disabled>
+                <i class="fas fa-upload me-2"></i>Cargar
+              </button>
+            </div>
+            <div class="form-text mt-2">
+              <span id="fileName"></span>
+            </div>
+          </form>
+        </div>
       </div>
 
-      <hr class="divider" />
-
-      <div class="history-section">
-        <h2>Estado Archivos Procesados</h2>
-
-        <div class="legend-container">
-          <p>Leyenda de estados:</p>
-          <ul>
-            <li>
-              <span class="status-circle status-completed"></span> Completado
-            </li>
-            <li>
-              <span class="status-circle status-processing"></span> Procesando
-            </li>
-            <li><span class="status-circle status-error"></span> Errores</li>
-          </ul>
+      <!-- Card para historial -->
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0 py-3">
+          <h2 class="h5 mb-0">Estado Archivos Procesados</h2>
         </div>
+        <div class="card-body">
+          <!-- Leyenda con badges -->
+          <div class="alert alert-light mb-3">
+            <p class="mb-2 fw-bold">Leyenda de estados:</p>
+            <span class="badge bg-success me-2"><i class="fas fa-check-circle"></i> Completado</span>
+            <span class="badge bg-warning text-dark me-2"><i class="fas fa-spinner"></i> Procesando</span>
+            <span class="badge bg-danger"><i class="fas fa-exclamation-circle"></i> Errores</span>
+          </div>
 
-        <table id="filesTable" class="history-table">
+          <!-- Tabla responsive -->
+          <div class="table-responsive">
+            <table id="filesTable" class="table table-hover">
           <thead>
             <tr>
               <th>Sección</th>
@@ -116,12 +124,21 @@
               </td>
             </tr>
           </tbody>
-        </table>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
-      <button class="btn btn-outline-danger btn-sm logout-button" title="Cerrar Sesión">Cerrar sesión</button>
+    
+    <!-- Logout Button -->
+    <div class="position-fixed bottom-0 end-0 p-3">
+      <button class="btn btn-outline-danger logout-button" title="Cerrar Sesión">
+        <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
+      </button>
     </div>
+    
     <script src="/js/user-upload.js"></script>
+    <script src="/js/utils.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
   </body>
 </html>

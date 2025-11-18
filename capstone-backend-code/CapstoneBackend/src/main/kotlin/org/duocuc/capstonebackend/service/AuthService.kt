@@ -64,17 +64,22 @@ class AuthService (
         return userResponse(savedUser)
     }
 
-    fun registerStudentFromExcel(request: RegisterRequestDto) {
-        // Verify if the user already exists
+    fun registerStudentFromExcel(request: RegisterRequestDto): Boolean {
+        // Verify if the user already exists by email
         if (userRepository.findByEmail(request.email).isPresent) {
             log.info("Usuario con email ${request.email} ya existe. Omitiendo creación.")
-            return
+            return false
         }
+        
+        // Verify if the user already exists by RUT
         if (userRepository.findByRut(request.rut).isPresent) {
-            throw IllegalStateException("El usuario con el RUT '${request.rut}' ya existe.")
+            log.info("Usuario con RUT ${request.rut} ya existe. Omitiendo creación.")
+            return false
         }
+        
         // Validate and find the Role
-        val role = roleRepository.findByName("alumno") ?: throw IllegalStateException("El rol 'alumno' no existe.")
+        val role = roleRepository.findByName("alumno") 
+            ?: throw IllegalStateException("El rol 'alumno' no existe.")
         
         // Validate and find the Degree (Carrera)
         val degreeName = "ing-informatica"
@@ -86,7 +91,7 @@ class AuthService (
             lastName = request.lastName,
             rut = request.rut,
             role = role,
-            degree = degree, // Carrera asignada
+            degree = degree,
             passwordHash = securityConfig.passwordEncoder().encode(request.password),
             email = request.email,
             state = true,
@@ -96,7 +101,8 @@ class AuthService (
         )
 
         userRepository.save(newUser)
-        log.info("Nuevo alumno creado con email: ${request.email}")
+        log.info("✓ Nuevo alumno creado: ${request.name} ${request.lastName} (${request.email})")
+        return true
     }
 
     fun userResponse(user: User): UserResponseDto {

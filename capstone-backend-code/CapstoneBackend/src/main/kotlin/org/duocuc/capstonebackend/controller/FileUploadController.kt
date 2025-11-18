@@ -27,15 +27,44 @@ class FileUploadController(
             val students = file.inputStream.use { inputStream ->
                 fileUploadService.processExcelFile(inputStream)
             }
-             log.info("El servicio de Excel procesó ${students.size} alumnos.")
-
-            students.forEach {
-                authService.registerStudentFromExcel(it)
+            
+            if (students.isEmpty()) {
+                log.warn("El archivo Excel no contiene alumnos válidos para procesar.")
+                return ResponseEntity.badRequest().body("El archivo no contiene alumnos válidos. Verifica el formato del Excel.")
             }
-            ResponseEntity("Archivo procesado. Los alumnos han sido creados o actualizados.", HttpStatus.CREATED)
+            
+            log.info("El servicio de Excel procesó ${students.size} alumnos del archivo.")
+
+            var created = 0
+            var skipped = 0
+            var errors = 0
+            
+            students.forEach { student ->
+                try {
+                    val wasCreated = authService.registerStudentFromExcel(student)
+                    if (wasCreated) created++ else skipped++
+                } catch (e: Exception) {
+                    log.error("Error al registrar alumno ${student.email}: ${e.message}")
+                    errors++
+                }
+            }
+            
+            val resultMessage = buildString {
+                append("Archivo procesado: ")
+                append("${students.size} alumnos encontrados. ")
+                append("Creados: $created, ")
+                append("Ya existían: $skipped")
+                if (errors > 0) {
+                    append(", Errores: $errors")
+                }
+            }
+            
+            log.info(resultMessage)
+            ResponseEntity(resultMessage, HttpStatus.CREATED)
         } catch (e: Exception) {
             log.error("Error al procesar el archivo Excel", e)
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar el archivo Excel: ${e.message}")
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al procesar el archivo Excel: ${e.message}")
         }
     }
 }

@@ -1,8 +1,8 @@
 -- Eliminar tablas si existen (en orden inverso de creación para manejar dependencias)
 DROP TABLE IF EXISTS metricas_juego_hangman CASCADE;
 DROP TABLE IF EXISTS resultados_juego_hangman CASCADE;
-DROP TABLE IF EXISTS metricas_juego_crisscross CASCADE;  -- Descomentar cuando se implemente
-DROP TABLE IF EXISTS resultados_juego_crisscross CASCADE;  -- Descomentar cuando se implemente
+DROP TABLE IF EXISTS metricas_juego_crisscross CASCADE;
+DROP TABLE IF EXISTS resultados_juego_crisscross CASCADE;
 DROP TABLE IF EXISTS metricas CASCADE;
 DROP TABLE IF EXISTS puntajes CASCADE;
 DROP TABLE IF EXISTS juegos CASCADE;
@@ -261,16 +261,6 @@ CREATE INDEX idx_metricas_hangman_fecha ON metricas_juego_hangman(fecha_hora DES
 CREATE INDEX idx_resultados_hangman_juego ON resultados_juego_hangman(id_juego);
 CREATE INDEX idx_resultados_hangman_adivinado ON resultados_juego_hangman(adivinado);
 
--- COMENTARIOS PARA DOCUMENTACION
-
-COMMENT ON TABLE usuario_asignatura IS 'Relación N:M entre usuarios y asignaturas. El rol del usuario determina si es profesor o alumno.';
-COMMENT ON TABLE conceptos IS 'Conceptos académicos extraídos automáticamente por IA (Gemini) desde PDFs';
-COMMENT ON TABLE metricas_juego_hangman IS 'Métricas granulares del juego Hangman - cada intento de letra';
-COMMENT ON TABLE resultados_juego_hangman IS 'Resultados finales del juego Hangman - por palabra completada';
-
-COMMENT ON COLUMN conceptos.hint IS 'Pista corta generada automáticamente por Gemini para juegos de adivinanza';
-COMMENT ON COLUMN conceptos.palabra_concepto IS 'Concepto en MAYUSCULAS extraído del PDF académico';
-COMMENT ON COLUMN conceptos.fecha_creacion IS 'Timestamp de cuando Gemini procesó y extrajo el concepto';
 
 /**********************INSERCION DE DATOS***********************/
 

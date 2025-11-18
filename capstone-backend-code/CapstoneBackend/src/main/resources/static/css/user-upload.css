@@ -1,108 +1,38 @@
-/* Estilos generales para el fondo y la fuente */
+/* Estilos mínimos - Bootstrap utility classes se usan en HTML */
 body {
-    font-family: 'Nunito', sans-serif; 
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    font-family: 'Nunito', sans-serif;
     min-height: 100vh;
-    background: linear-gradient(135deg, #e0f2f7, #fbe9e7); 
-    color: #333;
-    padding-bottom: 40px;
+    background: linear-gradient(135deg, #e0f2f7, #fbe9e7);
 }
 
-/* Estilos para el botón de volver */
-.header-container {
-    width: 95%;
-    max-width: 1200px;
-    margin: 20px auto 0;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.back-button {
-    text-decoration: none;
-    background-color: #f0f0f0;
-    color: #555;
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
-
-.back-button:hover {
-    background-color: #ddd;
-}
-
-/* Contenedor principal de la página */
-.page-container {
-    width: 95%;
-    max-width: 1200px;
-    margin: 40px auto;
-    text-align: left;
-}
-
-.page-title {
-    font-size: 2.5em;
-    color: #007bff;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-/* Sección de Carga de Archivo */
-.upload-section {
-    background: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    margin-bottom: 40px;
-}
-
-.format-example {
-    background-color: #f0f0f0;
-    padding: 15px;
-    border-left: 5px solid #ff8c00;
-    margin: 15px 0;
-}
-
-#uploadForm {
-    margin-top: 20px;
-}
-
-.custom-file-upload {
+/* Status indicators */
+.status-circle {
     display: inline-block;
-    padding: 10px 20px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    vertical-align: middle;
 }
 
-.custom-file-upload:hover {
-    background-color: #0056b3;
+.status-completed { background-color: #4CAF50; }
+.status-processing { background-color: #FFC107; }
+.status-error { background-color: #F44336; }
+
+/* Mejoras de transición */
+.btn {
+    transition: all 0.3s ease;
 }
 
-#fileName {
-    margin-left: 10px;
-    font-style: italic;
-    color: #666;
+.btn:hover {
+    transform: translateY(-1px);
 }
 
-#uploadButton {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #ff8c00;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
+.card {
+    transition: box-shadow 0.3s ease;
 }
 
-#uploadButton:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
 }
 
 /* Sección de Historial y Filtros */

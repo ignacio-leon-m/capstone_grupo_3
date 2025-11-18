@@ -1,101 +1,140 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>BrainBoost - Inicio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
-    <link rel="stylesheet" href="/css/home.css" />
-    <link rel="icon" href="/images/bb-logo.png" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  </head>
-  <body>
-    <header class="main-header">
-      <img src="/images/bb-logo.png" alt="BrainBoost Logo" class="logo" />
-    </header>
-    <div class="container">
-      <div class="content-box">
-        <h1 class="welcome-message">Bienvenido, humano</h1>
-        <p class="instruction">Selecciona una de las opciones:</p>
-        <div class="options-container" id="options-container">
-          <!-- Las opciones se agregarán dinámicamente aquí -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <link rel="icon" href="/images/bb-logo.png"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/home.css"/>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-light bg-white shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/home.html">
+            <img src="/images/bb-logo.png" alt="BrainBoost Logo" height="40">
+        </a>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <!-- Welcome Card -->
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h1 class="card-title mb-4">Bienvenido</h1>
+                    <p class="card-text text-muted mb-4">Selecciona una de las opciones:</p>
+                    
+                    <!-- Buttons using d-grid -->
+                    <div class="d-grid gap-3">
+                        <button type="button" id="carga-contenido-button" class="btn btn-primary btn-lg">
+                            <i class="fas fa-upload me-2"></i>Carga de Contenido
+                        </button>
+                        <button type="button" id="carga-usuarios-button" class="btn btn-primary btn-lg">
+                            <i class="fas fa-users me-2"></i>Carga de Usuarios
+                        </button>
+                        <button type="button" id="crear-profesor-button" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>Crear Profesor
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-     <div class="logout-fixed-container">
-      <button id="logout-button" class="btn btn-sm btn-outline-danger" title="Cerrar Sesión">Cerrar sesión</button>
-    </div>
+</div>
 
-  <script>
-      document.addEventListener('DOMContentLoaded', () => {
-          const token = localStorage.getItem('jwtToken');
-          const role = localStorage.getItem('userRole');
+<!-- Logout Button -->
+<div class="position-fixed bottom-0 end-0 p-3">
+    <button id="logout-button" class="btn btn-outline-danger" title="Cerrar Sesión">
+        <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
+    </button>
+</div>
 
-          if(!token){
-              window.location.href = '/index.html';
-              return;
-          }
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const token = localStorage.getItem('jwtToken');
+        const role = localStorage.getItem('userRole');
 
-          const optionsContainer = document.getElementById('options-container');
+        if (!token) {
+            window.location.href = '/index.html';
+            return;
+        }
 
-          // Opción visible para todos los roles autenticados
-          const contentLink = document.createElement('a');
-          contentLink.href = '/content.html';
-          contentLink.className = 'option-button content-button';
-          contentLink.textContent = 'Carga de Contenido';
-          optionsContainer.appendChild(contentLink);
+        console.log('Usuario autenticado con rol:', role);
 
-          // Opciones solo para admin
-          if (role === 'admin') {
-              const usersLink = document.createElement('a');
-              usersLink.href = '/user.html';
-              usersLink.className = 'option-button users-button';
-              usersLink.textContent = 'Carga de Usuarios';
-              optionsContainer.appendChild(usersLink);
+        const uploadUserButton = document.getElementById('carga-usuarios-button');
+        const createProfessorButton = document.getElementById('crear-profesor-button');
+        const uploadContentButton = document.getElementById('carga-contenido-button');
 
-              const createTeacherLink = document.createElement('a');
-              createTeacherLink.href = '/crear-profesor.html';
-              createTeacherLink.className = 'option-button users-button'; // Reutilizando estilo
-              createTeacherLink.textContent = 'Crear Profesor';
-              optionsContainer.appendChild(createTeacherLink);
-          }
+        // PROFESOR: puede cargar usuarios (alumnos Excel) y contenido
+        if (role === 'profesor') {
+            // Mostrar botón de carga de usuarios (Excel)
+            if (uploadUserButton) {
+                uploadUserButton.style.display = 'block';
+                uploadUserButton.addEventListener('click', () => {
+                    window.location.href = '/user-upload.html';
+                });
+            }
+            // Ocultar botón de crear profesor
+            if (createProfessorButton) {
+                createProfessorButton.style.display = 'none';
+            }
+            // Mostrar botón de contenido
+            if (uploadContentButton) {
+                uploadContentButton.style.display = 'block';
+                uploadContentButton.addEventListener('click', () => {
+                    window.location.href = '/content.html';
+                });
+            }
+        }
+        
+        // ADMIN: puede crear profesores y cargar contenido (NO puede cargar alumnos)
+        else if (role === 'admin') {
+            // Ocultar botón de carga de usuarios
+            if (uploadUserButton) {
+                uploadUserButton.style.display = 'none';
+            }
+            // Mostrar botón de crear profesor
+            if (createProfessorButton) {
+                createProfessorButton.style.display = 'block';
+                createProfessorButton.addEventListener('click', () => {
+                    window.location.href = '/create-professor.html';
+                });
+            }
+            // Mostrar botón de contenido
+            if (uploadContentButton) {
+                uploadContentButton.style.display = 'block';
+                uploadContentButton.addEventListener('click', () => {
+                    window.location.href = '/content.html';
+                });
+            }
+        }
+        
+        // ESTUDIANTE: ocultar todos los botones administrativos
+        else {
+            if (uploadUserButton) uploadUserButton.style.display = 'none';
+            if (createProfessorButton) createProfessorButton.style.display = 'none';
+            if (uploadContentButton) uploadContentButton.style.display = 'none';
+        }
 
-          // Opciones solo para profesor
-          if (role === 'profesor') {
-              const uploadStudentsLink = document.createElement('a');
-              uploadStudentsLink.href = '/user-upload.html';
-              uploadStudentsLink.className = 'option-button users-button'; // Reutilizando estilo
-              uploadStudentsLink.textContent = 'Carga de Alumnos';
-              optionsContainer.appendChild(uploadStudentsLink);
-
-              const mySubjectsLink = document.createElement('a');
-              mySubjectsLink.href = '/profesor-asignaturas.html';
-              mySubjectsLink.className = 'option-button content-button';
-              mySubjectsLink.textContent = 'Mis Asignaturas';
-              optionsContainer.appendChild(mySubjectsLink);
-          }
-
-          console.log('Usuario autenticado con rol:', role);
-      });
-
-      const logoutButton = document.getElementById('logout-button');
-      logoutButton.addEventListener('click', (e) => {
-          e.preventDefault();
-          localStorage.removeItem('jwtToken');
-          localStorage.removeItem('userRole');
-          window.location.href = '/index.html';
-      });
-  </script>
-  <script src="/js/jwt-logic.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-  </body>
+        const logoutButton = document.getElementById('logout-button');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('jwtToken');
+                localStorage.removeItem('userRole');
+                window.location.href = '/index.html';
+            });
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</body>
 </html>
