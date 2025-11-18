@@ -1,0 +1,62 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13
+    container_name: capstone-postgres
+    environment:
+      POSTGRES_DB: capstone-bbdd
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: OFDXHJlGMF7g9dls6JmJhyMDLEwdAMfuyoDV6StqLa9LywYc2I77mMJtRrMFu5QC
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongodb:
+    image: mongo:7.0
+    container_name: capstone-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpass123
+      MONGO_INITDB_DATABASE: capstone_docs
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    container_name: capstone-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      # PostgreSQL Configuration (Principal)
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/capstone-bbdd
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=OFDXHJlGMF7g9dls6JmJhyMDLEwdAMfuyoDV6StqLa9LywYc2I77mMJtRrMFu5QC
+      
+      # MongoDB Configuration (Documentos y logs)
+      - SPRING_DATA_MONGODB_URI=mongodb://admin:adminpass123@mongodb:27017/capstone_docs?authSource=admin
+      - SPRING_DATA_MONGODB_DATABASE=capstone_docs
+      - MONGODB_ENABLED=true
+
+volumes:
+  postgres_data:
+  mongodb_data:
+  mongodb_config:

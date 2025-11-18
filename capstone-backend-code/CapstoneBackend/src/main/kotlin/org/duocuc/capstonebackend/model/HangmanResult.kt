@@ -6,10 +6,6 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.UUID
 
-/**
- * Resultados finales del juego Hangman - por palabra completada.
- * Patrón escalable: resultados_juego_{nombre}
- */
 @Entity
 @Table(
     name = "resultados_juego_hangman",

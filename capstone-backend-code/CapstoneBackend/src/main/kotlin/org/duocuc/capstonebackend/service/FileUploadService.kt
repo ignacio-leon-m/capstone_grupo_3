@@ -5,7 +5,7 @@ import org.duocuc.capstonebackend.dto.RegisterRequestDto
 import org.duocuc.capstonebackend.nosql.StoredDocument
 import org.duocuc.capstonebackend.nosql.StoredDocumentRepository
 import org.duocuc.capstonebackend.security.CurrentUser
-import org.duocuc.capstonebackend.util.Checksums
+import org.duocuc.capstonebackend.util.HashingUtils
 import org.duocuc.capstonebackend.util.nameToTitleCase
 import org.duocuc.capstonebackend.util.splitFullNameFromExcel
 import org.springframework.stereotype.Service
@@ -17,10 +17,10 @@ import java.nio.file.Paths
 import java.util.*
 
 @Service
-class FileUploadService (
+class FileUploadService(
     private val storedDocumentRepository: StoredDocumentRepository,
     private val currentUser: CurrentUser
-){
+) {
     private val uploadDir: Path = Paths.get("uploads")
 
     init {
@@ -39,7 +39,7 @@ class FileUploadService (
         Files.copy(file.inputStream, filePath)
 
         val bytes = Files.readAllBytes(filePath)
-        val sha1 = Checksums.sha1(bytes)
+        val sha1 = HashingUtils.sha1(bytes)
 
         val storedDocument = StoredDocument(
             userId = userId,
@@ -72,18 +72,20 @@ class FileUploadService (
             val fullNameToTitleCase = fullName.nameToTitleCase()
             val (lastName, firstName) = splitFullNameFromExcel(fullNameToTitleCase)
 
-            students.add(RegisterRequestDto(
-                name = firstName,
-                lastName = lastName,
-                rut = rut,
-                email = "$rut@duocuc.cl",
-                phone = "",
-                password = rut
-                    .replace(".", "")
-                    .replace("-", "")
-                    .takeLast(4) + "1234",
-                role = "alumno"
-            ))
+            students.add(
+                RegisterRequestDto(
+                    name = firstName,
+                    lastName = lastName,
+                    rut = rut,
+                    email = "$rut@duocuc.cl",
+                    phone = "",
+                    password = rut
+                        .replace(".", "")
+                        .replace("-", "")
+                        .takeLast(4) + "1234",
+                    role = "alumno"
+                )
+            )
         }
         return students
     }

@@ -3,7 +3,7 @@ package org.duocuc.capstonebackend.service
 import org.duocuc.capstonebackend.nosql.AiQueryLog
 import org.duocuc.capstonebackend.nosql.AiQueryLogRepository
 import org.duocuc.capstonebackend.security.CurrentUser
-import org.duocuc.capstonebackend.util.Hashing
+import org.duocuc.capstonebackend.util.HashingUtils
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
@@ -22,7 +22,7 @@ class PersistenceAiService(
         val response = delegate.query(text, prompt)
 
         val userId = currentUser.id()
-        val textSha1 = Hashing.sha256Hex(text)
+        val textSha1 = HashingUtils.sha256Hex(text)
 
         queryLogRepo.save(
             AiQueryLog(
