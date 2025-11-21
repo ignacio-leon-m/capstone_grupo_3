@@ -1,5 +1,6 @@
 package com.bboost.brainboost.network
 
+import com.bboost.brainboost.dto.AiQueryResponseDto
 import com.bboost.brainboost.dto.AiQuizDto
 import com.bboost.brainboost.dto.AiSummaryDto
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -20,7 +21,6 @@ interface BrainBoostApiService {
     @POST("api/ai/pdf/resumen")
     suspend fun resumir(
         @Part file: MultipartBody.Part
-        // Aquí puedes añadir @Header("Authorization") String token si es necesario
     ): AiSummaryDto
 
     // Replicando: @PostMapping("/quiz")
@@ -29,17 +29,22 @@ interface BrainBoostApiService {
     suspend fun quiz(
         @Part file: MultipartBody.Part,
         @Query("numQuestions") numQuestions: Int = 5
-        // Aquí puedes añadir @Header("Authorization") String token si es necesario
     ): AiQuizDto
+
+    // --- NUEVO ENDPOINT PARA CONSULTAR PDF ---
+    @Multipart
+    @POST("api/ai/pdf/query")
+    suspend fun queryPdf(
+        @Part file: MultipartBody.Part,
+        @Query("prompt") prompt: String
+    ): AiQueryResponseDto
 }
 
 // --- Cliente de Red (Singleton) ---
 
 object ApiClient {
-    // IMPORTANTE: Esta es la IP de tu notebook que configuramos
-    private const val BASE_URL = "http://198.168.1.98:8080/"
+    private const val BASE_URL = "http://192.168.1.20:8080/"
 
-    // Cliente con timeouts aumentados para subidas de archivos
     private val okHttpClient = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)

@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -32,10 +31,13 @@ public final class ActivityContentUploadBinding implements ViewBinding {
   public final Button btnSelectFile;
 
   @NonNull
-  public final LinearLayout buttonContainer;
+  public final ConstraintLayout contentUploadRoot;
 
   @NonNull
   public final ProgressBar progressBar;
+
+  @NonNull
+  public final TextView tvContentTitle;
 
   @NonNull
   public final TextView txtApiResult;
@@ -43,23 +45,20 @@ public final class ActivityContentUploadBinding implements ViewBinding {
   @NonNull
   public final TextView txtFileName;
 
-  @NonNull
-  public final TextView txtTitle;
-
   private ActivityContentUploadBinding(@NonNull ConstraintLayout rootView,
       @NonNull Button btnGenerateQuiz, @NonNull Button btnGenerateSummary,
-      @NonNull Button btnSelectFile, @NonNull LinearLayout buttonContainer,
-      @NonNull ProgressBar progressBar, @NonNull TextView txtApiResult,
-      @NonNull TextView txtFileName, @NonNull TextView txtTitle) {
+      @NonNull Button btnSelectFile, @NonNull ConstraintLayout contentUploadRoot,
+      @NonNull ProgressBar progressBar, @NonNull TextView tvContentTitle,
+      @NonNull TextView txtApiResult, @NonNull TextView txtFileName) {
     this.rootView = rootView;
     this.btnGenerateQuiz = btnGenerateQuiz;
     this.btnGenerateSummary = btnGenerateSummary;
     this.btnSelectFile = btnSelectFile;
-    this.buttonContainer = buttonContainer;
+    this.contentUploadRoot = contentUploadRoot;
     this.progressBar = progressBar;
+    this.tvContentTitle = tvContentTitle;
     this.txtApiResult = txtApiResult;
     this.txtFileName = txtFileName;
-    this.txtTitle = txtTitle;
   }
 
   @Override
@@ -107,15 +106,17 @@ public final class ActivityContentUploadBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.buttonContainer;
-      LinearLayout buttonContainer = ViewBindings.findChildViewById(rootView, id);
-      if (buttonContainer == null) {
-        break missingId;
-      }
+      ConstraintLayout contentUploadRoot = (ConstraintLayout) rootView;
 
       id = R.id.progressBar;
       ProgressBar progressBar = ViewBindings.findChildViewById(rootView, id);
       if (progressBar == null) {
+        break missingId;
+      }
+
+      id = R.id.tvContentTitle;
+      TextView tvContentTitle = ViewBindings.findChildViewById(rootView, id);
+      if (tvContentTitle == null) {
         break missingId;
       }
 
@@ -131,15 +132,9 @@ public final class ActivityContentUploadBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.txtTitle;
-      TextView txtTitle = ViewBindings.findChildViewById(rootView, id);
-      if (txtTitle == null) {
-        break missingId;
-      }
-
       return new ActivityContentUploadBinding((ConstraintLayout) rootView, btnGenerateQuiz,
-          btnGenerateSummary, btnSelectFile, buttonContainer, progressBar, txtApiResult,
-          txtFileName, txtTitle);
+          btnGenerateSummary, btnSelectFile, contentUploadRoot, progressBar, tvContentTitle,
+          txtApiResult, txtFileName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

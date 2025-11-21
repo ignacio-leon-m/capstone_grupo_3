@@ -4,52 +4,50 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
-import com.bboost.brainboost.databinding.ActivityMainBinding
 import com.bboost.brainboost.dto.LoginRequestDto
 import com.bboost.brainboost.network.RetrofitClient
+import com.bboost.brainboost.ui.screens.LoginScreen
+import com.bboost.brainboost.ui.theme.BrainBoostTheme
 import com.bboost.brainboost.util.SessionManager
+import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
-    // ViewBinding para acceder fácil a la UI
-    private lateinit var binding: ActivityMainBinding
     private lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         sessionManager = SessionManager(this)
 
-        // Si ya hay un token, ir directo a Home sin mostrar el login
         if (sessionManager.getToken() != null) {
             goToHome()
-        }
-
-        // Asignar el clic del botón
-        binding.btnLogin.setOnClickListener {
-            performLogin()
-        }
-    }
-
-    private fun performLogin() {
-        val email = binding.etEmail.text.toString()
-        val password = binding.etPassword.text.toString()
-
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Email y contraseña requeridos", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val loginRequest = LoginRequestDto(email, password)
+        setContent {
+            BrainBoostTheme {
+                LoginScreen(
+                    onLogin = { email, password, onError, onSuccess ->
+                        performLogin(email, password, onError, onSuccess)
+                    }
+                )
+            }
+        }
+    }
 
+    private fun performLogin(
+        email: String,
+        password: String,
+        onError: (String) -> Unit,
+        onSuccess: () -> Unit
+    ) {
         lifecycleScope.launch {
             try {
-                val response = RetrofitClient.instance.login(loginRequest)
+                val response = RetrofitClient.instance.login(LoginRequestDto(email, password))
 
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
@@ -57,35 +55,35 @@ class MainActivity : AppCompatActivity() {
                     val role = loginResponse?.role
 
                     if (token != null && role != null) {
-                        Log.i("LOGIN_SUCCESS", "Token: $token, Rol: $role")
-
-                        // 1. Guardar la sesión
                         sessionManager.saveAuth(token, role)
 
-                        // 2. Ir a Home
+                        val bearer = "Bearer $token"
+                        val meResp = RetrofitClient.instance.getMe(bearer)
+
+                        if (meResp.isSuccessful) {
+                            meResp.body()?.let {
+                                sessionManager.saveUserId(it.id)
+                            }
+                        }
+
+                        onSuccess()
                         goToHome()
-
                     } else {
-                        binding.tvResult.text = "Error: Respuesta vacía del servidor."
+                        onError("Respuesta de login incompleta")
                     }
-
                 } else {
-                    val errorMsg = "Error: ${response.code()} - Credenciales incorrectas"
-                    Log.e("LOGIN_ERROR", errorMsg)
-                    binding.tvResult.text = errorMsg
+                    onError("Credenciales inválidas (${response.code()})")
                 }
+
             } catch (e: Exception) {
-                Log.e("LOGIN_EXCEPTION", "Excepción: ${e.message}", e)
-                binding.tvResult.text = "Error de conexión: ${e.message}"
+                onError("Error de conexión: ${e.message}")
             }
         }
     }
 
     private fun goToHome() {
         val intent = Intent(this, HomeActivity::class.java)
-        // Banderas para que el usuario no pueda volver al Login con el botón "atrás"
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
-
 }

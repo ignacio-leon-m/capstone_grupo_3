@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.bboost.brainboost.app-mergeDebugResources-49:/values-v24/values-v24.xml",
+            "outputFile": "com.bboost.brainboost.app-mergeDebugResources-62:/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\ignac\\.gradle\\caches\\8.14.3\\transforms\\51b391917dd56b75e1b55ab1f42bd76b\\transformed\\material-1.10.0\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\Claudio\\.gradle\\caches\\8.14.3\\transforms\\51b391917dd56b75e1b55ab1f42bd76b\\transformed\\material-1.10.0\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,9,12,15",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\ignac\\.gradle\\caches\\8.14.3\\transforms\\5e871e02d9a74dc3300376e11ee55157\\transformed\\appcompat-1.7.1\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\Claudio\\.gradle\\caches\\8.14.3\\transforms\\5e871e02d9a74dc3300376e11ee55157\\transformed\\appcompat-1.7.1\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

@@ -5,10 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.bboost.brainboost.R;
@@ -18,7 +18,7 @@ import java.lang.String;
 
 public final class ActivityHomeBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final ConstraintLayout rootView;
 
   @NonNull
   public final Button btnContent;
@@ -27,28 +27,36 @@ public final class ActivityHomeBinding implements ViewBinding {
   public final Button btnLogout;
 
   @NonNull
+  public final Button btnSubjects;
+
+  @NonNull
   public final Button btnUploadStudents;
 
   @NonNull
   public final Button btnUsers;
 
   @NonNull
+  public final ConstraintLayout rootHome;
+
+  @NonNull
   public final TextView tvWelcome;
 
-  private ActivityHomeBinding(@NonNull LinearLayout rootView, @NonNull Button btnContent,
-      @NonNull Button btnLogout, @NonNull Button btnUploadStudents, @NonNull Button btnUsers,
-      @NonNull TextView tvWelcome) {
+  private ActivityHomeBinding(@NonNull ConstraintLayout rootView, @NonNull Button btnContent,
+      @NonNull Button btnLogout, @NonNull Button btnSubjects, @NonNull Button btnUploadStudents,
+      @NonNull Button btnUsers, @NonNull ConstraintLayout rootHome, @NonNull TextView tvWelcome) {
     this.rootView = rootView;
     this.btnContent = btnContent;
     this.btnLogout = btnLogout;
+    this.btnSubjects = btnSubjects;
     this.btnUploadStudents = btnUploadStudents;
     this.btnUsers = btnUsers;
+    this.rootHome = rootHome;
     this.tvWelcome = tvWelcome;
   }
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public ConstraintLayout getRoot() {
     return rootView;
   }
 
@@ -85,6 +93,12 @@ public final class ActivityHomeBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.btnSubjects;
+      Button btnSubjects = ViewBindings.findChildViewById(rootView, id);
+      if (btnSubjects == null) {
+        break missingId;
+      }
+
       id = R.id.btnUploadStudents;
       Button btnUploadStudents = ViewBindings.findChildViewById(rootView, id);
       if (btnUploadStudents == null) {
@@ -97,14 +111,16 @@ public final class ActivityHomeBinding implements ViewBinding {
         break missingId;
       }
 
+      ConstraintLayout rootHome = (ConstraintLayout) rootView;
+
       id = R.id.tvWelcome;
       TextView tvWelcome = ViewBindings.findChildViewById(rootView, id);
       if (tvWelcome == null) {
         break missingId;
       }
 
-      return new ActivityHomeBinding((LinearLayout) rootView, btnContent, btnLogout,
-          btnUploadStudents, btnUsers, tvWelcome);
+      return new ActivityHomeBinding((ConstraintLayout) rootView, btnContent, btnLogout,
+          btnSubjects, btnUploadStudents, btnUsers, rootHome, tvWelcome);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
