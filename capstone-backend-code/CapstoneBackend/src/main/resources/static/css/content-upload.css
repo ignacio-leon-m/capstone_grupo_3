@@ -1,35 +1,45 @@
-/* Estilos mínimos - Bootstrap utility classes se usan en HTML */
-body {
-    font-family: 'Nunito', sans-serif;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #e0f2f7, #fbe9e7);
+/* ========================================
+   CONTENT UPLOAD PAGE - BRAINBOOST
+   Estilos específicos de la página de carga de contenido
+   El sistema base está en theme.css
+   ======================================== */
+
+/* Navbar personalizado */
+.navbar {
+    background-color: var(--color-white) !important;
+    box-shadow: var(--shadow-sm);
 }
 
-/* File drop area styles */
+/* Título de página */
+h1 {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--color-primary);
+}
+
+/* Drop area personalizada */
 .file-drop-area {
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all var(--transition-base);
+    background-color: var(--color-grey-100);
+    border-color: var(--color-grey-400) !important;
 }
 
 .file-drop-area:hover {
     background-color: rgba(0, 123, 255, 0.05);
-    border-color: #007bff !important;
+    border-color: var(--color-primary) !important;
+    transform: scale(1.01);
 }
 
-.file-drop-area.active, .file-drop-area.is-active {
+.file-drop-area.active,
+.file-drop-area.is-active {
     background-color: rgba(0, 123, 255, 0.1);
-    border-color: #007bff !important;
+    border-color: var(--color-primary) !important;
+    box-shadow: var(--shadow-md);
 }
 
-/* Mejoras de transición */
-.btn {
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    transform: translateY(-1px);
-}
-
-.card {
-    transition: box-shadow 0.3s ease;
+/* File message */
+.file-msg {
+    font-size: var(--text-base);
+    color: var(--color-grey-600);
 }

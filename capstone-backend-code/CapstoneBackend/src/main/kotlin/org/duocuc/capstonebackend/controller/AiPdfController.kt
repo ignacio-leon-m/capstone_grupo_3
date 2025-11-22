@@ -18,7 +18,7 @@ import java.util.*
 import org.duocuc.capstonebackend.service.ConceptService
 
 @RestController
-@RequestMapping("/api/ai/pdf")
+@RequestMapping("/api/files/pdf")
 class AiPdfController(
     @Qualifier("persistingAiService") private val aiService: AiService,
     private val fileUploadService: FileUploadService,

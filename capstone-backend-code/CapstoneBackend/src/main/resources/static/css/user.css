@@ -1,23 +1,29 @@
-/* Estilos mínimos - Bootstrap utility classes se usan en HTML */
-body {
-    font-family: 'Nunito', sans-serif;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #e0f2f7, #fbe9e7);
+/* ========================================
+   USER PAGE - BRAINBOOST
+   Estilos específicos de la página de usuarios
+   El sistema base está en theme.css
+   ======================================== */
+
+/* Navbar personalizado */
+.navbar {
+    background-color: var(--color-white) !important;
+    box-shadow: var(--shadow-sm);
 }
 
-/* Mejoras de transición */
-.btn {
-    transition: all 0.3s ease;
+/* Título de página */
+h1 {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--color-primary);
 }
 
-.btn:hover {
-    transform: translateY(-1px);
-}
-
-.card {
-    transition: box-shadow 0.3s ease;
-}
-
-.table-hover tbody tr:hover {
-    background-color: rgba(0, 123, 255, 0.05);
+/* Responsive */
+@media (max-width: 768px) {
+    h1 {
+        font-size: var(--text-2xl);
+    }
+    
+    .table-responsive {
+        font-size: var(--text-sm);
+    }
 }

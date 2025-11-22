@@ -4,10 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BrainBoost - Crear Profesor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="icon" href="/images/bb-logo.png" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/theme.css" />
     <link rel="stylesheet" href="/css/home.css" />
     <link rel="stylesheet" href="/css/forms.css" />
 </head>
@@ -22,38 +23,41 @@
             <h1 class="welcome-message">Crear Nuevo Profesor</h1>
             <p class="instruction">Completa los datos para registrar un profesor y asignarle asignaturas.</p>
             <form id="crearProfesorForm" class="form-container">
-                <div class="input-group">
-                    <label for="name">Nombre</label>
-                    <input type="text" id="name" name="name" required />
+                <div class="form-group">
+                    <label for="name" class="form-label">Nombre</label>
+                    <input type="text" id="name" name="name" class="form-control" required />
                 </div>
-                <div class="input-group">
-                    <label for="lastName">Apellido</label>
-                    <input type="text" id="lastName" name="lastName" required />
+                <div class="form-group">
+                    <label for="lastName" class="form-label">Apellido</label>
+                    <input type="text" id="lastName" name="lastName" class="form-control" required />
                 </div>
-                <div class="input-group">
-                    <label for="rut">RUT</label>
-                    <input type="text" id="rut" name="rut" required />
+                <div class="form-group">
+                    <label for="rut" class="form-label">RUT</label>
+                    <input type="text" id="rut" name="rut" class="form-control" required />
                 </div>
-                <div class="input-group">
-                    <label for="email">Correo Electrónico</label>
-                    <input type="email" id="email" name="email" required />
+                <div class="form-group">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" class="form-control" required />
                 </div>
-                <div class="input-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="password" required />
+                <div class="form-group">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" id="password" name="password" class="form-control" required />
                 </div>
-                <div class="input-group">
-                    <label for="subjects">Asignaturas (elige al menos 1)</label>
-                    <select id="subjects" name="subjects" multiple size="6" required></select>
-                    <small>Puedes seleccionar múltiples asignaturas con Ctrl/Cmd + clic.</small>
+                <div class="form-group">
+                    <label for="subjects" class="form-label">Asignaturas (elige al menos 1)</label>
+                    <select id="subjects" name="subjects" class="form-control" multiple size="6" required></select>
+                    <small class="text-muted">Puedes seleccionar múltiples asignaturas con Ctrl/Cmd + clic.</small>
                 </div>
-                <button type="submit" class="submit-button btn btn-primary">Crear Profesor</button>
+                <button type="submit" class="btn btn-success btn-lg btn-block btn-3d">Crear Profesor</button>
             </form>
         </div>
     </div>
 
     <div class="logout-fixed-container">
-        <button id="logout-button" class="btn btn-outline-danger btn-sm" title="Cerrar Sesión">Cerrar sesión</button>
+        <button id="logout-button" class="logout-icon-button" title="Cerrar Sesión">
+            <span class="logout-tooltip">Cerrar Sesión</span>
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
     </div>
 
     <script>

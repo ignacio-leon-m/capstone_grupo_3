@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const currentPath = window.location.pathname;
 
-    if (role !== 'admin' && currentPath === '/create-professor.html') {
+    if (role === 'profesor' && currentPath === '/create-professor.html') {
         alert('Acceso denegado. Solo los administradores pueden crear profesores.');
         window.location.href = '/home.html';
         return;

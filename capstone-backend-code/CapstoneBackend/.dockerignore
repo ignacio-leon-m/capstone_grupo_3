@@ -1,0 +1,43 @@
+# Build artifacts
+build/
+target/
+.gradle/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Git
+.git/
+.gitignore
+
+# Documentation (not needed in container)
+*.md
+DESIGN_SYSTEM_GUIDE.md
+IMPLEMENTATION_SUMMARY.md
+NEON_SETUP.md
+SUPABASE_SETUP.md
+GUIA_MIGRACION_NEON.md
+HANGMAN_TESTS.md
+
+# Local config
+local.properties
+.env
