@@ -1,38 +1,27 @@
-/* Estilos mínimos - Bootstrap utility classes se usan en HTML */
-body {
-    font-family: 'Nunito', sans-serif;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #e0f2f7, #fbe9e7);
+/* ========================================
+   USER UPLOAD PAGE - BRAINBOOST
+   Estilos específicos de la página de carga de usuarios
+   El sistema base está en theme.css
+   ======================================== */
+
+/* Navbar personalizado */
+.navbar {
+    background-color: var(--color-white) !important;
+    box-shadow: var(--shadow-sm);
 }
 
-/* Status indicators */
-.status-circle {
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    vertical-align: middle;
+/* Título de página */
+h1 {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--color-primary);
 }
 
-.status-completed { background-color: #4CAF50; }
-.status-processing { background-color: #FFC107; }
-.status-error { background-color: #F44336; }
-
-/* Mejoras de transición */
-.btn {
-    transition: all 0.3s ease;
-}
-
-.btn:hover {
-    transform: translateY(-1px);
-}
-
-.card {
-    transition: box-shadow 0.3s ease;
-}
-
-.table-hover tbody tr:hover {
-    background-color: rgba(0, 123, 255, 0.05);
+/* Input file personalizado */
+.input-group {
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
 }
 
 /* Sección de Historial y Filtros */

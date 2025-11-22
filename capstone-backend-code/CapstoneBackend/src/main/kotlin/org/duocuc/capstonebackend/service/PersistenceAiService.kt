@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service
  */
 @Service("persistingAiService")
 class PersistenceAiService(
-    @Qualifier("cachingAiService") private val delegate: AiService,
+    @param:Qualifier("cachingAiService") private val delegate: AiService,
+    @param:Qualifier("currentUser") private val currentUser: CurrentUser,
     private val queryLogRepo: AiQueryLogRepository,
-    private val currentUser: CurrentUser
 ) : AiService {
 
     override fun query(text: String, prompt: String): String {

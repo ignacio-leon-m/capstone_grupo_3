@@ -19,7 +19,6 @@ java {
 
 repositories {
     mavenCentral()
-    // NECESARIO: Agregamos el repositorio de Google para el SDK
     google()
 }
 
@@ -76,6 +75,10 @@ allOpen {
 tasks.withType<Test> {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+    systemProperty("java.net.preferIPv4Stack", "true")
 }
 
 jacoco {

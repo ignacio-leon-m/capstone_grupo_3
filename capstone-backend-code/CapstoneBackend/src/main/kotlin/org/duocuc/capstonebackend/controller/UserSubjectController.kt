@@ -13,7 +13,7 @@ import java.util.UUID
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = ["http://localhost:5173", "http://localhost:3000"]) // Ajustar según tu frontend
+@CrossOrigin(origins = ["http://localhost:5173", "http://localhost:3000", "https://brainboost-static.netlify.app"])
 class UserSubjectController(
     private val userSubjectService: UserSubjectService
 ) {
