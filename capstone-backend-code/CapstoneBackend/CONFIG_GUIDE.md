@@ -40,18 +40,22 @@ CapstoneBackend/
 **Cómo activar**:
 
 ```bash
-# Opción 1: Usando gradlew
-./gradlew bootRun -Dspring.profiles.active=dev
+# Opción 1: Usando gradlew (sin perfil específico, usa los valores por defecto)
+./gradlew bootRun
 
-# Opción 2: Variable de entorno
+# Opción 2: Variable de entorno en PowerShell
+$env:SPRING_PROFILES_ACTIVE="dev"
+./gradlew bootRun
+
+# Opción 3: Variable de entorno en Bash/Zsh
 export SPRING_PROFILES_ACTIVE=dev
 ./gradlew bootRun
 
-# Opción 3: En IntelliJ IDEA
+# Opción 4: En IntelliJ IDEA
 Run Configuration → Environment Variables → SPRING_PROFILES_ACTIVE=dev
 ```
 
-**Variables necesarias**: Ninguna, usa valores por defecto en `application-dev.properties`
+**Variables necesarias**: Ninguna, usa valores por defecto en `application.properties`
 
 ---
 
@@ -165,9 +169,6 @@ V2__Insert_initial_data.sql     # Datos de prueba
 # Todos los tests
 ./gradlew test
 
-# Con perfil de desarrollo
-./gradlew test -Dspring.profiles.active=dev
-
 # Solo tests de integración
 ./gradlew integrationTest
 ```
@@ -204,15 +205,16 @@ Render ejecuta automáticamente el Dockerfile que:
 
 ```bash
 # Opción 1: Gradle (recomendado para desarrollo)
-./gradlew bootRun -Dspring.profiles.active=dev
+# Por defecto usa los valores en application.properties
+./gradlew bootRun
 
 # Opción 2: JAR ejecutable
 ./gradlew build
-java -jar build/libs/CapstoneBackend-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
+java -jar build/libs/CapstoneBackend-0.0.1-SNAPSHOT.jar
 
 # Opción 3: Docker (pruebas locales)
 docker build -t brainboost-backend .
-docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE=dev brainboost-backend
+docker run -p 8080:8080 brainboost-backend
 ```
 
 ### Producción (Render):
@@ -237,14 +239,17 @@ docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE=dev brainboost-backend
 ### Ver configuración activa:
 
 ```bash
-# Ejecutar con debug de configuración
-./gradlew bootRun --debug | grep "property source"
+# PowerShell
+./gradlew bootRun --info
+
+# Bash/Zsh
+./gradlew bootRun --info | grep "property source"
 ```
 
 ### Ver perfil activo:
 
 ```bash
-curl http://localhost:8080/actuator/info
+curl http://localhost:8080/actuator/health
 ```
 
 ### Problemas comunes:
@@ -297,10 +302,9 @@ curl http://localhost:8080/actuator/info
 ### Para nuevo desarrollador:
 
 - [ ] Clonar el repositorio
-- [ ] Copiar `.env.example` a `.env`
-- [ ] Ajustar valores en `.env` (DB credentials, API keys)
-- [ ] Ejecutar `./gradlew bootRun -Dspring.profiles.active=dev`
+- [ ] Ejecutar `./gradlew bootRun`
 - [ ] Verificar `http://localhost:8080/actuator/health`
+- [ ] (Opcional) Copiar `.env.example` a `.env` y ajustar valores locales
 
 ### Para deployment en Render:
 
@@ -316,9 +320,9 @@ curl http://localhost:8080/actuator/info
 
 Si tienes problemas:
 
-1. Verifica el perfil activo: `echo $SPRING_PROFILES_ACTIVE`
-2. Revisa los logs: `./gradlew bootRun --info`
-3. Verifica las variables: `env | grep DATABASE`
+1. PowerShell: Verifica las variables con `Get-ChildItem Env:`
+2. Bash/Zsh: Verifica las variables con `env | grep DATABASE`
+3. Revisa los logs: `./gradlew bootRun --info`
 4. Consulta la documentación de Spring Boot: https://docs.spring.io/spring-boot/reference/
 
 ---
