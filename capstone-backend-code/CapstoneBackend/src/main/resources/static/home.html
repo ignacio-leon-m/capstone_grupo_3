@@ -73,9 +73,9 @@
         const createProfessorButton = document.getElementById('crear-profesor-button');
         const uploadContentButton = document.getElementById('carga-contenido-button');
 
-        // PROFESOR: puede cargar usuarios (alumnos Excel) y contenido
+        // PROFESOR: puede cargar usuarios masivamente (Excel) y cargar contenido
         if (role === 'profesor') {
-            // Mostrar botón de carga de usuarios (Excel)
+            // Mostrar botón de carga masiva de usuarios (Excel)
             if (uploadUserButton) {
                 uploadUserButton.style.display = 'block';
                 uploadUserButton.addEventListener('click', () => {
@@ -95,11 +95,16 @@
             }
         }
         
-        // ADMIN: puede crear profesores y cargar contenido (NO puede cargar alumnos)
+        // ADMIN: puede crear profesores, cargar contenido y VER usuarios (modal)
         else if (role === 'admin') {
-            // Ocultar botón de carga de usuarios
+            // Mostrar botón para ver usuarios (modal de usuarios en user.html)
             if (uploadUserButton) {
-                uploadUserButton.style.display = 'none';
+                uploadUserButton.style.display = 'block';
+                // Cambiar texto del botón para admin
+                uploadUserButton.innerHTML = '<i class="fas fa-users me-2"></i>Ver Usuarios';
+                uploadUserButton.addEventListener('click', () => {
+                    window.location.href = '/user.html';
+                });
             }
             // Mostrar botón de crear profesor
             if (createProfessorButton) {

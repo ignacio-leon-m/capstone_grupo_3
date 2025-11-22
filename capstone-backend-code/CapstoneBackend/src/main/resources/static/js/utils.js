@@ -21,17 +21,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const currentPath = window.location.pathname;
 
+    // Validación de permisos por página
+    // Solo ADMIN puede crear profesores
     if (role === 'profesor' && currentPath === '/create-professor.html') {
         alert('Acceso denegado. Solo los administradores pueden crear profesores.');
         window.location.href = '/home.html';
         return;
     }
 
-    if (role !== 'profesor' && (currentPath === '/user-upload.html' || currentPath === '/user.html')) {
-        alert('Acceso denegado. Solo los profesores pueden gestionar la carga de alumnos.');
+    // Solo PROFESOR puede gestionar carga masiva de alumnos (Excel)
+    if (role === 'admin' && currentPath === '/user-upload.html') {
+        alert('Acceso denegado. Solo los profesores pueden realizar la carga masiva de alumnos.');
         window.location.href = '/home.html';
         return;
     }
+
+    // Solo PROFESOR puede ver sus materias asignadas
+    if (role === 'admin' && currentPath === '/professor-subject.html') {
+        alert('Acceso denegado. Esta vista es solo para profesores.');
+        window.location.href = '/home.html';
+        return;
+    }
+
+    // ADMIN y PROFESOR pueden acceder a:
+    // - content.html (ver contenidos)
+    // - content-upload.html (cargar contenidos)
+    // - user.html (modal de usuarios - ADMIN puede ver, PROFESOR gestiona)
 
     const logoutButton = document.querySelector('.logout-button');
     if (logoutButton) {
