@@ -17,14 +17,15 @@ services:
     dockerfilePath: ./Dockerfile
     dockerContext: ./
     
-    # Environment variables
+    # Environment variables (valores sensibles se configuran en Render Dashboard)
     envVars:
+      # Spring Boot Profile
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      
       # Server Configuration
       - key: PORT
         value: 8080
-      
-      - key: SPRING_PROFILES_ACTIVE
-        value: production
       
       # Neon Database Configuration
       - key: DATABASE_URL
