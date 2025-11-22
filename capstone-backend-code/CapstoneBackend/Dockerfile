@@ -15,6 +15,9 @@ COPY gradle gradle
 COPY src src
 COPY hangman-game hangman-game
 
+# Dar permisos de ejecución a gradlew
+RUN chmod +x ./gradlew
+
 # Construir la aplicación (sin tests para optimizar)
 RUN ./gradlew build --no-daemon -x test
 
