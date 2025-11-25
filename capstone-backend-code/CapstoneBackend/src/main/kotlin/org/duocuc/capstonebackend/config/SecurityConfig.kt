@@ -45,7 +45,7 @@ class SecurityConfig(
                     "/login.html",
                     "/home.html",
                     "/user.html",
-                    "/crear-profesor.html",
+                    "/create-professor.html",
                     "/profesor-asignaturas.html",
                     "/content-upload.html",
                     "/content.html",

@@ -41,7 +41,9 @@ class UserSubjectService(
         val savedEnrollment = userSubjectRepository.save(newEnrollment)
         return toDto(savedEnrollment)
     }
-        // Method to get the professor's subjects
+    
+    // Method to get the professor's subjects
+    @Transactional(readOnly = true)
     fun getProfessorSubjects(profesorId: UUID): List<SubjectInfoDto> {
         val user = userRepository.findByIdOrNull(profesorId)
         ?: throw IllegalArgumentException("Profesor no encontrado con id: $profesorId")
@@ -63,6 +65,7 @@ class UserSubjectService(
     }
 
     // Method to get the student's subjects
+    @Transactional(readOnly = true)
     fun getStudentSubjects(studentId: UUID): List<SubjectInfoDto> {
         val user = userRepository.findByIdOrNull(studentId)
             ?: throw IllegalArgumentException("Profesor no encontrado con id: $studentId")

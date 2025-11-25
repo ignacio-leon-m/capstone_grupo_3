@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Validación de permisos por página
     // Solo ADMIN puede crear profesores
-    if (role === 'profesor' && currentPath === '/create-professor.html') {
+    if (role !== 'admin' && currentPath === '/create-professor.html') {
         alert('Acceso denegado. Solo los administradores pueden crear profesores.');
         window.location.href = '/home.html';
         return;

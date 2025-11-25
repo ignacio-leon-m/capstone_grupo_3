@@ -9,40 +9,69 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@6.0.0/css/all.min.css">
   <link rel="stylesheet" href="/css/theme.css" />
-  <link rel="stylesheet" href="/css/home.css" />
-  <link rel="stylesheet" href="/css/forms.css" />
+  <link rel="stylesheet" href="/css/professor-subject.css" />
 </head>
 <body>
-  <header class="main-header">
-    <img src="/images/bb-logo.png" alt="BrainBoost Logo" class="logo" />
-  </header>
+  <!-- Navbar -->
+  <nav class="navbar navbar-light bg-white shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/home.html">
+        <img src="/images/bb-logo.png" alt="BrainBoost Logo" height="40">
+      </a>
+      <button class="btn-3d btn-sm" onclick="window.location.href='/home.html'">
+        <span class="shadow"></span>
+        <span class="edge" style="background: linear-gradient(to left, hsl(200deg 15% 40%) 0%, hsl(200deg 15% 55%) 8%, hsl(200deg 15% 55%) 92%, hsl(200deg 15% 40%) 100%);"></span>
+        <span class="front" style="background: linear-gradient(135deg, #a8b2bf 0%, #d4d9e0 100%);">
+          <i class="fas fa-arrow-left me-2"></i>Volver
+        </span>
+      </button>
+    </div>
+  </nav>
 
-  <div class="container">
-    <a href="/home.html" class="back-button btn btn-link" title="Volver a Inicio"><i class="fas fa-arrow-left"></i> Volver</a>
-    <div class="content-box">
-      <h1 class="welcome-message">Mis Asignaturas</h1>
-      <p class="instruction">Selecciona una asignatura para ver sus alumnos.</p>
-      <div id="subjects" class="subjects"></div>
-      <div id="students" class="students d-none">
-        <h2 id="subjectTitle"></h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Alumno</th>
-              <th>Estado</th>
-              <th>Fecha Inscripción</th>
-            </tr>
-          </thead>
-          <tbody id="studentsBody"></tbody>
-        </table>
+  <!-- Main Content -->
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="mb-2">Mis Asignaturas</h1>
+        <p class="text-muted mb-4">Selecciona una asignatura para ver sus alumnos inscritos</p>
+      </div>
+    </div>
+
+    <!-- Subjects Grid -->
+    <div id="subjects" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5"></div>
+
+    <!-- Students Table Card -->
+    <div id="students" class="d-none">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0" id="subjectTitle"></h5>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Alumno</th>
+                  <th>Estado</th>
+                  <th>Fecha Inscripción</th>
+                </tr>
+              </thead>
+              <tbody id="studentsBody"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="logout-fixed-container">
-    <button id="logout-button" class="logout-icon-button" title="Cerrar Sesión">
-      <span class="logout-tooltip">Cerrar Sesión</span>
-      <i class="fas fa-sign-out-alt"></i>
+  <!-- Logout Button -->
+  <div class="position-fixed bottom-0 end-0 p-3">
+    <button id="logout-button" class="btn-3d" title="Cerrar Sesión">
+      <span class="shadow"></span>
+      <span class="edge" style="background: linear-gradient(to left, hsl(0deg 70% 35%) 0%, hsl(0deg 70% 50%) 8%, hsl(0deg 70% 50%) 92%, hsl(0deg 70% 35%) 100%);"></span>
+      <span class="front" style="background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);">
+        <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
+      </span>
     </button>
   </div>
 
@@ -61,24 +90,63 @@
       const me = await meRes.json();
       const myId = me.id;
 
+      // Helper function to get subject image
+      function getSubjectImage(subjectName) {
+        const name = subjectName.toLowerCase();
+        if (name.includes('matemática') || name.includes('math')) return '/images/subject-math.svg';
+        if (name.includes('ciencia') || name.includes('science') || name.includes('física') || name.includes('química')) return '/images/subject-science.svg';
+        if (name.includes('lengua') || name.includes('language')) return '/images/subject-language.svg';
+        if (name.includes('historia') || name.includes('history')) return '/images/subject-history.svg';
+        if (name.includes('inglés') || name.includes('english')) return '/images/subject-english.svg';
+        return '/images/subject-default.svg';
+      }
+
       // Cargar mis asignaturas (como profesor)
       const subRes = await fetch(`/api/subjects/professor/${myId}`, { headers: { 'Authorization': `Bearer ${token}` } });
       const container = document.getElementById('subjects');
       if (subRes.ok) {
         const subjects = await subRes.json();
         if (subjects.length === 0) {
-          container.innerHTML = '<p>No tienes asignaturas asignadas aún.</p>';
+          container.innerHTML = '<div class="col-12"><div class="alert alert-info">No tienes asignaturas asignadas aún.</div></div>';
         } else {
           subjects.forEach(s => {
-            const el = document.createElement('button');
-            el.className = 'subject btn btn-outline-primary btn-sm';
-            el.textContent = s.name;
-            el.addEventListener('click', () => loadStudents(s.id, s.name));
-            container.appendChild(el);
+            const col = document.createElement('div');
+            col.className = 'col';
+            
+            const card = document.createElement('div');
+            card.className = 'card h-100 shadow-sm border-0';
+            card.style.cursor = 'pointer';
+            card.style.transition = 'all 0.3s ease';
+            
+            card.innerHTML = `
+              <img src="${getSubjectImage(s.name)}" class="card-img-top" alt="${s.name}" style="height: 200px; object-fit: cover;">
+              <div class="card-body">
+                <h5 class="card-title">${s.name}</h5>
+                <p class="card-text text-muted">Click para ver alumnos inscritos</p>
+              </div>
+              <div class="card-footer bg-transparent border-0 text-center">
+                <button class="btn btn-primary btn-sm w-100">
+                  <i class="fas fa-users me-2"></i>Ver Alumnos
+                </button>
+              </div>
+            `;
+            
+            card.addEventListener('click', () => loadStudents(s.id, s.name));
+            card.addEventListener('mouseenter', () => {
+              card.style.transform = 'translateY(-5px)';
+              card.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+            });
+            card.addEventListener('mouseleave', () => {
+              card.style.transform = 'translateY(0)';
+              card.style.boxShadow = '';
+            });
+            
+            col.appendChild(card);
+            container.appendChild(col);
           });
         }
       } else {
-        container.innerHTML = '<p>Error al cargar asignaturas.</p>';
+        container.innerHTML = '<div class="col-12"><div class="alert alert-danger">Error al cargar asignaturas.</div></div>';
       }
 
       async function loadStudents(subjectId, subjectName) {
@@ -88,26 +156,35 @@
         const title = document.getElementById('subjectTitle');
         body.innerHTML = '';
         title.textContent = `Alumnos de ${subjectName}`;
-        box.style.display = 'block';
+        box.classList.remove('d-none');
         if (stRes.ok) {
           const list = await stRes.json();
           if (list.length === 0) {
-            body.innerHTML = '<tr><td colspan="3">Sin alumnos inscritos.</td></tr>';
+            body.innerHTML = '<tr><td colspan="3" class="text-center text-muted py-4">Sin alumnos inscritos.</td></tr>';
             return;
           }
           list.forEach(u => {
             const tr = document.createElement('tr');
+            
             const name = document.createElement('td');
-            name.textContent = u.userName;
+            name.innerHTML = `<i class="fas fa-user-graduate me-2 text-primary"></i>${u.userName}`;
+            
             const active = document.createElement('td');
-            active.textContent = u.active ? 'Activo' : 'Inactivo';
+            const badge = u.active ? 
+              '<span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Activo</span>' : 
+              '<span class="badge bg-secondary"><i class="fas fa-times-circle me-1"></i>Inactivo</span>';
+            active.innerHTML = badge;
+            
             const date = document.createElement('td');
-            date.textContent = new Date(u.enrollmentDate).toLocaleString();
-            tr.appendChild(name); tr.appendChild(active); tr.appendChild(date);
+            date.innerHTML = `<small class="text-muted"><i class="fas fa-calendar me-1"></i>${new Date(u.enrollmentDate).toLocaleDateString('es-ES')}</small>`;
+            
+            tr.appendChild(name); 
+            tr.appendChild(active); 
+            tr.appendChild(date);
             body.appendChild(tr);
           });
         } else {
-          body.innerHTML = '<tr><td colspan="3">Error al cargar alumnos.</td></tr>';
+          body.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">Error al cargar alumnos.</td></tr>';
         }
       }
 

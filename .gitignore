@@ -8,3 +8,18 @@ capstone-kotlin-code/.idea/
 
 # Documentos
 documentos-semanales/*.tmp
+
+# Docker
+.env
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
