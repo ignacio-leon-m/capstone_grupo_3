@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" fill="#11998e"/>
+  <circle cx="100" cy="100" r="60" fill="white" opacity="0.2"/>
+  <!-- Flask -->
+  <path d="M 90 50 L 90 80 L 70 130 Q 70 140 80 140 L 120 140 Q 130 140 130 130 L 110 80 L 110 50 Z" 
+        fill="white" stroke="white" stroke-width="2"/>
+  <ellipse cx="100" cy="50" rx="10" ry="3" fill="white"/>
+  <!-- Bubbles -->
+  <circle cx="95" cy="110" r="5" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="105" cy="120" r="4" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="90" cy="125" r="3" fill="rgba(255,255,255,0.6)"/>
+</svg>

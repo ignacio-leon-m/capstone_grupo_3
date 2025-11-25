@@ -8,65 +8,114 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <link rel="icon" href="/images/bb-logo.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/content-upload.css">
 </head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-light bg-white shadow-sm">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/home.html">
-                <img src="/images/bb-logo.png" alt="BrainBoost Logo" height="40">
-            </a>
-            <button class="btn btn-outline-secondary" onclick="window.location.href='/content.html'">
-                <i class="fas fa-arrow-left me-2"></i>Volver
-            </button>
+<body data-version="1.1">
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="position-fixed top-0 start-0 w-100 h-100 align-items-center justify-content-center" 
+     style="background: rgba(255, 255, 255, 0.95); z-index: 9999; backdrop-filter: blur(5px); display: flex;">
+    <div class="text-center">
+        <div class="spinner-border text-primary mb-3" role="status" style="width: 4rem; height: 4rem;">
+            <span class="visually-hidden">Cargando...</span>
         </div>
-    </nav>
+        <h4 class="text-primary">Cargando asignaturas y temas...</h4>
+        <p class="text-muted">Por favor espera un momento</p>
+    </div>
+</div>
 
-    <!-- Main Content -->
-    <div class="container my-4">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-10">
-                <h1 class="mb-4">Carga de Contenido</h1>
-                
-                <!-- Card para upload -->
-                <div class="card shadow-sm border-0">
-                    <div class="card-body p-4">
-                        <!-- Textarea -->
-                        <div class="mb-3">
-                            <label for="contentInput" class="form-label fw-bold">Contenido de texto</label>
-                            <textarea id="contentInput" class="form-control" rows="8" 
-                                placeholder="Pega aquí el contenido de un texto o arrastra un documento..."></textarea>
-                        </div>
-                        
-                        <!-- Drop Area -->
-                        <div class="file-drop-area border border-2 border-dashed rounded p-4 text-center mb-3">
-                            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
-                            <p class="file-msg text-muted mb-0">Arrastra y suelta documentos aquí</p>
-                            <input type="file" id="fileInput" multiple style="display: none;">
-                        </div>
+<!-- Navbar -->
+<nav class="navbar navbar-light bg-white shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/home.html">
+            <img src="/images/bb-logo.png" alt="BrainBoost Logo" height="40">
+        </a>
+        <button class="btn-3d btn-sm" onclick="window.location.href='/content.html'">
+            <span class="shadow"></span>
+            <span class="edge" style="background: linear-gradient(to left, hsl(200deg 15% 40%) 0%, hsl(200deg 15% 55%) 8%, hsl(200deg 15% 55%) 92%, hsl(200deg 15% 40%) 100%);"></span>
+            <span class="front" style="background: linear-gradient(135deg, #a8b2bf 0%, #d4d9e0 100%);">
+                <i class="fas fa-arrow-left me-2"></i>Volver
+            </span>
+        </button>
+    </div>
+</nav>
 
-                        <!-- Upload Button -->
-                        <div class="d-grid">
-                            <button id="uploadButton" class="btn btn-primary btn-lg" disabled>
-                                <i class="fas fa-paper-plane me-2"></i>Enviar
-                            </button>
-                        </div>
+<!-- Main Content -->
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <h1 class="mb-4">Carga de Contenido</h1>
+            <p class="text-muted mb-4">Sube archivos PDF para generar contenido automáticamente con IA</p>
+
+            <!-- Card para upload -->
+            <div class="card shadow-lg border-0" style="backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.95);">
+                <div class="card-body p-5">
+                    <!-- Selección de Asignatura -->
+                    <div class="mb-4">
+                        <label for="subjectSelect" class="form-label fw-bold">
+                            <i class="fas fa-book me-2 text-primary"></i>Asignatura
+                        </label>
+                        <select id="subjectSelect" class="form-select">
+                            <option value="">-- Selecciona una asignatura --</option>
+                        </select>
+                    </div>
+
+                    <!-- Selección de Tema -->
+                    <div class="mb-4">
+                        <label for="topicSelect" class="form-label fw-bold">
+                            <i class="fas fa-bookmark me-2 text-success"></i>Tema
+                        </label>
+                        <select id="topicSelect" class="form-select" disabled>
+                            <option value="">-- Selecciona un tema --</option>
+                        </select>
+                    </div>
+
+                    <!-- Drop Area -->
+                    <div class="file-drop-area border border-2 border-dashed rounded p-4 text-center mb-3">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                        <p class="file-msg text-muted mb-0">Arrastra y suelta tu archivo PDF aquí</p>
+                        <p class="text-muted small mb-2">o haz click para seleccionar</p>
+                        <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                        <p id="fileName" class="text-primary small mb-0 mt-2" style="display: none;"></p>
+                    </div>
+
+                    <!-- Upload Button -->
+                    <div class="d-grid">
+                        <button id="uploadButton" class="btn-3d btn-lg" disabled>
+                            <span class="shadow"></span>
+                            <span class="edge" style="background: linear-gradient(to left, hsl(217deg 100% 25%) 0%, hsl(217deg 100% 45%) 8%, hsl(217deg 100% 45%) 92%, hsl(217deg 100% 25%) 100%);"></span>
+                            <span class="front" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-paper-plane me-2"></i>Generar Contenido con IA
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- Alert para resultados -->
+                    <div id="resultAlert" class="alert alert-dismissible fade mt-4" role="alert" style="display: none;">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <div id="resultMessage"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Logout Button -->
-    <div class="position-fixed bottom-0 end-0 p-3">
-        <button class="btn btn-outline-danger logout-button" title="Cerrar Sesión">
-            <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
-        </button>
-    </div>
+</div>
 
-    <script src="/js/utils.js"></script>
-    <script src="/js/content-upload.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<!-- Logout Button -->
+<div class="position-fixed bottom-0 end-0 p-3">
+    <button class="btn-3d logout-button" title="Cerrar Sesión">
+        <span class="shadow"></span>
+        <span class="edge" style="background: linear-gradient(to left, hsl(0deg 70% 35%) 0%, hsl(0deg 70% 50%) 8%, hsl(0deg 70% 50%) 92%, hsl(0deg 70% 35%) 100%);"></span>
+        <span class="front" style="background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);">
+            <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
+        </span>
+    </button>
+</div>
+
+<script src="/js/utils.js"></script>
+<script src="/js/content-upload.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
 </body>
 </html>

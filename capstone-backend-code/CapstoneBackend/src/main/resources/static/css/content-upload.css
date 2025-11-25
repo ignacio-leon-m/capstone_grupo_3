@@ -43,3 +43,43 @@ h1 {
     font-size: var(--text-base);
     color: var(--color-grey-600);
 }
+
+/* Drag over state */
+.file-drop-area.drag-over {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-color: #667eea !important;
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+}
+
+/* Upload icon animation */
+.file-drop-area:hover .fa-cloud-upload-alt {
+    animation: bounce 0.5s ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Card enhancements */
+.card {
+    border-radius: 16px;
+    transition: all var(--transition-base);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Button disabled state for 3D buttons */
+.btn-3d:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn-3d:disabled .front {
+    background: linear-gradient(135deg, #a0a0a0 0%, #c0c0c0 100%) !important;
+}

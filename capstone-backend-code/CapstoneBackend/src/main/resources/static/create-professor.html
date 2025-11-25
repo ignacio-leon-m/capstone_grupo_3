@@ -48,7 +48,9 @@
                     <select id="subjects" name="subjects" class="form-control" multiple size="6" required></select>
                     <small class="text-muted">Puedes seleccionar múltiples asignaturas con Ctrl/Cmd + clic.</small>
                 </div>
-                <button type="submit" class="btn btn-success btn-lg btn-block btn-3d">Crear Profesor</button>
+                <button type="submit" class="btn btn-success btn-lg btn-block" style="margin-top: 1.5rem;">
+                    <i class="fas fa-user-plus me-2"></i>Crear Profesor
+                </button>
             </form>
         </div>
     </div>
@@ -62,28 +64,36 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 Iniciando create-professor.html');
             const token = localStorage.getItem('jwtToken');
             const role = localStorage.getItem('userRole');
 
+            console.log('👤 Rol detectado:', role);
+            console.log('🔑 Token presente:', !!token);
+
             if (!token) {
+                console.warn('❌ No hay token, redirigiendo a login');
                 window.location.href = '/index.html';
                 return;
             }
 
-            if (role !== 'admin') {
-                alert('Acceso denegado. Solo los administradores pueden crear profesores.');
-                window.location.href = '/home.html';
-                return;
-            }
+            // La validación de rol se hace en utils.js
+            // No duplicar aquí para evitar conflictos
+            console.log('✅ Validación de acceso aprobada');
 
             // Cargar asignaturas para seleccionar
             const subjectsSelect = document.getElementById('subjects');
+            console.log('📚 Cargando asignaturas...');
+            
             try {
                 const res = await fetch('/api/subjects', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
+                console.log('📡 Respuesta de /api/subjects:', res.status);
+                
                 if (res.ok) {
                     const list = await res.json();
+                    console.log('✅ Asignaturas cargadas:', list.length);
                     list.forEach(s => {
                         const opt = document.createElement('option');
                         opt.value = s.id;
@@ -91,17 +101,22 @@
                         subjectsSelect.appendChild(opt);
                     });
                 } else {
-                    console.error('No se pudo obtener listado de asignaturas');
+                    console.error('❌ Error al obtener asignaturas:', res.status, res.statusText);
+                    alert(`Error al cargar asignaturas: ${res.status}`);
                 }
             } catch (err) {
-                console.error('Error al cargar asignaturas', err);
+                console.error('❌ Error de red al cargar asignaturas:', err);
+                alert('Error de conexión al cargar asignaturas');
             }
 
             const form = document.getElementById('crearProfesorForm');
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                console.log('📝 Formulario enviado');
 
                 const selected = Array.from(subjectsSelect.selectedOptions).map(o => o.value);
+                console.log('📋 Asignaturas seleccionadas:', selected.length);
+                
                 if (selected.length === 0) {
                     alert('Debes seleccionar al menos una asignatura.');
                     return;
@@ -117,7 +132,10 @@
                     phone: null
                 };
 
+                console.log('📦 Payload a enviar:', { ...payload, password: '***' });
+
                 try {
+                    console.log('🚀 Enviando request a /api/auth/register...');
                     const res = await fetch('/api/auth/register', {
                         method: 'POST',
                         headers: {
@@ -127,18 +145,28 @@
                         body: JSON.stringify(payload)
                     });
 
+                    console.log('📡 Respuesta de registro:', res.status);
+
                     if (!res.ok) {
                         const errorData = await res.json().catch(() => ({}));
+                        console.error('❌ Error en registro:', errorData);
                         alert(`Error al crear profesor: ${errorData.message || res.status}`);
                         return;
                     }
 
                     const created = await res.json();
                     const professorId = created.id;
+                    console.log('✅ Profesor creado con ID:', professorId);
 
                     // Asignar las asignaturas seleccionadas
+                    console.log('🔗 Asignando asignaturas...');
+                    let enrolledCount = 0;
+                    let failedCount = 0;
+                    
                     for (const subjectId of selected) {
                         const enrollPayload = { userId: professorId, subjectId };
+                        console.log('📎 Asignando materia:', subjectId);
+                        
                         const enr = await fetch('/api/admin/subjects/enroll', {
                             method: 'POST',
                             headers: {
@@ -147,18 +175,29 @@
                             },
                             body: JSON.stringify(enrollPayload)
                         });
-                        if (!enr.ok) {
+                        
+                        if (enr.ok) {
+                            enrolledCount++;
+                            console.log('✅ Materia asignada correctamente');
+                        } else {
+                            failedCount++;
                             const ed = await enr.json().catch(() => ({}));
-                            alert(`Profesor creado, pero falló asignar una asignatura: ${ed.error || enr.status}`);
-                            // Continuamos intentando las demás
+                            console.error('❌ Error al asignar materia:', ed);
                         }
                     }
 
-                    alert('Profesor creado y asignaturas asociadas.');
+                    console.log(`✅ Proceso completado. Asignadas: ${enrolledCount}, Fallidas: ${failedCount}`);
+                    
+                    if (failedCount > 0) {
+                        alert(`Profesor creado. ${enrolledCount} asignaturas asociadas correctamente, ${failedCount} fallaron.`);
+                    } else {
+                        alert('✅ Profesor creado y todas las asignaturas asociadas correctamente.');
+                    }
+                    
                     form.reset();
                     subjectsSelect.selectedIndex = -1;
                 } catch (err) {
-                    console.error('Error de red al crear profesor:', err);
+                    console.error('❌ Error de red al crear profesor:', err);
                     alert('Error de red. No se pudo conectar con el servidor.');
                 }
             });
@@ -172,7 +211,8 @@
             });
         });
     </script>
-    <script src="/js/utils.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <!-- utils.js debe cargarse AL FINAL para que sus validaciones no bloqueen el script principal -->
+    <script src="/js/utils.js"></script>
 </body>
 </html>
