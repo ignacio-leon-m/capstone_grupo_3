@@ -1054,3 +1054,14 @@ body {
     padding: var(--spacing-md);
   }
 }
+
+/* ========================================
+   NAVBAR
+   ======================================== */
+.navbar {
+    padding: 0.5rem 1rem;
+}
+
+.navbar .navbar-brand img {
+    height: 50px !important;
+}

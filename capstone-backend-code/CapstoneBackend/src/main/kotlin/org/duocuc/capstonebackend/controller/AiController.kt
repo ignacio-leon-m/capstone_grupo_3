@@ -73,7 +73,7 @@ class AiController(
                 - Los conceptos deben ser relevantes y educativos
                 - Las palabras deben ser términos técnicos o conceptos importantes del texto
                 - Las pistas deben ser claras y ayudar a comprender el concepto
-                - Responde ÚNICAMENTE con un array JSON válido, sin texto adicional
+                - Responde ÚNICAMENNecesiTE con un array JSON válido, sin texto adicional
                 
                 Formato de respuesta:
                 [
@@ -95,7 +95,7 @@ class AiController(
                     .replace("```json", "")
                     .replace("```", "")
                     .trim()
-                
+
                 objectMapper.readValue<List<Map<String, String?>>>(cleanedResponse)
                     .map { map ->
                         ConceptCreateDto(

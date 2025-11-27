@@ -1,356 +1,162 @@
-
 const CONCEPTS_ENDPOINT = '/api/ai/pdf/concepts';
+const SUBJECTS_ENDPOINT = '/api/subjects';
 
 document.addEventListener('DOMContentLoaded', async () => {
-
-    const token = localStorage.getItem('jwtToken');
     const role = localStorage.getItem('userRole');
-    
-    if (!token) {
-        window.location.href = '/index.html';
-        return;
-    }
-
     if (role !== 'profesor') {
         alert('Acceso denegado. Sólo profesores pueden acceder.');
         window.location.href = '/home.html';
         return;
     }
 
-    const authHeader = { 'Authorization': `Bearer ${token}` };
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const subjectSelect = document.getElementById('subjectSelect');
-    const topicSelect = document.getElementById('topicSelect');
-    const fileInput = document.getElementById('fileInput');
-    const uploadButton = document.getElementById('uploadButton');
-    const fileNameDisplay = document.getElementById('fileName');
-    const dropArea = document.querySelector('.file-drop-area');
-    const resultAlert = document.getElementById('resultAlert');
-    const resultMessage = document.getElementById('resultMessage');
+    const ui = {
+        loadingModal: new bootstrap.Modal(document.getElementById('loadingModal')),
+        subject: document.getElementById('subjectSelect'),
+        topic: document.getElementById('topicSelect'),
+        fileInput: document.getElementById('fileInput'),
+        uploadBtn: document.getElementById('uploadButton'),
+        fileName: document.getElementById('fileName'),
+        dropArea: document.querySelector('.file-drop-area'),
+        alert: document.getElementById('resultAlert'),
+        msg: document.getElementById('resultMessage')
+    };
 
     let selectedFile = null;
-    let myUserId = null;
+    let subjectsCache = [];
+    let topicsCache = new Map();
 
-    try {
-        const meRes = await fetch('/api/users/me', { headers: authHeader });
-        
-        if (!meRes.ok) {
-            if (meRes.status === 401 || meRes.status === 403) {
-                alert('Sesión expirada. Por favor inicia sesión nuevamente.');
-                localStorage.clear();
-                window.location.href = '/index.html';
-                return;
-            }
-            throw new Error(`Error ${meRes.status}: ${meRes.statusText}`);
-        }
-        const me = await meRes.json();
-        myUserId = me.id;
-    } catch (err) {
-        console.error('Error when load user info:', err);
-        showError('Error al cargar información del usuario. Verifica tu conexión.');
-        return;
-    }
+    const showAlert = (type, msg) => {
+        ui.alert.className = `alert alert-${type} alert-dismissible fade show mt-4`;
+        ui.msg.innerHTML = msg;
+        ui.alert.style.display = 'block';
+    };
+    const hideAlert = () => (ui.alert.style.display = 'none');
 
-    try {
-        console.log('Loading subject from:', myUserId);
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
-        
-        const subjectsRes = await fetch(`/api/subjects/professor/${myUserId}`, { 
-            headers: authHeader,
-            signal: controller.signal 
-        });
-        
-        clearTimeout(timeoutId);
-        
-        console.log('Server response:', subjectsRes.status, subjectsRes.statusText);
-        
-        if (!subjectsRes.ok) {
-            const errorText = await subjectsRes.text();
-            console.error('Error while loading subjects:', errorText);
-            throw new Error(`Error ${subjectsRes.status}: ${errorText}`);
-        }
-        
-        const subjects = await subjectsRes.json();
-        console.log('Total subjects:', subjects.length);
+    const updateButtonState = () => {
+        const isValid = ui.subject.value && ui.topic.value && selectedFile;
+        ui.uploadBtn.disabled = !isValid;
+    };
 
-        if (subjects.length === 0) {
-            loadingOverlay.classList.add('d-none');
-            showWarning('No tienes asignaturas asignadas todavía. Contacta al administrador para que te asigne asignaturas.');
-            return;
-        }
-
-        // Fill subject selector
-        subjects.forEach(subject => {
-            const option = document.createElement('option');
-            option.value = subject.id;
-            option.textContent = subject.name;
-            subjectSelect.appendChild(option);
-        });
-
-        // Hide loading overlay
-        loadingOverlay.classList.add('d-none');
-    } catch (err) {
-        console.error('Error at subject load:', err);
-        loadingOverlay.classList.add('d-none');
-        
-        if (err.name === 'AbortError') {
-            showError('La solicitud tardó demasiado. Por favor verifica tu conexión o que el servidor esté activo.');
-        } else {
-            showError(`Error al cargar las asignaturas: ${err.message}`);
-        }
-        return;
-    }
-
-    // Event: Subject selected -> Load topics
-
-    subjectSelect.addEventListener('change', async () => {
-        const subjectId = subjectSelect.value;
-        
-        // Reset topic selector and file input
-        topicSelect.innerHTML = '<option value="">Selecciona un tema</option>';
-        topicSelect.disabled = true;
+    const resetFileState = () => {
         selectedFile = null;
-        fileNameDisplay.style.display = 'none';
-        fileInput.value = '';
+        ui.fileInput.value = '';
+        ui.fileName.style.display = 'none';
         updateButtonState();
+    };
+    const withTimeout = (promise, ms = 20000) => Promise.race([
+        promise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Tiempo de espera excedido')), ms))
+    ]);
 
-        if (!subjectId) return;
-
-        topicSelect.innerHTML = '<option value="">Cargando temas</option>';
-
-        try {
-            const topicsRes = await fetch(`/api/subjects/${subjectId}/topics`, { headers: authHeader });
-            if (!topicsRes.ok) throw new Error('Error al cargar temas');
-
-            const topics = await topicsRes.json();
-
-            // Clean and fill topic selector
-            topicSelect.innerHTML = '<option value="">Selecciona un tema</option>';
-
-            if (topics.length === 0) {
-                showWarning('Esta asignatura no tiene temas.');
-                return;
-            }
-
-            topics.forEach(topic => {
-                const option = document.createElement('option');
-                option.value = topic.id;
-                option.textContent = topic.name;
-                topicSelect.appendChild(option);
-            });
-
-            topicSelect.disabled = false;
-
-        } catch (err) {
-            console.error('Error al cargar temas:', err);
-            topicSelect.innerHTML = '<option value="">Error al cargar temas</option>';
-            showError('Error al cargar los temas de la asignatura');
-        }
-    });
-
-
-//    Event: Topic selection change
-    topicSelect.addEventListener('change', () => {
-        updateButtonState();
-    });
-
-
-    // Drag & Drop
-    dropArea.addEventListener('click', () => fileInput.click());
-
-    dropArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropArea.classList.add('drag-over');
-    });
-
-    dropArea.addEventListener('dragleave', () => {
-        dropArea.classList.remove('drag-over');
-    });
-
-    dropArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropArea.classList.remove('drag-over');
-        
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            const file = e.dataTransfer.files[0];
-            handleFileSelection(file);
-        }
-    });
-
-    fileInput.addEventListener('change', () => {
-        if (fileInput.files && fileInput.files.length > 0) {
-            handleFileSelection(fileInput.files[0]);
-        }
-    });
-
-    function handleFileSelection(file) {
-        // Limpiar alertas anteriores al seleccionar nuevo archivo
+    const loadTopics = async (subjectId) => {
         hideAlert();
-        
-        if (!file.name.toLowerCase().endsWith('.pdf')) {
-            showError('Solo se permiten archivos PDF');
+        ui.topic.disabled = true;
+        ui.topic.innerHTML = '<option value="">Cargando temas...</option>';
+        if (!subjectId) {
+            ui.topic.innerHTML = '<option value="">-- Selecciona un tema --</option>';
             return;
         }
+        try {
+            let topics = topicsCache.get(subjectId);
+            if (!topics) {
+                topics = await withTimeout(fetchAPI(`/api/subjects/${subjectId}/topics`));
+                topicsCache.set(subjectId, topics);
+            }
+            if (!topics.length) {
+                ui.topic.innerHTML = '<option value="">(Sin temas)</option>';
+                showAlert('warning', 'La asignatura seleccionada no tiene temas.');
+            } else {
+                ui.topic.innerHTML = '<option value="">-- Selecciona un tema --</option>' + topics.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+                ui.topic.disabled = false;
+            }
+        } catch (e) {
+            console.error('Error al cargar temas:', e);
+            ui.topic.innerHTML = '<option value="">Error al cargar</option>';
+            showAlert('danger', 'No se pudieron cargar los temas.');
+        } finally {
+            updateButtonState();
+        }
+    };
 
-        // Validar tamaño del archivo (50MB máximo)
-        const maxSize = 50 * 1024 * 1024; // 50MB en bytes
-        if (file.size > maxSize) {
-            const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-            showError(`El archivo es demasiado grande (${sizeMB} MB). El tamaño máximo permitido es 50 MB.`);
+    const initView = async () => {
+        ui.loadingModal.show();
+        try {
+            await withTimeout(fetchAPI('/api/users/me'));
+            subjectsCache = await withTimeout(fetchAPI(SUBJECTS_ENDPOINT));
+            if (!subjectsCache.length) {
+                showAlert('warning', '<strong>Atención:</strong> No hay asignaturas disponibles.');
+            } else {
+                ui.subject.innerHTML = subjectsCache.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                await loadTopics(ui.subject.value);
+            }
+        } catch (e) {
+            console.error('Error en carga inicial:', e);
+            showAlert('danger', `<strong>Error:</strong> Falló la carga inicial (${e.message}).`);
+        } finally {
+            ui.loadingModal.hide();
+            updateButtonState();
+        }
+    };
+
+    ui.subject.addEventListener('change', async () => {
+        ui.loadingModal.show();
+        await loadTopics(ui.subject.value);
+        ui.loadingModal.hide();
+    });
+
+    const setFile = (file) => {
+        if (!file) return;
+        if (file.type !== 'application/pdf') {
+            showAlert('warning', 'Sólo se aceptan archivos PDF.');
+            resetFileState();
             return;
         }
-
+        if (file.size > 20 * 1024 * 1024) {
+            showAlert('warning', 'El archivo supera el límite de 20MB.');
+            resetFileState();
+            return;
+        }
         selectedFile = file;
-        const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-        fileNameDisplay.textContent = `📄 ${file.name} (${sizeMB} MB)`;
-        fileNameDisplay.style.display = 'block';
-        console.log('✅ Archivo seleccionado:', file.name, `(${sizeMB} MB)`);
+        ui.fileName.textContent = `Archivo seleccionado: ${file.name}`;
+        ui.fileName.style.display = 'block';
         updateButtonState();
-    }
+    };
 
-    //  Validate button state
-    function updateButtonState() {
-        const hasSubject = subjectSelect.value !== '';
-        const hasTopic = topicSelect.value !== '';
-        const hasFile = selectedFile !== null;
+    ui.dropArea.addEventListener('click', () => ui.fileInput.click());
+    ui.fileInput.addEventListener('change', (e) => setFile(e.target.files[0]));
+    ['dragenter', 'dragover'].forEach(evt => ui.dropArea.addEventListener(evt, (e) => { e.preventDefault(); ui.dropArea.classList.add('drag-over'); }));
+    ['dragleave', 'drop'].forEach(evt => ui.dropArea.addEventListener(evt, (e) => { e.preventDefault(); ui.dropArea.classList.remove('drag-over'); }));
+    ui.dropArea.addEventListener('drop', (e) => { const file = e.dataTransfer.files[0]; setFile(file); });
 
-        uploadButton.disabled = !(hasSubject && hasTopic && hasFile);
-    }
-
-    // Event: Upload button clicked
-    uploadButton.addEventListener('click', async (e) => {
-        e.preventDefault();
-
-        const subjectId = subjectSelect.value;
-        const topicId = topicSelect.value;
-
-        if (!subjectId || !topicId || !selectedFile) {
-            showError('Debes seleccionar asignatura, tema y archivo PDF');
+    ui.uploadBtn.addEventListener('click', async () => {
+        hideAlert();
+        if (!selectedFile || !ui.topic.value) {
+            showAlert('warning', 'Debe seleccionar tema y archivo PDF.');
             return;
         }
-
-        // Prepare form data
         const formData = new FormData();
         formData.append('file', selectedFile);
-        formData.append('topicId', topicId);
-        formData.append('max', '30'); // Máximo 30 conceptos
-
-        // Cancel button and show loading state
-        uploadButton.disabled = true;
-        const frontSpan = uploadButton.querySelector('.front');
-        if (frontSpan) {
-            frontSpan.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando PDF con IA';
-        }
-
-        console.log('Sending PDF to server for concept generation:');
-        console.log('Subject:', subjectSelect.options[subjectSelect.selectedIndex].text);
-        console.log('Theme:', topicSelect.options[topicSelect.selectedIndex].text);
-        console.log('File:', selectedFile.name);
+        formData.append('topicId', ui.topic.value);
+        formData.append('max', '30');
+        
+        ui.loadingModal.show();
+        ui.uploadBtn.disabled = true;
 
         try {
-            const response = await fetch(CONCEPTS_ENDPOINT, {
-                method: 'POST',
-                headers: authHeader,
-                body: formData
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                
-                // Manejo específico de error de tamaño excedido
-                if (response.status === 413 || errorText.includes('Maximum upload size exceeded')) {
-                    throw new Error('El archivo excede el tamaño máximo permitido (50 MB). Por favor, selecciona un archivo más pequeño.');
-                }
-                
-                throw new Error(`Error ${response.status}: ${errorText}`);
-            }
-
-            const result = await response.json();
-            console.log('Server response:', result);
-
-            // Show results
-            const inserted = result.inserted || 0;
-            const examples = result.examples || [];
-
-            if (inserted > 0) {
-                let examplesHTML = '';
-                if (examples.length > 0) {
-                    examplesHTML = '<div class="mt-3"><strong>Ejemplos de conceptos generados:</strong><ul class="list-unstyled mt-2">';
-                    examples.forEach(ex => {
-                        examplesHTML += `<li class="mb-1">• <strong>${ex.word}</strong>: ${ex.hint}</li>`;
-                    });
-                    examplesHTML += '</ul></div>';
-                }
-
-                showSuccess(
-                    `<strong>Contenido generado exitosamente</strong><br>` +
-                    `Se crearon ${inserted} conceptos a partir del PDF.${examplesHTML}`
-                );
-
-                // Reset form
-                setTimeout(() => {
-                    subjectSelect.selectedIndex = 0;
-                    topicSelect.innerHTML = '<option value="">Selecciona un tema</option>';
-                    topicSelect.disabled = true;
-                    selectedFile = null;
-                    fileInput.value = '';
-                    fileNameDisplay.style.display = 'none';
-                    updateButtonState();
-                }, 3000);
-
-            } else {
-                showWarning('No se pudieron generar conceptos del PDF. Verifica que el archivo contenga texto legible.');
-            }
-
-        } catch (err) {
-            console.error('❌ Error al procesar archivo:', err);
-            
-            // Intentar parsear el error como JSON
-            let errorMessage = err.message;
-            if (err.message.includes('{')) {
-                try {
-                    const errorJson = JSON.parse(err.message.substring(err.message.indexOf('{')));
-                    errorMessage = errorJson.message || errorMessage;
-                } catch (parseErr) {
-                    // Si no se puede parsear, usar el mensaje original
-                }
-            }
-            
-            showError(`Error al procesar el archivo: ${errorMessage}`);
+            const res = await withTimeout(fetchAPI(CONCEPTS_ENDPOINT, { method: 'POST', body: formData }), 60000);
+            const inserted = res.inserted || 0;
+            const examplesHtml = (res.examples || []).map(ex => `<li><strong>${ex.word}</strong>: ${ex.hint}</li>`).join('');
+            showAlert('success', `Se generaron <strong>${inserted}</strong> conceptos.<br/>Ejemplos:<ul class="mb-0">${examplesHtml}</ul>`);
+            resetFileState();
+        } catch (e) {
+            console.error('Error al generar conceptos:', e);
+            showAlert('danger', `Error al generar conceptos: ${e.message}`);
         } finally {
-            // Restore button state
-            uploadButton.disabled = false;
-            if (frontSpan) {
-                frontSpan.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Generar Contenido con IA';
-            }
+            ui.loadingModal.hide();
+            ui.uploadBtn.disabled = false;
             updateButtonState();
         }
     });
 
-
-    // Alert display functions
-    function showSuccess(message) {
-        resultAlert.className = 'alert alert-success alert-dismissible fade show mt-4';
-        resultMessage.innerHTML = message;
-        resultAlert.style.display = 'block';
-    }
-
-    function showError(message) {
-        resultAlert.className = 'alert alert-danger alert-dismissible fade show mt-4';
-        resultMessage.innerHTML = `<strong>Error:</strong> ${message}`;
-        resultAlert.style.display = 'block';
-    }
-
-    function showWarning(message) {
-        resultAlert.className = 'alert alert-warning alert-dismissible fade show mt-4';
-        resultMessage.innerHTML = `<strong>Atención:</strong> ${message}`;
-        resultAlert.style.display = 'block';
-    }
-
-    function hideAlert() {
-        resultAlert.style.display = 'none';
-        resultMessage.innerHTML = '';
-    }
-
+    await initView();
 });
