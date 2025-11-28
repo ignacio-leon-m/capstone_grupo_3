@@ -1,22 +1,54 @@
 [
     {
-        "merged": "com.bboost.brainboost.app-mergeDebugResources-50:/layout/activity_content_upload.xml",
-        "source": "com.bboost.brainboost.app-main-53:/layout/activity_content_upload.xml"
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/activity_topic_list.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/activity_topic_list.xml"
     },
     {
-        "merged": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-mergeDebugResources-50:\\layout\\activity_create_teacher.xml",
-        "source": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-main-53:\\layout\\activity_create_teacher.xml"
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/activity_subject_list.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/activity_subject_list.xml"
     },
     {
-        "merged": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-mergeDebugResources-50:\\layout\\activity_home.xml",
-        "source": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-main-53:\\layout\\activity_home.xml"
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/item_subject.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/item_subject.xml"
     },
     {
-        "merged": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-mergeDebugResources-50:\\layout\\activity_upload_students.xml",
-        "source": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-main-53:\\layout\\activity_upload_students.xml"
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/item_topic.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/item_topic.xml"
     },
     {
-        "merged": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-mergeDebugResources-50:\\layout\\activity_main.xml",
-        "source": "C:\\Users\\ignac\\.gradle\\daemon\\8.14.3\\com.bboost.brainboost.app-main-53:\\layout\\activity_main.xml"
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/activity_create_teacher.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/activity_create_teacher.xml"
+    },
+    {
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/activity_student_subjects.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/activity_student_subjects.xml"
+    },
+    {
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/activity_home.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/activity_home.xml"
+    },
+    {
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/activity_main.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/activity_upload_concepts_result.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/activity_upload_concepts_result.xml"
+    },
+    {
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/activity_content_upload.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/activity_content_upload.xml"
+    },
+    {
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/activity_upload_concepts.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/activity_upload_concepts.xml"
+    },
+    {
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/activity_upload_students.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/activity_upload_students.xml"
+    },
+    {
+        "merged": "com.bboost.brainboost.app-mergeDebugResources-63:/layout/activity_hangman.xml",
+        "source": "com.bboost.brainboost.app-main-66:/layout/activity_hangman.xml"
     }
 ]

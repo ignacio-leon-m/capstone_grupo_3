@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Brainboost" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Tema base de la app (Material 3) -->
+    <style name="Theme.Brainboost" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Opcional: colores/overrides -->
     </style>
 </resources>

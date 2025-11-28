@@ -8,3 +8,5 @@ capstone-kotlin-code/.idea/
 
 # Documentos
 documentos-semanales/*.tmp
+".idea/" 
+"uploads/" 

@@ -2,78 +2,60 @@ package com.bboost.brainboost
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.bboost.brainboost.databinding.ActivityHomeBinding
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import com.bboost.brainboost.ui.screens.HomeScreen
+import com.bboost.brainboost.ui.theme.BrainBoostTheme
 import com.bboost.brainboost.util.SessionManager
+import com.bboost.brainboost.ui.subjects.SubjectsListActivity
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : ComponentActivity() {
 
-    private lateinit var binding: ActivityHomeBinding
     private lateinit var sessionManager: SessionManager
-
+    private val TAG = "HomeActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHomeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        Log.d(TAG, "Iniciando HomeActivity")
 
         sessionManager = SessionManager(this)
+        val role = sessionManager.getRole()?.lowercase() ?: "alumno"
 
-        // 1. Obtener el rol guardado
-        val role = sessionManager.getRole()
+        setContent {
+            BrainBoostTheme {
 
-        // 2. Configurar la UI según el rol
-        setupUI(role)
+                HomeScreen(
+                    role = role,
 
-        // 3. Configurar el botón de logout
-        binding.btnLogout.setOnClickListener {
-            performLogout()
-        }
+                    // 👉 MODO QUIZ
+                    onNavigateToContent = {
+                        val i = Intent(this, SubjectsListActivity::class.java)
+                        i.putExtra("MODE", "quiz")
+                        startActivity(i)
+                    },
 
-        binding.btnContent.setOnClickListener {
-            Toast.makeText(this, "Ir a Carga de Contenido", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, ContentUploadActivity::class.java)
-            startActivity(intent)
-        }
-        binding.btnUploadStudents.setOnClickListener {
-            val intent = Intent(this, UploadStudentsActivity::class.java)
-            startActivity(intent)
-        }
-    }
+                    onNavigateToUploadStudents = {
+                        startActivity(Intent(this, UploadStudentsActivity::class.java))
+                    },
 
-    private fun setupUI(role: String?) {
-        if (role == null) {
-            // Si por alguna razón no hay rol, volver al login
-            performLogout()
-            return
-        }
+                    onNavigateToUsers = {},
 
-        // El botón "Carga de Contenido" (btnContent) es visible para todos por defecto.
+                    // 👉 MODO CONCEPTOS
+                    onNavigateToConcepts = {
+                        val i = Intent(this, SubjectsListActivity::class.java)
+                        i.putExtra("MODE", "concepts")
+                        startActivity(i)
+                    },
 
-        // Lógica de visibilidad basada en tu home.html
-        when (role) {
-            "admin" -> {
-                binding.btnUsers.visibility = View.VISIBLE
+                    onLogout = {
+                        sessionManager.clearSession()
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                    }
+                )
             }
-            "profesor" -> {
-                binding.btnUploadStudents.visibility = View.VISIBLE
-            }
-            // "alumno" u otros roles no ven botones extra
         }
-    }
-
-    private fun performLogout() {
-        // 1. Borrar la sesión
-        sessionManager.clearSession()
-
-        // 2. Navegar de vuelta a MainActivity (Login)
-        val intent = Intent(this, MainActivity::class.java)
-
-        // Banderas para limpiar el historial de navegación:
-        // No puedes volver a "Home" con el botón "atrás"
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.bboost.brainboost">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,24 +14,58 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Brainboost"
         android:usesCleartextTraffic="true">
+
         <activity
-            android:name=".ContentUploadActivity"
+            android:name=".ui.subjects.StudentSubjectsActivity"
             android:exported="false" />
+
+        <!-- FIX: Declaración correcta del ContentUploadActivity -->
+        <activity
+            android:name=".ui.ContentUploadActivity"
+            android:exported="false" />
+
         <activity
             android:name=".UploadStudentsActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.subjects.SubjectsListActivity"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".HomeActivity"
-            android:exported="false" />
-    </application>
 
+        <activity
+            android:name=".ui.hangman.HangmanActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.topics.TopicListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.concepts.UploadConceptsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.concepts.UploadConceptsResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.questions.UploadQuestionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.quiz.QuizActivity"
+            android:exported="false" />
+
+    </application>
 </manifest>

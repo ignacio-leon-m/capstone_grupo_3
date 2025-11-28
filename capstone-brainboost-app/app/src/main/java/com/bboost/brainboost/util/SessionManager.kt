@@ -1,33 +1,34 @@
 package com.bboost.brainboost.util
 
 import android.content.Context
-import android.content.SharedPreferences
 
 class SessionManager(context: Context) {
-    private val PREFS_NAME = "brainboost_prefs"
-    private val KEY_TOKEN = "jwt_token"
-    private val KEY_ROLE = "user_role"
 
-    private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-    private val editor: SharedPreferences.Editor = prefs.edit()
+    private val prefs = context.getSharedPreferences("brainboost_prefs", Context.MODE_PRIVATE)
 
     fun saveAuth(token: String, role: String) {
-        editor.putString(KEY_TOKEN, token)
-        editor.putString(KEY_ROLE, role)
-        editor.apply()
+        prefs.edit()
+            .putString("TOKEN", token)
+            .putString("ROLE", role)
+            .apply()
     }
 
-    fun getToken(): String? {
-        return prefs.getString(KEY_TOKEN, null)
-    }
+    fun getToken(): String? = prefs.getString("TOKEN", null)
 
-    fun getRole(): String? {
-        return prefs.getString(KEY_ROLE, null)
-    }
+    /** Nombre estándar usado en todas las Activities */
+    fun getUserRole(): String? = prefs.getString("ROLE", null)
+
+    /** Método antiguo (mantener por compatibilidad) */
+    fun getRole(): String? = prefs.getString("ROLE", null)
 
     fun clearSession() {
-        editor.remove(KEY_TOKEN)
-        editor.remove(KEY_ROLE)
-        editor.apply()
+        prefs.edit().clear().apply()
     }
+
+    // ===== USER ID =====
+    fun saveUserId(id: String) {
+        prefs.edit().putString("USER_ID", id).apply()
+    }
+
+    fun getUserId(): String? = prefs.getString("USER_ID", null)
 }

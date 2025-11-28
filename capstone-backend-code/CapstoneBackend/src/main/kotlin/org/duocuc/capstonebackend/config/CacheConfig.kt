@@ -24,8 +24,11 @@ class CacheConfig {
 
     @Bean
     fun cacheManager(caffeine: Caffeine<Any, Any>): CacheManager {
-        val cm = CaffeineCacheManager("ai_summaries", "ai_quizzes")
+        val cm = CaffeineCacheManager("ai_summaries", "ai_quizzes", "ai_queries") // ← agrega "ai_queries"
         cm.setCaffeine(caffeine)
         return cm
     }
+
+
+
 }
