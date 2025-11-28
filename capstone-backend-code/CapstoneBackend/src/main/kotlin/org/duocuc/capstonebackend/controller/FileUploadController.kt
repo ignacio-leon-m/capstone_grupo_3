@@ -1,6 +1,7 @@
 package org.duocuc.capstonebackend.controller
 
 import org.duocuc.capstonebackend.dto.EnrollSubjectDto
+import org.duocuc.capstonebackend.repository.UserRepository
 import org.duocuc.capstonebackend.service.*
 import org.duocuc.capstonebackend.util.PdfTextExtractor
 import org.slf4j.LoggerFactory
@@ -22,6 +23,7 @@ class FileUploadController(
     private val fileUploadService: FileUploadService,
     private val authService: AuthService,
     private val userSubjectService: UserSubjectService,
+    private val userRepository: UserRepository, // Injected UserRepository
     @param:Qualifier("persistingAiService") private val aiService: AiService
 ) {
     private val log = LoggerFactory.getLogger(FileUploadController::class.java)
@@ -47,32 +49,40 @@ class FileUploadController(
             var enrolled = 0
             var skipped = 0
             var errors = 0
+            
             students.forEach { student ->
                 try {
-                    val newUser = authService.registerStudentFromExcel(student)
-                    if (newUser != null) {
+                    var user = authService.registerStudentFromExcel(student)
+                    if (user != null) {
                         created++
-                        try {
-                            userSubjectService.enrollToSubject(EnrollSubjectDto(newUser.id!!, subjectId))
-                            enrolled++
-                        } catch (e: Exception) {
-                            log.error("Error al matricular alumno ${newUser.email} en la asignatura $subjectId: ${e.message}")
-                            errors++
-                        }
                     } else {
+                        // If user was not created, it means they already exist. Fetch the existing user.
+                        user = userRepository.findByEmail(student.email).orElse(null)
                         skipped++
                     }
+
+                    // Attempt to enroll the user (whether new or existing)
+                    if (user != null) {
+                        try {
+                            userSubjectService.enrollToSubject(EnrollSubjectDto(user.id!!, subjectId))
+                            enrolled++
+                        } catch (e: Exception) {
+                            // Log warning if enrollment fails (e.g., already enrolled) but don't count as a main error.
+                            log.warn("No se pudo enrolar al usuario ${user.email} (¿quizás ya está inscrito?): ${e.message}")
+                        }
+                    }
                 } catch (e: Exception) {
-                    log.error("Error al registrar alumno ${student.email}: ${e.message}")
+                    log.error("Error al procesar al alumno ${student.email}: ${e.message}")
                     errors++
                 }
             }
+            
             val resultMessage = buildString {
                 append("Archivo procesado: ")
                 append("${students.size} alumnos encontrados. ")
-                append("Creados: $created, ")
-                append("Matriculados: $enrolled, ")
-                append("Ya existían: $skipped")
+                append("Nuevos creados: $created, ")
+                append("Enrolados en esta asignatura: $enrolled, ")
+                append("Ya existían en el sistema: $skipped")
                 if (errors > 0) {
                     append(", Errores: $errors")
                 }

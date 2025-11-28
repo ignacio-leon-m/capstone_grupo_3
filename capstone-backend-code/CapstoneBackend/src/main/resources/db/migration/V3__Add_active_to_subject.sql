@@ -1,0 +1,2 @@
+ALTER TABLE public.asignaturas
+ADD COLUMN estado BOOLEAN NOT NULL DEFAULT TRUE;

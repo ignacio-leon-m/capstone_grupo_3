@@ -1,18 +1,18 @@
 version: '3.8'
 services:
   postgres:
-    image: postgres:13
+    image: postgres:17.5
     container_name: capstone-postgres
     environment:
       POSTGRES_DB: capstone-bbdd
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: OFDXHJlGMF7g9dls6JmJhyMDLEwdAMfuyoDV6StqLa9LywYc2I77mMJtRrMFu5QC
+      POSTGRES_PASSWORD: <YOUR_DB_PASSWORD>
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -30,7 +30,7 @@ services:
       - mongodb_data:/data/db
       - mongodb_config:/data/configdb
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -49,15 +49,16 @@ services:
       # PostgreSQL Configuration (Principal)
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/capstone-bbdd
       - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=OFDXHJlGMF7g9dls6JmJhyMDLEwdAMfuyoDV6StqLa9LywYc2I77mMJtRrMFu5QC
+      - SPRING_DATASOURCE_PASSWORD=<YOUR_DB_PASSWORD>
       
       # MongoDB Configuration (Documentos y logs)
       - SPRING_DATA_MONGODB_URI=mongodb://admin:adminpass123@mongodb:27017/capstone_docs?authSource=admin
       - SPRING_DATA_MONGODB_DATABASE=capstone_docs
       - MONGODB_ENABLED=true
-
+      - gemini.api-key=<YOUR_GEMINI_API_KEY>
 volumes:
   postgres_data:
   mongodb_data:
   mongodb_config:
+    
 
