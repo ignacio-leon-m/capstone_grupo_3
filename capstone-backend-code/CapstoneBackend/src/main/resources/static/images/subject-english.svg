@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
-  <rect width="200" height="200" fill="#4facfe"/>
-  <circle cx="100" cy="100" r="60" fill="white" opacity="0.2"/>
-  <!-- Speech bubble -->
-  <rect x="60" y="60" width="80" height="50" fill="white" rx="8"/>
-  <path d="M 90 110 L 95 120 L 100 110 Z" fill="white"/>
-  <text x="100" y="90" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#4facfe" text-anchor="middle">Aa</text>
-</svg>

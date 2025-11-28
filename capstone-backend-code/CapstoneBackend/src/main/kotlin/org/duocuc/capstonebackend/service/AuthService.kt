@@ -64,17 +64,17 @@ class AuthService (
         return userResponse(savedUser)
     }
 
-    fun registerStudentFromExcel(request: RegisterRequestDto): Boolean {
+    fun registerStudentFromExcel(request: RegisterRequestDto): User? {
         // Verify if the user already exists by email
         if (userRepository.findByEmail(request.email).isPresent) {
             log.info("Usuario con email ${request.email} ya existe. Omitiendo creación.")
-            return false
+            return null
         }
         
         // Verify if the user already exists by RUT
         if (userRepository.findByRut(request.rut).isPresent) {
             log.info("Usuario con RUT ${request.rut} ya existe. Omitiendo creación.")
-            return false
+            return null
         }
         
         // Validate and find the Role
@@ -100,9 +100,9 @@ class AuthService (
             lastLoginAt = null
         )
 
-        userRepository.save(newUser)
+        val savedUser = userRepository.save( newUser)
         log.info("✓ Nuevo alumno creado: ${request.name} ${request.lastName} (${request.email})")
-        return true
+        return savedUser
     }
 
     fun userResponse(user: User): UserResponseDto {

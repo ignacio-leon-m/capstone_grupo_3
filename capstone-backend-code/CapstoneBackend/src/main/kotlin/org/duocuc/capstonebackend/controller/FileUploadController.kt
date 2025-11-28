@@ -1,8 +1,7 @@
 package org.duocuc.capstonebackend.controller
 
-import org.duocuc.capstonebackend.service.AiService
-import org.duocuc.capstonebackend.service.AuthService
-import org.duocuc.capstonebackend.service.FileUploadService
+import org.duocuc.capstonebackend.dto.EnrollSubjectDto
+import org.duocuc.capstonebackend.service.*
 import org.duocuc.capstonebackend.util.PdfTextExtractor
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -15,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import java.util.*
 
 @RestController
 @RequestMapping("/api/files")
 class FileUploadController(
     private val fileUploadService: FileUploadService,
     private val authService: AuthService,
+    private val userSubjectService: UserSubjectService,
     @param:Qualifier("persistingAiService") private val aiService: AiService
 ) {
     private val log = LoggerFactory.getLogger(FileUploadController::class.java)
@@ -28,7 +29,10 @@ class FileUploadController(
     // Upload and create users from an Excel file
     @PostMapping("/upload-excel")
     @PreAuthorize("hasAuthority('profesor')")
-    fun uploadExcelFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
+    fun uploadExcelFile(
+        @RequestParam("file") file: MultipartFile,
+        @RequestParam("subjectId") subjectId: UUID
+    ): ResponseEntity<String> {
         return try {
             val students = file.inputStream.use { inputStream ->
                 fileUploadService.processExcelFile(inputStream)
@@ -40,12 +44,24 @@ class FileUploadController(
             }
             log.info("El servicio de Excel procesó ${students.size} alumnos del archivo.")
             var created = 0
+            var enrolled = 0
             var skipped = 0
             var errors = 0
             students.forEach { student ->
                 try {
-                    val wasCreated = authService.registerStudentFromExcel(student)
-                    if (wasCreated) created++ else skipped++
+                    val newUser = authService.registerStudentFromExcel(student)
+                    if (newUser != null) {
+                        created++
+                        try {
+                            userSubjectService.enrollToSubject(EnrollSubjectDto(newUser.id!!, subjectId))
+                            enrolled++
+                        } catch (e: Exception) {
+                            log.error("Error al matricular alumno ${newUser.email} en la asignatura $subjectId: ${e.message}")
+                            errors++
+                        }
+                    } else {
+                        skipped++
+                    }
                 } catch (e: Exception) {
                     log.error("Error al registrar alumno ${student.email}: ${e.message}")
                     errors++
@@ -55,6 +71,7 @@ class FileUploadController(
                 append("Archivo procesado: ")
                 append("${students.size} alumnos encontrados. ")
                 append("Creados: $created, ")
+                append("Matriculados: $enrolled, ")
                 append("Ya existían: $skipped")
                 if (errors > 0) {
                     append(", Errores: $errors")
@@ -64,8 +81,6 @@ class FileUploadController(
             ResponseEntity(resultMessage, HttpStatus.CREATED)
         } catch (e: Exception) {
             log.error("Error al procesar el archivo Excel", e)
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Error al procesar el archivo Excel: ${e.message}")
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Error al procesar el archivo Excel: ${e.message}")
         }

@@ -18,6 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileNameSpan = document.getElementById('fileName');
     const uploadButton = document.getElementById('uploadButton');
     const uploadForm = document.getElementById('uploadForm');
+    const returnButton = document.querySelector('.return-button');
+
+    if (returnButton) {
+        returnButton.addEventListener('click', () => {
+            window.location.href = '/home.html';
+        });
+    }
 
     fileInput.addEventListener('change', () => {
         if (fileInput.files.length > 0) {
