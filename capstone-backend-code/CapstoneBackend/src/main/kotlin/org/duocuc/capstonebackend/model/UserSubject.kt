@@ -5,10 +5,6 @@ import org.hibernate.annotations.UuidGenerator
 import java.time.LocalDateTime
 import java.util.UUID
 
-/**
- * Entidad que representa la relación N:M entre usuarios y asignaturas.
- * El rol del usuario determina si es una asignación de profesor o inscripción de alumno.
- */
 @Entity
 @Table(
     name = "usuario_asignatura",

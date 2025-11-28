@@ -1,117 +1,64 @@
-:root {
-    --brainboost-blue: #007bff; 
-    --brainboost-magenta: #ff007f; 
-    --brainboost-orange: #ff8c00; 
-    --brainboost-yellow: #ffd700;
-    --brainboost-cyan: #00ffff; 
-    --background-dark: #F5F6F7; 
-    --background-light: #F5F6F7; 
-    --box-bg: rgba(255, 255, 255, 0.9); 
-}
+/* ========================================
+   LOGIN PAGE - BRAINBOOST
+   Estilos específicos de la página de login
+   El sistema base está en theme.css
+   ======================================== */
 
+/* Layout Específico del Login */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(135deg, var(--background-dark), var(--background-light));
     overflow: hidden;
 }
 
-.login-container {
-    background: var(--box-bg);
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    max-width: 400px;
-    max-height: 70vh;
-    width: 90%;
-    position: relative;
-    border: 2px solid transparent;
-    background-image: linear-gradient(var(--box-bg), var(--box-bg)), 
-                      linear-gradient(45deg, var(--brainboost-blue), var(--brainboost-magenta), var(--brainboost-orange));
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
-    animation: gradientShift 10s ease infinite;
-}
-
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+/* Logo Area */
+.logo-area {
+    margin-bottom: var(--spacing-md);
 }
 
 .logo-area img {
     max-width: 140px;
     width: 100%;
     height: auto;
-    margin-bottom: 10px; 
+    margin-bottom: var(--spacing-sm);
 }
 
-
+/* Login Form Heading */
 .login-form h2 {
-    color: #333;
-    margin-bottom: 15px; 
-    padding: 0 10px;
+    color: var(--color-grey-900);
+    margin-bottom: var(--spacing-md);
+    padding: 0 var(--spacing-sm);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
 }
 
-.input-group {
-    margin-bottom: 20px;
-}
-
-.input-group input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-}
-
-.input-group input:focus {
-    border-color: var(--brainboost-blue);
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-.login-button {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 15px;
-    background: linear-gradient(45deg, var(--brainboost-blue), var(--brainboost-cyan));
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.login-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-}
-
+/* Links del Formulario */
 .links {
-    margin-top: 15px; 
-    padding: 0 10px;
-    box-sizing: border-box;
+    margin-top: var(--spacing-md);
+    padding: 0 var(--spacing-sm);
 }
 
 .links a {
-    color: var(--brainboost-magenta);
+    color: var(--color-magenta);
     text-decoration: none;
-    font-size: 14px;
-    margin: 0 10px;
-    transition: color 0.3s ease;
+    font-size: var(--text-sm);
+    margin: 0 var(--spacing-sm);
+    transition: color var(--transition-base);
 }
 
 .links a:hover {
-    color: var(--brainboost-blue);
+    color: var(--color-primary);
     text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .logo-area img {
+        max-width: 100px;
+    }
+    
+    .login-form h2 {
+        font-size: var(--text-xl);
+    }
 }

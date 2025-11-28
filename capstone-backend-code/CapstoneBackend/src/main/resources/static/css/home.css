@@ -1,82 +1,90 @@
-/* Estilos generales para el fondo y la fuente */
-body {
-    font-family: 'Nunito', sans-serif;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #e0f2f7, #fbe9e7);
-    color: #333;
+/* ========================================
+   HOME PAGE - BRAINBOOST
+   Estilos específicos de la página home
+   El sistema base está en theme.css
+   ======================================== */
+
+/* Navbar personalizado con gradiente sutil */
+.navbar {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
 }
 
-/* Mejorar apariencia de cards */
+/* Ajustes específicos del contenedor principal */
+.container {
+    max-width: 1200px;
+}
+
+/* Card de bienvenida mejorada */
 .card {
-    border-radius: 1rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
-/* Botones con mejor espaciado */
-.btn {
-    border-radius: 0.5rem;
+.card-body {
+    padding: 3rem;
+}
+
+.card-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.5rem;
+}
+
+.card-text {
+    font-size: 1.1rem;
+    color: #6c757d;
+}
+
+/* Grid de botones mejorado */
+.card-body .d-grid {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Botón de logout mejorado */
+.position-fixed .btn {
+    backdrop-filter: blur(10px);
+    background: rgba(220, 53, 69, 0.1);
+    border: 2px solid #dc3545;
+    border-radius: 50px;
+    padding: 0.75rem 1.5rem;
     font-weight: 600;
     transition: all 0.3s ease;
 }
 
-.btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-
-/* Estilos para el contenedor flotante */
-.logout-fixed-container {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    z-index: 1000;
-}
-
-/* Estilos para el botón del ícono */
-.logout-icon-button {
-    background-color: #fff;
-    color: #a0a0a0;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    text-decoration: none;
-    position: relative;
-}
-
-.logout-icon-button:hover {
-    background-color: #f44336;
+.position-fixed .btn:hover {
+    background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 20px rgba(220, 53, 69, 0.4);
 }
 
-/* Estilos para el texto flotante (tooltip) */
-.logout-tooltip {
-    position: absolute;
-    right: 60px;
-    background-color: #333;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 5px;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
-    font-size: 0.9em;
-}
-
-/* Muestra el tooltip al pasar el mouse sobre el ícono */
-.logout-icon-button:hover .logout-tooltip {
-    opacity: 1;
-    visibility: visible;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 2rem;
+    }
+    
+    .card-title {
+        font-size: 2rem;
+    }
+    
+    .btn-3d .front {
+        padding: 10px 30px;
+        font-size: 1rem;
+    }
 }

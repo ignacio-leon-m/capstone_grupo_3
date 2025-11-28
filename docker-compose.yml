@@ -1,0 +1,119 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:13
+    container_name: brainboost-postgres
+    environment:
+      POSTGRES_DB: capstone-bbdd
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: vivigames77
+    ports:
+      - "5432:5432"
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - brainboost-network
+
+  # MongoDB Database (for documents and logs)
+  mongodb:
+    image: mongo:7.0
+    container_name: brainboost-mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpass123
+      MONGO_INITDB_DATABASE: capstone_docs
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - brainboost-network
+
+  # Backend Spring Boot Application
+  backend:
+    build:
+      context: ./capstone-backend-code/CapstoneBackend
+      dockerfile: Dockerfile
+    container_name: brainboost-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      # Spring Profile
+      - SPRING_PROFILES_ACTIVE=docker
+      
+      # PostgreSQL Configuration
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/capstone-bbdd
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=vivigames77
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      
+      # JPA/Hibernate Configuration
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+      - SPRING_JPA_SHOW_SQL=false
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      
+      # Flyway Configuration
+      - SPRING_FLYWAY_ENABLED=true
+      - SPRING_FLYWAY_BASELINE_ON_MIGRATE=true
+      - SPRING_FLYWAY_LOCATIONS=classpath:db/migration
+      
+      # MongoDB Configuration
+      - SPRING_DATA_MONGODB_URI=mongodb://admin:adminpass123@mongodb:27017/capstone_docs?authSource=admin
+      - SPRING_DATA_MONGODB_DATABASE=capstone_docs
+      - MONGODB_ENABLED=true
+      
+      # JWT Configuration
+      - JWT_SECRET=5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+      - JWT_EXPIRATION=86400000
+      
+      # Google Gemini AI Configuration (set your own key)
+      - GEMINI_API_KEY=AIzaSyBT8zt_FMTCt0RoTgH024utvAVYxeQqWbE
+      
+      # Server Configuration
+      - SERVER_PORT=8080
+      
+      # File Upload Configuration (20MB)
+      - SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=20MB
+      - SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=20MB
+    volumes:
+      - backend_uploads:/app/uploads
+    networks:
+      - brainboost-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
+  backend_uploads:
+    driver: local
+
+networks:
+  brainboost-network:
+    driver: bridge

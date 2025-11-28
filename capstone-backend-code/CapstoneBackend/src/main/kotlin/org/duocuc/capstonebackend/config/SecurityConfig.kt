@@ -39,15 +39,15 @@ class SecurityConfig(
                 it.requestMatchers(
                     "/api/auth/**",
                     "/api/hangman/**",
+                    "/actuator/**",  // Health checks y monitoring
                     "/",
                     "/index.html",
                     "/login.html",
                     "/home.html",
                     "/user.html",
-                    "/crear-profesor.html",
-                    "/profesor-asignaturas.html",
+                    "/create-professor.html",
+                    "/professor-subject.html",
                     "/content-upload.html",
-                    "/content.html",
                     "/css/**",
                     "/js/**",
                     "/images/**",

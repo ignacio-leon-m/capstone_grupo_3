@@ -9,5 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 class CapstoneBackendApplication
 
 fun main(args: Array<String>) {
-	runApplication<CapstoneBackendApplication>(*args)
+    val ctx = runApplication<CapstoneBackendApplication>(*args)
+    val port = ctx.environment.getProperty("server.port") ?: "8080"
+    println("Servidor iniciado correctamente en: http://localhost:$port/")
+    println("Presiona Ctrl+C para detener el servidor.")
 }

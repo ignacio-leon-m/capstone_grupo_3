@@ -19,18 +19,20 @@ java {
 
 repositories {
     mavenCentral()
-    // NECESARIO: Agregamos el repositorio de Google para el SDK
     google()
 }
 
 val poiVersion = "5.4.1"
+val tikaVersion = "3.2.0"
 
 dependencies {
     // Dependencia Gemini: SDK de Java, versión estable
     implementation("com.google.genai:google-genai:1.23.0")
-    // Dependencias Tika (Mantenidas de tu lista)
-    implementation("org.apache.tika:tika-core:3.2.3")
-    implementation("org.apache.tika:tika-parsers-standard-package:3.2.3")
+    // Dependencias Tika
+    implementation("org.apache.tika:tika-core:${tikaVersion}")
+    implementation("org.apache.tika:tika-parsers-standard-package:${tikaVersion}")
+    // OCR module (Tesseract integration)
+    implementation("org.apache.tika:tika-parser-ocr-module:${tikaVersion}")
     // Otras dependencias
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
@@ -46,6 +48,8 @@ dependencies {
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    // PDF processing: Tika brings compatible PDFBox version automatically
+    // implementation("org.apache.pdfbox:pdfbox:2.0.32")  // removed: conflicts with Tika 3.2.0
     implementation("org.apache.poi:poi:${poiVersion}")
     implementation("org.apache.poi:poi-ooxml:${poiVersion}")
     runtimeOnly("org.postgresql:postgresql")
@@ -76,6 +80,10 @@ allOpen {
 tasks.withType<Test> {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+    systemProperty("java.net.preferIPv4Stack", "true")
 }
 
 jacoco {

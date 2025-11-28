@@ -8,5 +8,23 @@ capstone-kotlin-code/.idea/
 
 # Documentos
 documentos-semanales/*.tmp
+<<<<<<< HEAD
 ".idea/" 
 "uploads/" 
+=======
+
+# Docker
+.env
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+>>>>>>> 2549841 (Avanzada casi toda la lógica definitiva)

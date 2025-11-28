@@ -5,10 +5,6 @@ import org.hibernate.annotations.UuidGenerator
 import java.time.LocalDateTime
 import java.util.UUID
 
-/**
- * Métricas generales de preguntas (no específicas de un juego).
- * Para métricas específicas de juegos, ver HangmanMetric, etc.
- */
 @Entity
 @Table(name = "metricas", schema = "public")
 class Metric(

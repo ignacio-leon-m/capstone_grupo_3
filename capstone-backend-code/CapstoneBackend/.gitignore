@@ -6,6 +6,11 @@ build/
 !**/src/test/**/build/
 .serena/
 
+### Environment Variables ###
+.env
+.env.local
+.env.*.local
+
 ### STS ###
 .apt_generated
 .classpath

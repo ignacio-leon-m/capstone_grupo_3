@@ -1,35 +1,85 @@
-/* Estilos mínimos - Bootstrap utility classes se usan en HTML */
-body {
-    font-family: 'Nunito', sans-serif;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #e0f2f7, #fbe9e7);
+/* ========================================
+   CONTENT UPLOAD PAGE - BRAINBOOST
+   Estilos específicos de la página de carga de contenido
+   El sistema base está en theme.css
+   ======================================== */
+
+/* Navbar personalizado */
+.navbar {
+    background-color: var(--color-white) !important;
+    box-shadow: var(--shadow-sm);
 }
 
-/* File drop area styles */
+/* Título de página */
+h1 {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--color-primary);
+}
+
+/* Drop area personalizada */
 .file-drop-area {
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all var(--transition-base);
+    background-color: var(--color-grey-100);
+    border-color: var(--color-grey-400) !important;
 }
 
 .file-drop-area:hover {
     background-color: rgba(0, 123, 255, 0.05);
-    border-color: #007bff !important;
+    border-color: var(--color-primary) !important;
+    transform: scale(1.01);
 }
 
-.file-drop-area.active, .file-drop-area.is-active {
+.file-drop-area.active,
+.file-drop-area.is-active {
     background-color: rgba(0, 123, 255, 0.1);
-    border-color: #007bff !important;
+    border-color: var(--color-primary) !important;
+    box-shadow: var(--shadow-md);
 }
 
-/* Mejoras de transición */
-.btn {
-    transition: all 0.3s ease;
+/* File message */
+.file-msg {
+    font-size: var(--text-base);
+    color: var(--color-grey-600);
 }
 
-.btn:hover {
-    transform: translateY(-1px);
+/* Drag over state */
+.file-drop-area.drag-over {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-color: #667eea !important;
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
 }
 
+/* Upload icon animation */
+.file-drop-area:hover .fa-cloud-upload-alt {
+    animation: bounce 0.5s ease-in-out;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Card enhancements */
 .card {
-    transition: box-shadow 0.3s ease;
+    border-radius: 16px;
+    transition: all var(--transition-base);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Button disabled state for 3D buttons */
+.btn-3d:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.btn-3d:disabled .front {
+    background: linear-gradient(135deg, #a0a0a0 0%, #c0c0c0 100%) !important;
 }

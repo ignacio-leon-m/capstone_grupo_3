@@ -1,0 +1,51 @@
+/* ========================================
+   PROFESSOR SUBJECT PAGE - BRAINBOOST
+   Estilos específicos para tarjetas de asignaturas
+   ======================================== */
+
+/* Subject Cards Enhancements */
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.card-img-top {
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+/* Table Styling */
+.table-hover tbody tr {
+  transition: all 0.2s ease;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+  transform: scale(1.01);
+}
+
+/* Badge Styling */
+.badge {
+  padding: 0.5em 0.75em;
+  font-weight: 500;
+}
+
+/* Empty State */
+.alert {
+  border-radius: 12px;
+  border: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card-img-top {
+    height: 150px !important;
+  }
+  
+  .table {
+    font-size: 0.875rem;
+  }
+}

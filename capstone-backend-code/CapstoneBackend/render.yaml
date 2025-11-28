@@ -1,0 +1,60 @@
+# ===================================
+# Render Blueprint Configuration
+# Spring Boot + Neon PostgreSQL
+# ===================================
+
+services:
+  - type: web
+    name: brainboost-backend
+    runtime: docker
+    plan: free
+    branch: main
+    rootDir: capstone-backend-code/CapstoneBackend
+    region: oregon  # US West - cercano a Neon US West
+    healthCheckPath: /actuator/health
+    
+    # Docker build configuration
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
+    
+    # Environment variables (valores sensibles se configuran en Render Dashboard)
+    envVars:
+      # Spring Boot Profile - PRODUCCIÓN
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      
+      # Server Configuration
+      - key: PORT
+        value: 8080
+      
+      # Neon Database Configuration
+      - key: DATABASE_URL
+        value: jdbc:postgresql://ep-fancy-tree-af5xp9ie-pooler.c-2.us-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      
+      - key: DATABASE_USERNAME
+        value: neondb_owner
+      
+      - key: DATABASE_PASSWORD
+        sync: false  # ⚠️ Set manually in Render dashboard for security
+      
+      # JWT Configuration
+      - key: JWT_SECRET
+        sync: false  # ⚠️ Set manually in Render dashboard for security
+      
+      - key: JWT_ACCESS_EXPIRATION
+        value: 3600000
+      
+      - key: JWT_REFRESH_EXPIRATION
+        value: 604800000
+      
+      # Gemini API Configuration
+      - key: GEMINI_API_KEY
+        sync: false  # ⚠️ Set manually in Render dashboard for security
+      
+      # Java Memory Configuration (Free tier: 512MB)
+      - key: JAVA_TOOL_OPTIONS
+        value: -Xmx400m -Xms256m
+      
+      # JPA Configuration
+      - key: JPA_SHOW_SQL
+        value: false  # Disable in production

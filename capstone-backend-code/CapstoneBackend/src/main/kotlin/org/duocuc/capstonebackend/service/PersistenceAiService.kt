@@ -3,7 +3,7 @@ package org.duocuc.capstonebackend.service
 import org.duocuc.capstonebackend.nosql.AiQueryLog
 import org.duocuc.capstonebackend.nosql.AiQueryLogRepository
 import org.duocuc.capstonebackend.security.CurrentUser
-import org.duocuc.capstonebackend.util.Hashing
+import org.duocuc.capstonebackend.util.HashingUtils
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
@@ -13,16 +13,16 @@ import org.springframework.stereotype.Service
  */
 @Service("persistingAiService")
 class PersistenceAiService(
-    @Qualifier("cachingAiService") private val delegate: AiService,
+    @param:Qualifier("cachingAiService") private val delegate: AiService,
+    @param:Qualifier("currentUser") private val currentUser: CurrentUser,
     private val queryLogRepo: AiQueryLogRepository,
-    private val currentUser: CurrentUser
 ) : AiService {
 
     override fun query(text: String, prompt: String): String {
         val response = delegate.query(text, prompt)
 
         val userId = currentUser.id()
-        val textSha1 = Hashing.sha256Hex(text)
+        val textSha1 = HashingUtils.sha256Hex(text)
 
         queryLogRepo.save(
             AiQueryLog(
