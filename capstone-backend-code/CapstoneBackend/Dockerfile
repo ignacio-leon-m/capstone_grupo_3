@@ -1,20 +1,13 @@
-# Etapa 1: Construcción
 FROM gradle:8.5-jdk21 AS build
 
 WORKDIR /app
 
-# Copiar archivos de configuración de Gradle
 COPY build.gradle.kts settings.gradle.kts gradlew ./
 COPY gradle gradle
 
-# Copiar código fuente
 COPY src src
-COPY hangman-game hangman-game
 
-# Dar permisos de ejecución a gradlew
 RUN chmod +x ./gradlew
-
-# Construir la aplicación (sin tests para optimizar)
 RUN ./gradlew build --no-daemon -x test
 
 # Etapa 2: Ejecución (imagen más ligera)
@@ -28,7 +21,7 @@ COPY --from=build /app/build/libs/CapstoneBackend-0.0.1-SNAPSHOT.jar app.jar
 # Crear directorio para uploads
 RUN mkdir -p /app/uploads
 
-# Exponer puerto (Render usa variable $PORT)
+# Exponer puerto
 EXPOSE 8080
 
 # Instalar curl y tesseract (OCR) + idioma español
@@ -41,7 +34,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
 # Comando para ejecutar la aplicación
 ENTRYPOINT ["java", \
   "-Djava.security.egd=file:/dev/./urandom", \
-  "-Dserver.port=${PORT:-8080}", \
+  "-Dserver.port=${PORT:8080}", \
   "-Xmx512m", \
   "-Xms256m", \
   "-jar", "app.jar"]
