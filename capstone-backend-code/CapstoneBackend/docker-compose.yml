@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_DB: capstone-bbdd
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: vivigames77
+      POSTGRES_PASSWORD:
     ports:
       - "5432:5432"
     volumes:
@@ -48,13 +48,13 @@ services:
       # PostgreSQL Configuration (Principal)
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/capstone-bbdd
       - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=vivigames77
+      - SPRING_DATASOURCE_PASSWORD=
       
       # MongoDB Configuration (Documentos y logs)
       - SPRING_DATA_MONGODB_URI=mongodb://admin:adminpass123@mongodb:27017/capstone_docs?authSource=admin
       - SPRING_DATA_MONGODB_DATABASE=capstone_docs
       - MONGODB_ENABLED=true
-      - gemini.api-key=AIzaSyDlX0wgHI2jM9p2HIuvhDZu627NsXWjmjw
+      - gemini.api-key=
 volumes:
   postgres_data:
   mongodb_data:
