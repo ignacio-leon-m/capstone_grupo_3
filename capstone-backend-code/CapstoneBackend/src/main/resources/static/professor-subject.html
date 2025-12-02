@@ -1,229 +1,227 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mis Asignaturas - Profesor</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="icon" href="/images/bb-logo.png" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="/css/theme.css" />
-  <link rel="stylesheet" href="/css/professor-subject.css" />
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>Mis Asignaturas - Profesor</title>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap"
+		  rel="stylesheet"/>
+	<link rel="icon" href="/images/bb-logo.png"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@6.0.0/css/all.min.css">
+	<link rel="stylesheet" href="/css/theme.css"/>
+	<link rel="stylesheet" href="/css/professor-subject.css"/>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-light bg-white shadow-sm">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/home.html">
-        <img src="/images/bb-logo.png" alt="BrainBoost Logo">
-      </a>
-      <button class="btn btn-outline-secondary btn-sm" onclick="window.location.href='/home.html'">
-        <i class="fas fa-arrow-left me-2"></i>Volver
-      </button>
-    </div>
-  </nav>
+<!-- Navbar -->
+<nav class="navbar navbar-light bg-white shadow-sm">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="/home.html">
+			<img src="/images/bb-logo.png" alt="BrainBoost Logo">
+		</a>
+		<button class="btn btn-outline-secondary btn-sm" onclick="window.location.href='/home.html'">
+			<i class="fas fa-arrow-left me-2"></i>Volver
+		</button>
+	</div>
+</nav>
 
-  <!-- Main Content -->
-  <div class="container my-5">
-    <div class="row">
-      <div class="col-12">
-        <h1 class="mb-2">Mis Asignaturas</h1>
-        <p class="text-muted mb-4">Selecciona una asignatura para ver sus alumnos inscritos</p>
-      </div>
-    </div>
+<!-- Main Content -->
+<div class="container my-5">
+	<div class="row">
+		<div class="col-12">
+			<h1 class="mb-2">Mis Asignaturas</h1>
+			<p class="text-muted mb-4">Selecciona una asignatura para ver sus alumnos inscritos</p>
+		</div>
+	</div>
 
-    <!-- Subjects Grid -->
-    <div id="subjects" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-5">
-      <div class="col-12 text-center py-5">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-          <span class="visually-hidden">Cargando...</span>
-        </div>
-        <h5 class="mt-3 text-muted">Cargando asignaturas...</h5>
-      </div>
-    </div>
+	<!-- Subjects Grid -->
+	<div id="subjects" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-5">
+		<div class="col-12 text-center py-5">
+			<div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+				<span class="visually-hidden">Cargando...</span>
+			</div>
+			<h5 class="mt-3 text-muted">Cargando asignaturas...</h5>
+		</div>
+	</div>
 
-    <!-- Students Table Card -->
-    <div id="students" class="d-none">
-      <!-- Loading Modal for Students -->
-      <div class="modal fade" id="studentsLoadingModal" tabindex="-1" aria-labelledby="studentsLoadingModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-        <div class="modal-dialog modal-dialog-centered border-0">
-          <div class="modal-content">
-            <div class="modal-body text-center p-5">
-              <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
-                <span class="visually-hidden">Cargando...</span>
-              </div>
-              <h5 class="modal-title" id="studentsLoadingModalLabel">Cargando alumnos...</h5>
-              <p class="text-muted mb-0">Por favor espera un momento.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card shadow-lg border-0">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center flex-wrap">
-          <h5 class="mb-0" id="subjectTitle"></h5>
-        </div>
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-hover mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>Alumno</th>
-                  <th>Estado</th>
-                  <th>Fecha Inscripción</th>
-                </tr>
-              </thead>
-              <tbody id="studentsBody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<!-- Students Table Card -->
+	<div id="students" class="d-none">
+		<!-- Loading Modal for Students -->
+		<div class="modal fade" id="studentsLoadingModal" tabindex="-1" aria-labelledby="studentsLoadingModalLabel"
+			 aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+			<div class="modal-dialog modal-dialog-centered border-0">
+				<div class="modal-content">
+					<div class="modal-body text-center p-5">
+						<div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+							<span class="visually-hidden">Cargando...</span>
+						</div>
+						<h5 class="modal-title" id="studentsLoadingModalLabel">Cargando alumnos...</h5>
+						<p class="text-muted mb-0">Por favor espera un momento.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card shadow-lg border-0">
+			<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center flex-wrap">
+				<h5 class="mb-0" id="subjectTitle"></h5>
+			</div>
+			<div class="card-body p-0">
+				<div class="table-responsive">
+					<table class="table table-hover mb-0">
+						<thead class="table-light">
+						<tr>
+							<th>Alumno</th>
+							<th>Estado</th>
+							<th>Fecha Inscripción</th>
+						</tr>
+						</thead>
+						<tbody id="studentsBody"></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
-  <!-- Logout Button -->
-  <div class="position-fixed bottom-0 end-0 p-3">
-    <button id="logout-button" class="btn btn-outline-danger logout-button" title="Cerrar Sesión">
-      <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
-    </button>
-  </div>
+<!-- Logout Button -->
+<div class="position-fixed bottom-0 end-0 p-3">
+	<button id="logout-button" class="btn btn-outline-danger logout-button" title="Cerrar Sesión">
+		<i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
+	</button>
+</div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const token = localStorage.getItem('jwtToken');
-      const role = localStorage.getItem('userRole');
-      if (!token) { window.location.href = '/index.html'; return; }
-      if (role !== 'profesor' && role !== 'admin') {
-        alert('Acceso denegado'); window.location.href = '/home.html'; return;
-      }
+<script>
+	document.addEventListener('DOMContentLoaded', async () => {
 
-      // Obtener mi id y rol desde el backend
-      const meRes = await fetch('/api/users/me', { headers: { 'Authorization': `Bearer ${token}` } });
-      if (!meRes.ok) { alert('No se pudo obtener el usuario actual'); return; }
-      const me = await meRes.json();
-      const myId = me.id;
+	  // Get my id and role from backend
+	  const meRes = await fetch('/api/users/me', { headers: { 'Authorization': `Bearer ${token}` } });
+	  if (!meRes.ok) { alert('No se pudo obtener el usuario actual'); return; }
+	  const me = await meRes.json();
+	  const myId = me.id;
 
-      // Helper function to get subject image
-      function getSubjectImage(subjectName) {
-        // Simple hash function to get a number between 1 and 7
-        let hash = 0;
-        for (let i = 0; i < subjectName.length; i++) {
-          hash = (hash << 5) - hash + subjectName.charCodeAt(i);
-          hash |= 0; // Convert to 32bit integer
-        }
-        const imageNumber = Math.abs(hash % 7) + 1;
-        return `/images/subject-image-${imageNumber}.jpg`;
-      }
+	  // Helper function to get subject image
+	  function getSubjectImage(subjectName) {
+		// Simple hash function to get a number between 1 and 7
+		let hash = 0;
+		for (let i = 0; i < subjectName.length; i++) {
+		  hash = (hash << 5) - hash + subjectName.charCodeAt(i);
+		  hash |= 0; // Convert to 32bit integer
+		}
+		const imageNumber = Math.abs(hash % 7) + 1;
+		return `/images/subject-image-${imageNumber}.jpg`;
+	  }
 
-      // Cargar mis asignaturas (como profesor)
-      const subRes = await fetch(`/api/subjects/professor/${myId}`, { headers: { 'Authorization': `Bearer ${token}` } });
-      const container = document.getElementById('subjects');
-      if (subRes.ok) {
-        const subjects = await subRes.json();
-        if (subjects.length === 0) {
-          container.innerHTML = '<div class="col-12"><div class="alert alert-info">No tienes asignaturas asignadas aún.</div></div>';
-        } else {
-          const cardsHtml = subjects.map(s => `
-            <div class="col">
-              <div class="card h-100 shadow-sm border-0 subject-card" data-subject-id="${s.id}" data-subject-name="${s.name}" style="cursor: pointer; transition: all 0.3s ease;">
-                <img src="${getSubjectImage(s.name)}" class="card-img-top" alt="${s.name}" style="height: 200px; object-fit: cover;">
-                <div class="card-body">
-                  <h5 class="card-title">${s.name}</h5>
-                  <p class="card-text text-muted">Click para ver alumnos inscritos</p>
-                </div>
-                <div class="card-footer bg-transparent border-0 text-center">
-                  <button class="btn btn-primary btn-sm w-100">
-                    <i class="fas fa-users me-2"></i>Ver Alumnos
-                  </button>
-                </div>
-              </div>
-            </div>
-          `).join('');
-          container.innerHTML = cardsHtml;
-        }
-      } else {
-        container.innerHTML = '<div class="col-12"><div class="alert alert-danger">Error al cargar asignaturas.</div></div>';
-      }
+	  // Subject load
+	  const subjectRes = await fetch(`/api/subjects/${myId}/subjects`, { headers: { 'Authorization': `Bearer ${token}` } });
+	  const container = document.getElementById('subjects');
+	  if (subjectRes.ok) {
+		const subjects = await subjectRes.json();
+		if (subjects.length === 0) {
+		  container.innerHTML = '<div class="col-12"><div class="alert alert-info">No tienes asignaturas asignadas aún.</div></div>';
+		} else {
+		  const cardsHtml = subjects.map(s => `
+			<div class="col">
+			  <div class="card h-100 shadow-sm border-0 subject-card" data-subject-id="${s.id}" data-subject-name="${s.name}" style="cursor: pointer; transition: all 0.3s ease;">
+				<img src="${getSubjectImage(s.name)}" class="card-img-top" alt="${s.name}" style="height: 200px; object-fit: cover;">
+				<div class="card-body">
+				  <h5 class="card-title">${s.name}</h5>
+				  <p class="card-text text-muted">Click para ver alumnos inscritos</p>
+				</div>
+				<div class="card-footer bg-transparent border-0 text-center">
+				  <button class="btn btn-primary btn-sm w-100">
+					<i class="fas fa-users me-2"></i>Ver Alumnos
+				  </button>
+				</div>
+			  </div>
+			</div>
+		  `).join('');
+		  container.innerHTML = cardsHtml;
+		}
+	  } else {
+		container.innerHTML = '<div class="col-12"><div class="alert alert-danger">Error al cargar asignaturas.</div></div>';
+	  }
 
-      container.addEventListener('click', (e) => {
-          const card = e.target.closest('.subject-card');
-          if (card) {
-              loadStudents(card.dataset.subjectId, card.dataset.subjectName);
-          }
-      });
+	  container.addEventListener('click', (e) => {
+		  const card = e.target.closest('.subject-card');
+		  if (card) {
+			  loadStudents(card.dataset.subjectId, card.dataset.subjectName);
+		  }
+	  });
 
-      container.addEventListener('mouseover', (e) => {
-        const card = e.target.closest('.subject-card');
-        if (card) {
-          card.style.transform = 'translateY(-5px)';
-          card.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
-        }
-      });
+	  container.addEventListener('mouseover', (e) => {
+		const card = e.target.closest('.subject-card');
+		if (card) {
+		  card.style.transform = 'translateY(-5px)';
+		  card.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+		}
+	  });
 
-      container.addEventListener('mouseout', (e) => {
-        const card = e.target.closest('.subject-card');
-        if (card) {
-          card.style.transform = 'translateY(0)';
-          card.style.boxShadow = '';
-        }
-      });
+	  container.addEventListener('mouseout', (e) => {
+		const card = e.target.closest('.subject-card');
+		if (card) {
+		  card.style.transform = 'translateY(0)';
+		  card.style.boxShadow = '';
+		}
+	  });
 
-      let currentSubjectId = null;
-      const studentsBox = document.getElementById('students');
-      const studentsBody = document.getElementById('studentsBody');
-      const subjectTitle = document.getElementById('subjectTitle');
+	  let currentSubjectId = null;
+	  const studentsBox = document.getElementById('students');
+	  const studentsBody = document.getElementById('studentsBody');
+	  const subjectTitle = document.getElementById('subjectTitle');
 
-      const studentsLoadingModal = new bootstrap.Modal(document.getElementById('studentsLoadingModal'));
+	  const studentsLoadingModal = new bootstrap.Modal(document.getElementById('studentsLoadingModal'));
 
-      async function loadStudents(subjectId, subjectName) {
-        currentSubjectId = subjectId;
-        studentsBody.innerHTML = '';
-        subjectTitle.textContent = `Alumnos de ${subjectName}`;
-        studentsBox.classList.remove('d-none');
-        studentsLoadingModal.show();
+	  async function loadStudents(subjectId, subjectName) {
+		currentSubjectId = subjectId;
+		studentsBody.innerHTML = '';
+		subjectTitle.textContent = `Alumnos de ${subjectName}`;
+		studentsBox.classList.remove('d-none');
+		studentsLoadingModal.show();
 
-        const fetchData = async () => {
-          try {
-            const stRes = await fetch(`/api/subjects/${subjectId}/students?nocache=${Date.now()}`, { headers: { 'Authorization': `Bearer ${token}` } });
-            if (stRes.ok) {
-              const list = await stRes.json();
-              if (list.length === 0) {
-                studentsBody.innerHTML = '<tr><td colspan="3" class="text-center text-muted py-4">Sin alumnos inscritos.</td></tr>';
-              } else {
-                const studentsHtml = list.map(u => `
-                  <tr>
-                    <td>${u.userName}</td>
-                    <td>${u.active ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-secondary">Inactivo</span>'}</td>
-                    <td><small class="text-muted">${new Date(u.enrollmentDate).toLocaleDateString('es-ES')}</small></td>
-                  </tr>
-                `).join('');
-                studentsBody.innerHTML = studentsHtml;
-              }
-            } else {
-              studentsBody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">Error al cargar alumnos.</td></tr>';
-            }
-          } catch (e) {
-            studentsBody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">Error al cargar alumnos.</td></tr>';
-          }
-        };
+		const fetchData = async () => {
+		  try {
+			const stRes = await fetch(`/api/subjects/${subjectId}/students?nocache=${Date.now()}`, { headers: { 'Authorization': `Bearer ${token}` } });
+			if (stRes.ok) {
+			  const list = await stRes.json();
+			  if (list.length === 0) {
+				studentsBody.innerHTML = '<tr><td colspan="3" class="text-center text-muted py-4">Sin alumnos inscritos.</td></tr>';
+			  } else {
+				const studentsHtml = list.map(u => `
+				  <tr>
+					<td>${u.userName}</td>
+					<td>${u.active ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-secondary">Inactivo</span>'}</td>
+					<td><small class="text-muted">${new Date(u.enrollmentDate).toLocaleDateString('es-ES')}</small></td>
+				  </tr>
+				`).join('');
+				studentsBody.innerHTML = studentsHtml;
+			  }
+			} else {
+			  studentsBody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">Error al cargar alumnos.</td></tr>';
+			}
+		  } catch (e) {
+			studentsBody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">Error al cargar alumnos.</td></tr>';
+		  }
+		};
 
-        // Ensure the spinner is shown for at least 500ms to avoid race conditions and improve UX
-        const minimumWait = new Promise(resolve => setTimeout(resolve, 500));
+		// Ensure the spinner is shown for at least 500ms to avoid race conditions and improve UX
+		const minimumWait = new Promise(resolve => setTimeout(resolve, 500));
 
-        await Promise.all([fetchData(), minimumWait]);
+		await Promise.all([fetchData(), minimumWait]);
 
-        studentsLoadingModal.hide();
-      }
+		studentsLoadingModal.hide();
+	  }
 
-      document.getElementById('logout-button').addEventListener('click', (e) => {
-        e.preventDefault();
-        localStorage.removeItem('jwtToken');
-        localStorage.removeItem('userRole');
-        window.location.href = '/index.html';
-      });
-    });
-  </script>
-  <script src="/js/utils.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	  document.getElementById('logout-button').addEventListener('click', (e) => {
+		e.preventDefault();
+		localStorage.removeItem('jwtToken');
+		localStorage.removeItem('userRole');
+		window.location.href = '/index.html';
+	  });
+	});
+</script>
+<script src="./js/utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+		crossorigin="anonymous"></script>
 </body>
 </html>

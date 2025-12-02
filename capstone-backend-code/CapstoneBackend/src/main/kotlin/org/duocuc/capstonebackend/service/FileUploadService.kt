@@ -4,7 +4,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory
 import org.duocuc.capstonebackend.dto.RegisterRequestDto
 import org.duocuc.capstonebackend.nosql.StoredDocument
 import org.duocuc.capstonebackend.nosql.StoredDocumentRepository
-import org.duocuc.capstonebackend.security.CurrentUser
+import org.duocuc.capstonebackend.security.CustomUserDetails
 import org.duocuc.capstonebackend.util.HashingUtils
 import org.duocuc.capstonebackend.util.nameToTitleCase
 import org.duocuc.capstonebackend.util.splitFullNameFromExcel
@@ -19,7 +19,7 @@ import java.util.*
 @Service
 class FileUploadService(
     private val storedDocumentRepository: StoredDocumentRepository,
-    private val currentUser: CurrentUser
+    private val customUserDetails: CustomUserDetails
 ) {
     private val uploadDir: Path = Paths.get("uploads")
 
@@ -30,7 +30,7 @@ class FileUploadService(
     }
 
     fun savePdf(file: MultipartFile): StoredDocument {
-        val userId = currentUser.id()
+        val userId = customUserDetails.id
         val originalFileName = file.originalFilename ?: "unknown.pdf"
         val fileExtension = originalFileName.substringAfterLast('.', "")
         val uniqueFileName = "${UUID.randomUUID()}.$fileExtension"

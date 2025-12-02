@@ -1,47 +1,94 @@
-// utils.js - Validación de autenticación y permisos para vistas administrativas
+// UNIVERSAL WRAPPER FETCH
+export async function fetchAPI(url, options = {}) {
 
-document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('jwtToken');
-    const role = localStorage.getItem('userRole');
+    const token = localStorage.getItem("jwtToken");
+    // IF FORMDATA, THE BROWSER SETS THE 'Content-Type...'
+    // IF NOT, ASSUME JSON
+    const isFormData = options.body instanceof FormData;
 
-    // Redireccionar si no hay token
-    if (!token) {
-        window.location.href = '/index.html';
-        return;
+    const headers = {
+          ...(!isFormData && { "Content-Type": "application/json" }),
+          ...(options.headers || {}),
+          ...(token ? { "Authorization": `Bearer ${token}` } : {})
+      };
+
+    const response = await fetch(url, { ...options, headers });
+
+    // 401 EXPIRED TOKEN - 403 INVALID TOKEN
+    if (response.status === 401 || response.status === 403) {
+        logout();
+        throw new Error("Sesión expirada o inválida");
     }
 
-    // Verificar que existe el rol
-    if (!role) {
-        alert('Error: No se pudo determinar tu rol de usuario.');
-        localStorage.removeItem('jwtToken');
-        localStorage.removeItem('userRole');
-        window.location.href = '/index.html';
-        return;
+     if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || `Error HTTP: ${response.status}`);
     }
 
-    const currentPath = window.location.pathname;
+    const contentType = response.headers.get("content-type") || "";
+    return contentType.includes("application/json") ? response.json() : response.text();
+}
 
-    if (role !== 'admin' && currentPath === '/create-professor.html') {
-        alert('Acceso denegado. Solo los administradores pueden crear profesores.');
-        window.location.href = '/home.html';
-        return;
-    }
 
-    if (role !== 'profesor' && (currentPath === '/user-upload.html' || currentPath === '/user.html')) {
-        alert('Acceso denegado. Solo los profesores pueden gestionar la carga de alumnos.');
-        window.location.href = '/home.html';
-        return;
-    }
+// AUTH AND ROLE HANDLER
+export async function initAuthGuards() {
+    const path = window.location.pathname;
 
-    const logoutButton = document.querySelector('.logout-button');
-    if (logoutButton) {
-        logoutButton.addEventListener('click', (e) => {
+    //WHITE LIST
+    const publicPaths = ["/index.html"];
+
+    // IF IT'S A PUBLIC  ROUTE, RETURN
+    if (publicPaths.some(p => path.endsWith(p))) return;
+
+    try {
+        // REFRESH CURRENT USER AT RELOAD
+        const user = await fetchAPI("/api/users/me");
+
+        // USER DATA
+        localStorage.setItem("userRole", user.role);
+        localStorage.setItem("userId", user.id);
+        localStorage.setItem("userEmail", user.email);
+
+        console.log(`Sesión validada: ${user.email} [${user.role}]`);
+
+        // ROLE ACCESS CONTROL
+        checkRoleAccess(path, user.role);
+
+        } catch (error) {
+            console.warn("Acceso denegado o sesión inválida:", error);
+            logout();
+        }
+    // LOGOUT BUTTON LISTENER
+    document.querySelector(".logout-button")?.addEventListener("click", (e) => {
             e.preventDefault();
-            localStorage.removeItem('jwtToken');
-            localStorage.removeItem('userRole');
-            window.location.href = '/index.html';
-        });
+            logout();
+    });
+  });
+
+// AUXILIAR FUNCTION TO VALIDATE AUTH BY URL
+function checkRoleAccess(path, role) {
+    const adminOnly = ["/create-professor.html"];
+    const professorOnly = ["/user-upload.html", "/professor-subject.html"];
+
+    if (adminOnly.some(p => path.endsWith(p)) && currentRole !== "admin") {
+        alert("Acceso exclusivo para Administradores.");
+        window.location.href = "/home.html";
     }
 
-    console.log('Usuario autenticado:', role, 'en vista:', currentPath);
-});
+    if (professorOnly.some(p => path.endsWith(p)) && currentRole !== "profesor") {
+        alert("Acceso exclusivo para Profesores.");
+        window.location.href = "/home.html";
+    }
+}
+
+function logout() {
+    localStorage.clear();
+    // Evitar loop infinito si ya estamos en index
+    if (!window.location.pathname.endsWith("/index.html")) {
+        window.location.href = "/index.html";
+    }
+}
+
+}
+
+initAuthGuards();

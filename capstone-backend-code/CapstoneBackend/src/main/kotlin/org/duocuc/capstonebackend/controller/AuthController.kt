@@ -30,7 +30,6 @@ class AuthController(
 ) {
 
     @PostMapping("/register")
-    @PreAuthorize("hasAuthority('admin')")
     fun register(@RequestBody request: RegisterRequestDto): ResponseEntity<UserResponseDto> {
         val userResponse = authService.userRegistry(request)
         return ResponseEntity(userResponse, HttpStatus.CREATED)
@@ -59,7 +58,6 @@ class AuthController(
         return ResponseEntity("Logout exitoso", HttpStatus.OK)
     }
 
-    // ====== NUEVO: perfil del usuario autenticado ======
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
     fun me(): ResponseEntity<MeDto> {

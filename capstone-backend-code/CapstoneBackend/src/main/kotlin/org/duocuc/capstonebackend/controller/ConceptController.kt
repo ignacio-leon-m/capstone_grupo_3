@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.*
 import java.util.UUID
 
 @RestController
-@RequestMapping("/api/topics")
+@RequestMapping("/api/concepts")
 class ConceptController(
     private val conceptService: ConceptService
 ) {
-    @GetMapping("/{topicId}/concepts")
+    @GetMapping("/{topicId}/list")
     @PreAuthorize("isAuthenticated()")
     fun getConceptsByTopic(@PathVariable topicId: UUID): ResponseEntity<List<ConceptResponseDto>> {
         return ResponseEntity.ok(conceptService.getConceptsByTopic(topicId))
     }
 
-    @PostMapping("/{topicId}/concepts")
+    @PostMapping("/{topicId}/create")
     @PreAuthorize("hasAnyAuthority('profesor','admin')")
     fun createConcepts(
         @PathVariable topicId: UUID,

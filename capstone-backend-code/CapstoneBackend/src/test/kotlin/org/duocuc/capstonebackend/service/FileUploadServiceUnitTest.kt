@@ -2,7 +2,6 @@ package org.duocuc.capstonebackend.service
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -11,7 +10,7 @@ class FileUploadServiceUnitTest {
 
     private val service = FileUploadService(
         storedDocumentRepository = TODO(),
-        currentUser = TODO()
+        customUserDetails = TODO()
     )
 
     //@Test
@@ -36,7 +35,7 @@ class FileUploadServiceUnitTest {
         val row2 = sheet.createRow(12)
         row2.createCell(1).setCellValue("22.222.222-2")
         row2.createCell(2).setCellValue("Richards, Keith")
-        
+
         // Convertir el workbook a un InputStream
         val outputStream = ByteArrayOutputStream()
         workbook.write(outputStream)
@@ -84,7 +83,10 @@ class FileUploadServiceUnitTest {
         val exception = assertThrows<IllegalStateException> {
             service.processExcelFile(inputStream)
         }
-        assertEquals("No se pudo encontrar el nombre de la carrera en la celda C6 del archivo Excel. El formato del archivo es incorrecto.", exception.message)
+        assertEquals(
+            "No se pudo encontrar el nombre de la carrera en la celda C6 del archivo Excel. El formato del archivo es incorrecto.",
+            exception.message
+        )
     }
 
     //@Test
